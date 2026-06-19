@@ -1,0 +1,97 @@
+# Mall -> open-data crime source bindings (the pilot).
+#
+# Each entry maps a property_id (must exist in data/properties.csv) to one
+# jurisdiction dataset and the portal-specific field names. Field names VARY per
+# portal and must be validated against the live schema before a source is trusted
+# (see the project README, "Adding a mall"). A source with wrong field names fails
+# gracefully and shows as FAILED in the report rather than crashing the run.
+#
+# type: "socrata" | "arcgis"
+#   socrata  -> base_url + dataset_id (4x4). within_circle needs a true point column;
+#               datasets exposing separate lat/lon columns set point_field + point_field_lon
+#               (a bounding box is used, then the pipeline re-filters by exact distance).
+#   arcgis   -> base_url is the FeatureServer LAYER url; date_query_style epoch_ms|date_literal.
+
+defaults:
+  radius_m: 1000
+
+sources:
+  # --- Beverly Center, Los Angeles, CA (LA City Crime Data 2020-present) ---
+  - property_id: BEVCENTER
+    type: socrata
+    name: "LAPD Crime Data 2020-present"
+    base_url: "https://data.lacity.org"
+    dataset_id: "2nrs-mtv8"
+    point_field: "lat"            # LA exposes separate lat/lon numeric columns
+    point_field_lon: "lon"
+    date_field: "date_occ"
+    crime_type_field: "crm_cd_desc"
+    description_field: "crm_cd_desc"
+    address_field: "location"
+    incident_id_field: "dr_no"
+
+  # --- The Domain, Austin, TX (APD Crime Reports) ---
+  - property_id: THEDOMAIN
+    type: socrata
+    name: "Austin PD Crime Reports"
+    base_url: "https://data.austintexas.gov"
+    dataset_id: "fdj4-gpfu"
+    point_field: "latitude"
+    point_field_lon: "longitude"
+    date_field: "occ_date"
+    crime_type_field: "crime_type"
+    description_field: "crime_type"
+    address_field: "address"
+    incident_id_field: "incident_report_number"
+
+  # --- Opry Mills, Nashville, TN (Metro Nashville PD Incidents) ---
+  - property_id: OPRYMILLS
+    type: socrata
+    name: "Metro Nashville PD Incidents"
+    base_url: "https://data.nashville.gov"
+    dataset_id: "2u6v-ujjs"
+    point_field: "latitude"
+    point_field_lon: "longitude"
+    date_field: "incident_occurred"
+    crime_type_field: "offense_description"
+    description_field: "offense_description"
+    address_field: "incident_location"
+    incident_id_field: "incident_number"
+
+  # --- Northgate Station, Seattle, WA (SPD Crime Data 2008-present) ---
+  - property_id: NORTHGATE
+    type: socrata
+    name: "Seattle PD Crime Data"
+    base_url: "https://data.seattle.gov"
+    dataset_id: "tazs-3rd5"
+    point_field: "latitude"
+    point_field_lon: "longitude"
+    date_field: "offense_start_datetime"
+    crime_type_field: "offense"
+    description_field: "offense"
+    address_field: "_100_block_address"
+    incident_id_field: "report_number"
+
+  # --- Cherry Creek Shopping Center, Denver, CO (Denver Police crime, ArcGIS) ---
+  - property_id: CHERRYCREEK
+    type: arcgis
+    name: "Denver PD Crime"
+    base_url: "https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/ArcGIS/rest/services/ODC_CRIME_CRIMES_P/FeatureServer/0"
+    date_query_style: "epoch_ms"
+    date_field: "FIRST_OCCURRENCE_DATE"
+    crime_type_field: "OFFENSE_TYPE_ID"
+    description_field: "OFFENSE_CATEGORY_ID"
+    address_field: "INCIDENT_ADDRESS"
+    incident_id_field: "INCIDENT_ID"
+
+  # --- Lenox Square, Atlanta, GA (Atlanta PD COBRA crime, ArcGIS) ---
+  - property_id: LENOX
+    type: arcgis
+    name: "Atlanta PD Crime"
+    base_url: "https://services3.arcgis.com/Et5Qfajgiyosiw4d/arcgis/rest/services/CrimeDataExport_4/FeatureServer/0"
+    date_query_style: "epoch_ms"
+    date_field: "occur_date"
+    crime_type_field: "UC2_Literal"
+    description_field: "UC2_Literal"
+    address_field: "location"
+    incident_id_field: "offense_id"

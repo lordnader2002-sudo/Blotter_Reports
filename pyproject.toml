@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blotter-reports"
+version = "0.1.0"
+description = "Daily police-blotter / crime-incident reports near our mall properties, pulled from free open-data portals."
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.31",
+    "pandas>=2.1",
+    "pyyaml>=6.0",
+    "openpyxl>=3.1",
+    "pydantic>=2.5",
+]
+
+[project.optional-dependencies]
+opd = ["openpolicedata"]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock",
+    "responses>=0.25",
+    "freezegun>=1.4",
+    "ruff",
+]
+
+[project.scripts]
+blotter = "blotter.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: hits live open-data portals; skipped by default (run with -m integration)",
+]
+addopts = "-m 'not integration'"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

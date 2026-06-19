@@ -1,0 +1,23 @@
+{
+  "features": [
+    {
+      "attributes": {
+        "offense_id": "A1",
+        "occur_date": 1749513600000,
+        "UC2_Literal": "LARCENY-FROM VEHICLE",
+        "location": "3393 PEACHTREE RD NE"
+      },
+      "geometry": { "x": -84.36242, "y": 33.84680 }
+    },
+    {
+      "attributes": {
+        "offense_id": "A2",
+        "occur_date": 1749600000000,
+        "UC2_Literal": "AGG ASSAULT",
+        "location": "3400 LENOX RD NE"
+      },
+      "geometry": { "x": -84.36210, "y": 33.84700 }
+    }
+  ],
+  "exceededTransferLimit": false
+}

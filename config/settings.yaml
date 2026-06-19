@@ -1,0 +1,56 @@
+# Global pipeline settings.
+
+# How far back to pull incidents (days). Daily runs use a rolling window so a
+# late-posted incident still shows up.
+recency_window_days: 30
+
+# Default search radius around each mall (meters). Override per-source in registry.yaml.
+radius_m: 1000
+
+# Max rows fetched per source per run. Hitting this flags the mall as "truncated".
+result_limit: 5000
+
+# Crime-type -> bucket mapping. Case-insensitive substring match against the raw
+# crime-type string from each portal. Precedence is VIOLENT, PROPERTY,
+# QUALITY_OF_LIFE, OTHER (first bucket with a hit wins). Unknown types -> OTHER.
+# Per-city vocabularies differ, so extend these lists as you add malls.
+crime_categories:
+  VIOLENT:
+    - assault
+    - robbery
+    - homicide
+    - murder
+    - shooting
+    - rape
+    - sexual
+    - weapon
+    - battery
+    - kidnap
+    - aggravated
+  PROPERTY:
+    - burglary
+    - theft
+    - larceny
+    - shoplifting
+    - stolen
+    - motor vehicle
+    - auto theft
+    - vandalism
+    - arson
+    - fraud
+    - vehicle break
+    - property
+  QUALITY_OF_LIFE:
+    - trespass
+    - disorderly
+    - loitering
+    - narcotic
+    - drug
+    - liquor
+    - intoxicat
+    - noise
+    - vagrancy
+
+# Optional bucket allow/deny lists. Empty keep_categories = keep all buckets.
+keep_categories: []
+drop_categories: []
