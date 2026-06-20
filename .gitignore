@@ -17,3 +17,7 @@ htmlcov/
 
 # OS
 .DS_Store
+
+# Generated dashboard preview artifact (CI publishes the real one under reports/ and _site/)
+/dashboard_data.json
+_site/

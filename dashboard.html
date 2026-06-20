@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blotter Reports</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body,#root{height:100%;overflow:hidden}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  ::-webkit-scrollbar{width:6px;height:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:rgba(128,128,128,.28);border-radius:3px}
+  ::-webkit-scrollbar-thumb:hover{background:rgba(128,128,128,.45)}
+  button,input,select{font-family:inherit}
+  input::placeholder{color:#8a909b}
+  .leaflet-popup-content{font-family:'Inter',sans-serif;font-size:12px;line-height:1.5}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useMemo} = React;
+
+/* ═══ SUPABASE CONFIG ══════════════════════════════════════════ */
+/* Fill these after creating a NEW Supabase project for the blotter dashboard
+   (Settings → API). The anon key is safe to expose — access is controlled by
+   Auth + Row-Level-Security, so the SHARED password is the real gate. Until
+   these placeholders are replaced the app runs in local-dev mode: no login,
+   and it loads the public dashboard_data.json. See docs/SUPABASE_SETUP.md. */
+const SUPABASE_URL      = "https://YOUR-PROJECT.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR-ANON-KEY";
+const SHARED_EMAIL      = "you@example.com";   // the single shared login account
+const DATA_BUCKET       = "blotter";            // private Storage bucket
+const DATA_OBJECT       = "blotter_data.json";
+
+const SB_READY = !SUPABASE_URL.includes("YOUR-PROJECT") && !SUPABASE_ANON_KEY.includes("YOUR-ANON");
+const sb = (SB_READY && window.supabase)
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
+/* ═══ THEME ════════════════════════════════════════════════════ */
+const THEMES = {
+  midnight:{
+    sidebar:'#0a0e14',sidebarHover:'#13171f',sidebarActive:'#1a1f28',sidebarBorder:'#171c24',
+    sidebarText:'#6c7280',sidebarHead:'#e8eaed',accent:'#a3e635',accentBg:'rgba(163,230,53,.10)',
+    bg:'#0a0e14',surface:'#13161c',border:'#1c222b',borderStrong:'#2d343f',
+    text:'#e8eaed',textSub:'#9ca3af',textMuted:'#6c7280',
+    critical:'#ef4444',high:'#f97316',medium:'#eab308',low:'#22c55e'},
+  daylight:{
+    sidebar:'#0a0e14',sidebarHover:'#13171f',sidebarActive:'#1a1f28',sidebarBorder:'#171c24',
+    sidebarText:'#6c7280',sidebarHead:'#e8eaed',accent:'#65a30d',accentBg:'rgba(101,163,13,.10)',
+    bg:'#f7f8fa',surface:'#fff',border:'#e5e7eb',borderStrong:'#d1d5db',
+    text:'#111827',textSub:'#4b5563',textMuted:'#9ca3af',
+    critical:'#dc2626',high:'#ea580c',medium:'#ca8a04',low:'#16a34a'},
+};
+const mono={fontFamily:"'JetBrains Mono',ui-monospace,monospace",fontFeatureSettings:"'tnum' 1"};
+
+/* Crime category → severity color (the blotter analogue of PT's threat band). */
+const CAT_LABEL={VIOLENT:'Violent',PROPERTY:'Property',QUALITY_OF_LIFE:'Quality of life',OTHER:'Other'};
+const CATS=['VIOLENT','PROPERTY','QUALITY_OF_LIFE','OTHER'];
+const catColor=(cat,t)=>({VIOLENT:t.critical,PROPERTY:t.high,QUALITY_OF_LIFE:t.medium,OTHER:t.low}[cat]||t.textMuted);
+const statusColor=(s,t)=>({OK:t.low,FAILED:t.critical,'NO COVERAGE':t.high}[s]||t.textMuted);
+
+const fmtDate=(iso)=>{ if(!iso) return '—'; const d=new Date(iso); if(isNaN(d)) return '—';
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); };
+const fmtM=(m)=> (m==null||isNaN(m)) ? '—' : `${Math.round(m)} m`;
+
+/* ═══ SMALL COMPONENTS ═════════════════════════════════════════ */
+const ICON_PATHS={
+  dashboard:"M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z",
+  incidents:"M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4",
+  property:"M3 21h18M5 21V7l8-4v18M19 21V11l-6-4",
+  map:"M1 6l7-4 8 4 7-4v16l-7 4-8-4-7 4V6z",
+  trends:"M22 12h-4l-3 9L9 3l-3 9H2",
+  quality:"M12 22c5-1 9-5 9-10V5l-9-3-9 3v7c0 5 4 9 9 10zM12 8v4M12 16h.01",
+  logout:"M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9",
+  sun:"M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41M12 7a5 5 0 100 10 5 5 0 000-10z",
+  moon:"M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z",
+};
+const Icon=({id,size=16})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+  stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+  <path d={ICON_PATHS[id]||''}/></svg>;
+
+const Pill=({label,color})=><span style={{
+  ...mono,display:'inline-block',fontSize:9.5,fontWeight:600,letterSpacing:'.05em',
+  padding:'2px 7px',borderRadius:3,background:`${color}16`,color,
+  textTransform:'uppercase',border:`1px solid ${color}30`,whiteSpace:'nowrap'}}>{label}</span>;
+
+const CatPill=({cat,t})=><Pill label={CAT_LABEL[cat]||cat} color={catColor(cat,t)}/>;
+
+const Sparkline=({data,color,w=80,h=28})=>{
+  if(!data||data.length<2) return null;
+  const max=Math.max(...data),min=Math.min(...data),r=max-min||1;
+  const pts=data.map((v,i)=>`${(i/(data.length-1))*w},${h-2-((v-min)/r)*(h-6)}`).join(' ');
+  return <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{display:'block'}}>
+    <polygon points={`${pts} ${w},${h} 0,${h}`} fill={`${color}30`}/>
+    <polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>;
+};
+
+const MiniBar=({value,max,color,t})=><div style={{height:6,background:t.border,borderRadius:2,overflow:'hidden'}}>
+  <div style={{width:`${max?Math.min(100,(value/max)*100):0}%`,height:'100%',background:color,borderRadius:2,transition:'width .4s ease'}}/>
+</div>;
+
+const StatCard=({t,label,value,sub,spark,color})=><div style={{
+  flex:1,minWidth:0,background:t.surface,border:`1px solid ${t.border}`,borderRadius:8,padding:'18px 20px'}}>
+  <div style={{...mono,fontSize:9.5,fontWeight:600,letterSpacing:'.13em',textTransform:'uppercase',color:t.textMuted,marginBottom:12}}>{label}</div>
+  <div style={{display:'flex',alignItems:'flex-end',justifyContent:'space-between',gap:8}}>
+    <div style={{minWidth:0}}>
+      <div style={{...mono,fontSize:40,fontWeight:700,color:color||t.text,lineHeight:1,letterSpacing:'-.03em'}}>{value}</div>
+      {sub&&<div style={{fontSize:11,color:t.textMuted,marginTop:8}}>{sub}</div>}
+    </div>
+    {spark&&<Sparkline data={spark} color={color||t.accent}/>}
+  </div>
+</div>;
+
+const Card=({t,title,right,children,pad=true})=><div style={{
+  background:t.surface,border:`1px solid ${t.border}`,borderRadius:8,overflow:'hidden'}}>
+  {title&&<div style={{display:'flex',alignItems:'center',justifyContent:'space-between',
+    padding:'12px 16px',borderBottom:`1px solid ${t.border}`}}>
+    <span style={{fontSize:12.5,fontWeight:600,color:t.text}}>{title}</span>{right}</div>}
+  <div style={{padding:pad?16:0}}>{children}</div>
+</div>;
+
+/* ═══ DATA + AUTH HOOKS (mirrors Protest-Tracker) ══════════════ */
+function useData(authed){
+  const [data,setData]=useState(null);
+  const [err,setErr]=useState(null);
+  useEffect(()=>{
+    let cancelled=false;
+    async function load(){
+      try{
+        let json;
+        if(sb){
+          if(!authed) return;
+          const {data:blob,error}=await sb.storage.from(DATA_BUCKET).download(DATA_OBJECT);
+          if(error) throw new Error(error.message||'download failed');
+          json=JSON.parse(await blob.text());
+        }else{
+          const r=await fetch('dashboard_data.json');
+          if(!r.ok) throw new Error(`HTTP ${r.status} — dashboard_data.json not found`);
+          json=await r.json();
+        }
+        if(!cancelled) setData(json);
+      }catch(e){ if(!cancelled) setErr(e.message); }
+    }
+    load();
+    return ()=>{cancelled=true;};
+  },[authed]);
+  return {data,err};
+}
+
+function useAuth(){
+  const [session,setSession]=useState(undefined);
+  useEffect(()=>{
+    if(!sb){ setSession(null); return; }
+    sb.auth.getSession().then(({data})=>setSession(data.session||null));
+    const {data:sub}=sb.auth.onAuthStateChange((_e,s)=>setSession(s));
+    return ()=>sub.subscription.unsubscribe();
+  },[]);
+  return {
+    session,
+    authed:  sb ? !!session : true,
+    loading: sb ? session===undefined : false,
+    login:   (password)=>sb.auth.signInWithPassword({email:SHARED_EMAIL,password}),
+    logout:  ()=>sb&&sb.auth.signOut(),
+  };
+}
+
+/* ═══ NAV ══════════════════════════════════════════════════════ */
+const NAV=[
+  {section:'OVERVIEW'},
+  {id:'dashboard',label:'Summary',icon:'dashboard'},
+  {id:'incidents',label:'Incidents',icon:'incidents'},
+  {id:'malls',label:'By Mall',icon:'property'},
+  {section:'ANALYTICS'},
+  {id:'map',label:'Map',icon:'map'},
+  {id:'trends',label:'Trends',icon:'trends'},
+  {id:'quality',label:'Data Quality',icon:'quality'},
+];
+const LABELS={dashboard:'Summary',incidents:'Incidents',malls:'By Mall',map:'Map',trends:'Trends',quality:'Data Quality'};
+function navBadge(id,data){
+  if(!data) return null;
+  if(id==='incidents') return data.totals?.incidents;
+  if(id==='malls') return data.malls?.length;
+  if(id==='map') return data.incidents?.length;
+  if(id==='quality') return (data.coverage_gaps?.length||0)+(data.sources||[]).filter(s=>s.status==='FAILED').length||null;
+  return null;
+}
+
+const Sidebar=({t,view,setView,data,onLogout})=><aside style={{
+  width:224,flexShrink:0,display:'flex',flexDirection:'column',
+  background:t.sidebar,borderRight:`1px solid ${t.sidebarBorder}`,height:'100vh'}}>
+  <div style={{padding:'18px 18px 16px'}}>
+    <div style={{display:'flex',alignItems:'center',gap:10}}>
+      <div style={{width:30,height:30,borderRadius:7,background:t.accent,flexShrink:0,
+        display:'flex',alignItems:'center',justifyContent:'center',
+        boxShadow:`0 0 0 1px ${t.accent}33,0 4px 14px ${t.accent}25`}}>
+        <span style={{...mono,fontSize:13,fontWeight:800,color:'#0a0e14',letterSpacing:'-.04em'}}>BR</span>
+      </div>
+      <div style={{lineHeight:1.15,minWidth:0}}>
+        <div style={{color:t.sidebarHead,fontSize:13,fontWeight:700,letterSpacing:'-.01em'}}>Blotter Reports</div>
+        <div style={{...mono,color:t.accent,fontSize:9.5,fontWeight:600,letterSpacing:'.05em',marginTop:1}}>v1.0</div>
+      </div>
+    </div>
+  </div>
+  <nav style={{flex:1,padding:'2px 0 12px',overflowY:'auto'}}>
+    {NAV.map((item,i)=>{
+      if(item.section) return <div key={`s${i}`} style={{
+        ...mono,fontSize:9.5,fontWeight:600,letterSpacing:'.14em',
+        color:`${t.sidebarText}b3`,padding:'14px 18px 6px'}}>{item.section}</div>;
+      const active=view===item.id;
+      const badge=navBadge(item.id,data);
+      return <button key={item.id} onClick={()=>setView(item.id)} style={{
+        width:'calc(100% - 12px)',margin:'0 6px',display:'flex',alignItems:'center',gap:10,
+        padding:'8px 12px',borderRadius:6,background:active?t.sidebarActive:'transparent',border:'none',
+        borderLeft:`2px solid ${active?t.accent:'transparent'}`,
+        color:active?t.sidebarHead:t.sidebarText,cursor:'pointer',
+        transition:'background .12s,color .12s',fontSize:13,fontWeight:active?600:500,textAlign:'left'}}
+        onMouseEnter={e=>{if(!active){e.currentTarget.style.background=t.sidebarHover;e.currentTarget.style.color=t.sidebarHead;}}}
+        onMouseLeave={e=>{if(!active){e.currentTarget.style.background='transparent';e.currentTarget.style.color=t.sidebarText;}}}>
+        <Icon id={item.icon} size={14}/>
+        <span style={{flex:1}}>{item.label}</span>
+        {badge!=null&&<span style={{...mono,fontSize:10,fontWeight:600,
+          color:active?t.accent:`${t.sidebarText}cc`,padding:'2px 7px',borderRadius:4,minWidth:22,
+          textAlign:'center',background:active?`${t.accent}14`:'transparent'}}>{badge}</span>}
+      </button>;
+    })}
+  </nav>
+  <div style={{padding:'10px 14px 14px',borderTop:`1px solid ${t.sidebarBorder}`}}>
+    {onLogout&&<button onClick={onLogout} style={{width:'100%',display:'flex',alignItems:'center',gap:8,
+      background:'transparent',border:'none',cursor:'pointer',color:t.sidebarText,fontSize:11.5,
+      padding:'7px 8px',borderRadius:5,textAlign:'left'}}
+      onMouseEnter={e=>{e.currentTarget.style.color=t.sidebarHead;e.currentTarget.style.background=t.sidebarHover;}}
+      onMouseLeave={e=>{e.currentTarget.style.color=t.sidebarText;e.currentTarget.style.background='transparent';}}>
+      <Icon id="logout" size={13}/><span>Log out</span>
+    </button>}
+  </div>
+</aside>;
+
+const TopBar=({t,view,data,dark,toggleDark,query,setQuery})=>{
+  const gen=data?.generated?new Date(data.generated):null;
+  const genStr=gen&&!isNaN(gen)?gen.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}):'';
+  return <div style={{height:54,background:t.bg,borderBottom:`1px solid ${t.border}`,
+    display:'flex',alignItems:'center',padding:'0 22px',gap:14,flexShrink:0}}>
+    <div style={{display:'flex',alignItems:'baseline',gap:8,minWidth:0}}>
+      <span style={{fontSize:14,fontWeight:600,color:t.text}}>{LABELS[view]||view}</span>
+      <span style={{color:t.textMuted,fontSize:13}}>/</span>
+      <span style={{...mono,fontSize:11.5,color:t.textMuted,whiteSpace:'nowrap'}}>
+        {data?`${data.window_days}-day window · generated ${genStr}`:'loading…'}</span>
+    </div>
+    {(view==='incidents')&&<div style={{marginLeft:'auto',position:'relative',width:320,maxWidth:'34vw'}}>
+      <input value={query||''} onChange={e=>setQuery&&setQuery(e.target.value)}
+        placeholder="Search incidents…"
+        style={{width:'100%',height:34,background:t.surface,border:`1px solid ${t.border}`,
+          borderRadius:7,padding:'0 12px',color:t.text,fontSize:12.5,outline:'none'}}/>
+    </div>}
+    <button onClick={toggleDark} title="Toggle theme" style={{marginLeft:view==='incidents'?0:'auto',
+      width:34,height:34,display:'flex',alignItems:'center',justifyContent:'center',
+      background:t.surface,border:`1px solid ${t.border}`,borderRadius:7,color:t.textSub,cursor:'pointer'}}>
+      <Icon id={dark?'sun':'moon'} size={15}/>
+    </button>
+  </div>;
+};
+
+/* ═══ VIEWS ════════════════════════════════════════════════════ */
+const Overview=({t,data})=>{
+  const tot=data.totals||{};
+  const covered=(data.malls||[]).filter(m=>m.status==='OK').length;
+  const catMax=Math.max(1,...CATS.map(c=>tot[c]||0));
+  const topMalls=[...(data.malls||[])].sort((a,b)=>(b.total||0)-(a.total||0)).slice(0,8);
+  const mallMax=Math.max(1,...topMalls.map(m=>m.total||0));
+  const trend=data.trend||[];
+  const spark=trend.length>1?trend.map(x=>x.total):null;
+  return <div style={{display:'flex',flexDirection:'column',gap:16}}>
+    <div style={{display:'flex',gap:12}}>
+      <StatCard t={t} label="Total Incidents" value={tot.incidents??0} sub={`within ${data.radius_m||1000} m of malls`} spark={spark} color={t.accent}/>
+      <StatCard t={t} label="Violent" value={tot.violent??0} sub="highest-severity bucket" color={t.critical}/>
+      <StatCard t={t} label="Malls Covered" value={`${covered}/${data.malls?.length??0}`} sub="sources returning data"/>
+      <StatCard t={t} label="Coverage Gaps" value={tot.coverage_gaps??0} sub="malls with no source" color={(tot.coverage_gaps?t.high:t.low)}/>
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+      <Card t={t} title="By category">
+        <div style={{display:'flex',flexDirection:'column',gap:12}}>
+          {CATS.map(c=><div key={c}>
+            <div style={{display:'flex',justifyContent:'space-between',marginBottom:5}}>
+              <span style={{display:'flex',alignItems:'center',gap:8,fontSize:12,color:t.textSub}}>
+                <CatPill cat={c} t={t}/></span>
+              <span style={{...mono,fontSize:12,fontWeight:600,color:t.text}}>{tot[c]||0}</span>
+            </div>
+            <MiniBar value={tot[c]||0} max={catMax} color={catColor(c,t)} t={t}/>
+          </div>)}
+        </div>
+      </Card>
+      <Card t={t} title="Top malls by incidents">
+        <div style={{display:'flex',flexDirection:'column',gap:11}}>
+          {topMalls.length===0&&<span style={{fontSize:12,color:t.textMuted}}>No incidents in window.</span>}
+          {topMalls.map(m=><div key={m.property_id}>
+            <div style={{display:'flex',justifyContent:'space-between',marginBottom:5}}>
+              <span style={{fontSize:12,color:t.textSub,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{m.property_name||m.property_id}</span>
+              <span style={{...mono,fontSize:12,fontWeight:600,color:t.text}}>{m.total||0}</span>
+            </div>
+            <MiniBar value={m.total||0} max={mallMax} color={t.accent} t={t}/>
+          </div>)}
+        </div>
+      </Card>
+    </div>
+    <Card t={t} title="Highlights — most notable" pad={false}>
+      <IncidentTable t={t} rows={data.highlights||[]} compact/>
+    </Card>
+  </div>;
+};
+
+const COLS=[
+  {key:'property_name',label:'Mall'},
+  {key:'occurred_at',label:'Date'},
+  {key:'crime_category',label:'Category'},
+  {key:'crime_type',label:'Type'},
+  {key:'distance_m',label:'Distance'},
+  {key:'address',label:'Address'},
+];
+const IncidentTable=({t,rows,compact})=>{
+  const [sortCol,setSortCol]=useState('occurred_at');
+  const [asc,setAsc]=useState(false);
+  const sorted=useMemo(()=>{
+    const r=[...rows];
+    r.sort((a,b)=>{
+      let va=a[sortCol],vb=b[sortCol];
+      if(sortCol==='distance_m'){va=va??1e12;vb=vb??1e12;}
+      else{va=String(va??'').toLowerCase();vb=String(vb??'').toLowerCase();}
+      if(va<vb)return asc?-1:1; if(va>vb)return asc?1:-1; return 0;
+    });
+    return r;
+  },[rows,sortCol,asc]);
+  const th=(c)=><th key={c.key} onClick={()=>{ if(sortCol===c.key)setAsc(!asc); else{setSortCol(c.key);setAsc(c.key==='distance_m');} }}
+    style={{...mono,fontSize:9.5,fontWeight:600,letterSpacing:'.08em',textTransform:'uppercase',
+      color:t.textMuted,textAlign:'left',padding:'10px 14px',cursor:'pointer',
+      borderBottom:`1px solid ${t.border}`,whiteSpace:'nowrap',userSelect:'none',position:'sticky',top:0,background:t.surface}}>
+    {c.label}{sortCol===c.key?(asc?' ▲':' ▼'):''}</th>;
+  return <div style={{overflow:'auto',maxHeight:compact?320:'calc(100vh - 200px)'}}>
+    <table style={{width:'100%',borderCollapse:'collapse',fontSize:12.5}}>
+      <thead><tr>{COLS.map(th)}</tr></thead>
+      <tbody>
+        {sorted.length===0&&<tr><td colSpan={COLS.length} style={{padding:18,color:t.textMuted,fontSize:12}}>No incidents.</td></tr>}
+        {sorted.map((r,i)=><tr key={i} style={{borderBottom:`1px solid ${t.border}`}}>
+          <td style={{padding:'9px 14px',color:t.text,whiteSpace:'nowrap'}}>{r.property_name}</td>
+          <td style={{padding:'9px 14px',color:t.textSub,...mono,fontSize:11.5,whiteSpace:'nowrap'}}>{fmtDate(r.occurred_at)}</td>
+          <td style={{padding:'9px 14px'}}><CatPill cat={r.crime_category} t={t}/></td>
+          <td style={{padding:'9px 14px',color:t.textSub}}>{r.crime_type||'—'}</td>
+          <td style={{padding:'9px 14px',...mono,fontSize:11.5,color:t.text}}>{fmtM(r.distance_m)}</td>
+          <td style={{padding:'9px 14px',color:t.textMuted,maxWidth:280,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{r.address||'—'}</td>
+        </tr>)}
+      </tbody>
+    </table>
+  </div>;
+};
+
+const Incidents=({t,data,query})=>{
+  const [cat,setCat]=useState('');
+  const [mall,setMall]=useState('');
+  const malls=[...new Set((data.incidents||[]).map(r=>r.property_name))].sort();
+  const rows=(data.incidents||[]).filter(r=>{
+    if(cat&&r.crime_category!==cat) return false;
+    if(mall&&r.property_name!==mall) return false;
+    if(query){ const hay=`${r.property_name} ${r.crime_type} ${r.address} ${r.crime_category}`.toLowerCase();
+      if(!hay.includes(query.toLowerCase())) return false; }
+    return true;
+  });
+  const sel={height:32,background:t.surface,border:`1px solid ${t.border}`,borderRadius:7,
+    padding:'0 10px',color:t.text,fontSize:12,outline:'none'};
+  return <div style={{display:'flex',flexDirection:'column',gap:12}}>
+    <div style={{display:'flex',gap:10,alignItems:'center'}}>
+      <select value={cat} onChange={e=>setCat(e.target.value)} style={sel}>
+        <option value="">All categories</option>
+        {CATS.map(c=><option key={c} value={c}>{CAT_LABEL[c]}</option>)}
+      </select>
+      <select value={mall} onChange={e=>setMall(e.target.value)} style={sel}>
+        <option value="">All malls</option>
+        {malls.map(m=><option key={m} value={m}>{m}</option>)}
+      </select>
+      <span style={{...mono,fontSize:11.5,color:t.textMuted,marginLeft:'auto'}}>{rows.length} incidents</span>
+    </div>
+    <div style={{background:t.surface,border:`1px solid ${t.border}`,borderRadius:8,overflow:'hidden'}}>
+      <IncidentTable t={t} rows={rows}/>
+    </div>
+  </div>;
+};
+
+const Malls=({t,data})=>{
+  const malls=[...(data.malls||[])].sort((a,b)=>(b.total||0)-(a.total||0));
+  return <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))',gap:14}}>
+    {malls.map(m=><div key={m.property_id} style={{background:t.surface,border:`1px solid ${t.border}`,borderRadius:8,padding:16}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:8,marginBottom:12}}>
+        <div style={{minWidth:0}}>
+          <div style={{fontSize:13.5,fontWeight:600,color:t.text}}>{m.property_name||m.property_id}</div>
+          <div style={{...mono,fontSize:10,color:t.textMuted,marginTop:2}}>{m.property_id}</div>
+        </div>
+        <Pill label={m.status} color={statusColor(m.status,t)}/>
+      </div>
+      <div style={{display:'flex',alignItems:'baseline',gap:8,marginBottom:12}}>
+        <span style={{...mono,fontSize:30,fontWeight:700,color:t.text,lineHeight:1}}>{m.total||0}</span>
+        <span style={{fontSize:11,color:t.textMuted}}>incidents{m.truncated?' (truncated)':''}</span>
+      </div>
+      <div style={{display:'flex',gap:6,marginBottom:12,flexWrap:'wrap'}}>
+        {CATS.filter(c=>m[c]).map(c=><span key={c} style={{...mono,fontSize:10.5,color:catColor(c,t)}}>
+          {m[c]} {CAT_LABEL[c].toLowerCase()}</span>)}
+      </div>
+      <div style={{display:'flex',justifyContent:'space-between',fontSize:11,color:t.textMuted,borderTop:`1px solid ${t.border}`,paddingTop:10}}>
+        <span>Nearest: <b style={{color:t.textSub}}>{fmtM(m.nearest_m)}</b></span>
+        <span>Recent: <b style={{color:t.textSub}}>{fmtDate(m.most_recent)}</b></span>
+      </div>
+    </div>)}
+  </div>;
+};
+
+const MapView=({t,data})=>{
+  const ref=useRef(null); const mapRef=useRef(null);
+  useEffect(()=>{
+    if(!ref.current||!window.L) return;
+    if(mapRef.current){ mapRef.current.invalidateSize(); return; }
+    const m=L.map(ref.current,{zoomControl:true}).setView([39.5,-98.35],4);
+    const dark=t.bg==='#0a0e14';
+    L.tileLayer(dark
+      ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+      : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {attribution:'&copy; OpenStreetMap',maxZoom:19}).addTo(m);
+    const bounds=[];
+    (data.malls||[]).forEach(mk=>{ if(mk.lat==null||mk.lon==null) return;
+      L.circleMarker([mk.lat,mk.lon],{radius:7,fillColor:t.accent,color:'#0a0e14',weight:2,fillOpacity:1})
+        .bindPopup(`<b>${mk.property_name||mk.property_id}</b><br>${mk.total||0} incidents`).addTo(m);
+      bounds.push([mk.lat,mk.lon]);
+    });
+    (data.incidents||[]).forEach(ev=>{ if(ev.lat==null||ev.lon==null) return;
+      const c=catColor(ev.crime_category,t);
+      L.circleMarker([ev.lat,ev.lon],{radius:5,fillColor:c,color:'#fff',weight:1,fillOpacity:.85})
+        .bindPopup(`<b>${ev.crime_type||ev.crime_category}</b><br>${CAT_LABEL[ev.crime_category]||''} · ${fmtM(ev.distance_m)}<br>${fmtDate(ev.occurred_at)} — ${ev.property_name}`).addTo(m);
+      bounds.push([ev.lat,ev.lon]);
+    });
+    if(bounds.length) m.fitBounds(bounds,{padding:[40,40],maxZoom:13});
+    mapRef.current=m;
+  },[data,t]);
+  return <div style={{position:'relative'}}>
+    <div ref={ref} style={{height:'calc(100vh - 108px)',width:'100%',borderRadius:8,overflow:'hidden',border:`1px solid ${t.border}`}}/>
+    <div style={{position:'absolute',right:14,bottom:14,zIndex:500,background:t.surface,border:`1px solid ${t.border}`,
+      borderRadius:8,padding:'10px 12px',fontSize:10.5}}>
+      <div style={{...mono,fontSize:9,letterSpacing:'.1em',color:t.textMuted,marginBottom:6}}>CATEGORY</div>
+      {CATS.map(c=><div key={c} style={{display:'flex',alignItems:'center',gap:7,marginTop:3,color:t.textSub}}>
+        <span style={{width:9,height:9,borderRadius:9,background:catColor(c,t),display:'inline-block'}}/>{CAT_LABEL[c]}</div>)}
+      <div style={{display:'flex',alignItems:'center',gap:7,marginTop:6,paddingTop:6,borderTop:`1px solid ${t.border}`,color:t.textSub}}>
+        <span style={{width:9,height:9,borderRadius:2,background:t.accent,display:'inline-block'}}/>Mall</div>
+    </div>
+  </div>;
+};
+
+const Trends=({t,data})=>{
+  const ref=useRef(null); const chartRef=useRef(null);
+  const trend=data.trend||[];
+  useEffect(()=>{
+    if(!ref.current||!window.Chart) return;
+    if(chartRef.current) chartRef.current.destroy();
+    const labels=trend.map(x=>x.label);
+    const ds=(key,cat)=>({label:CAT_LABEL[cat],data:trend.map(x=>x[key]||0),
+      backgroundColor:catColor(cat,t),borderRadius:3,stack:'s'});
+    chartRef.current=new Chart(ref.current,{type:'bar',
+      data:{labels,datasets:[ds('violent','VIOLENT'),ds('property','PROPERTY'),ds('qol','QUALITY_OF_LIFE'),ds('other','OTHER')]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{labels:{color:t.textSub,font:{family:'Inter'}}}},
+        scales:{x:{stacked:true,ticks:{color:t.textMuted},grid:{color:t.border}},
+                y:{stacked:true,ticks:{color:t.textMuted},grid:{color:t.border}}}}});
+    return ()=>chartRef.current&&chartRef.current.destroy();
+  },[trend,t]);
+  if(trend.length===0) return <Card t={t} title="Trends"><div style={{color:t.textMuted,fontSize:12,padding:20}}>
+    No trend history yet — it accumulates one point per daily run.</div></Card>;
+  return <Card t={t} title="Incidents over time (by category)">
+    <div style={{height:'calc(100vh - 220px)',minHeight:300}}><canvas ref={ref}/></div>
+  </Card>;
+};
+
+const Quality=({t,data})=>{
+  const sources=data.sources||[];
+  return <div style={{display:'flex',flexDirection:'column',gap:16}}>
+    {(data.coverage_gaps||[]).length>0&&<Card t={t} title="Coverage gaps">
+      <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+        {data.coverage_gaps.map(g=><Pill key={g} label={g} color={t.high}/>)}
+      </div>
+      <div style={{fontSize:11,color:t.textMuted,marginTop:10}}>These malls have no configured source — a zero here is "unknown", not "no crime."</div>
+    </Card>}
+    <Card t={t} title="Sources" pad={false}>
+      <table style={{width:'100%',borderCollapse:'collapse',fontSize:12.5}}>
+        <thead><tr>{['Mall','Source','Status','Fetched','Note'].map(h=><th key={h} style={{
+          ...mono,fontSize:9.5,letterSpacing:'.08em',textTransform:'uppercase',color:t.textMuted,
+          textAlign:'left',padding:'10px 14px',borderBottom:`1px solid ${t.border}`}}>{h}</th>)}</tr></thead>
+        <tbody>
+          {sources.length===0&&<tr><td colSpan={5} style={{padding:18,color:t.textMuted}}>No source runs recorded.</td></tr>}
+          {sources.map((s,i)=><tr key={i} style={{borderBottom:`1px solid ${t.border}`}}>
+            <td style={{padding:'9px 14px',color:t.text}}>{s.property_id}</td>
+            <td style={{padding:'9px 14px',color:t.textSub}}>{s.name}</td>
+            <td style={{padding:'9px 14px'}}><Pill label={s.status} color={statusColor(s.status,t)}/></td>
+            <td style={{padding:'9px 14px',...mono,fontSize:11.5,color:t.text}}>{s.fetched_count}{s.truncated?'+':''}</td>
+            <td style={{padding:'9px 14px',color:t.textMuted,maxWidth:360,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{s.error||(s.truncated?'results truncated':'—')}</td>
+          </tr>)}
+        </tbody>
+      </table>
+    </Card>
+  </div>;
+};
+
+/* ═══ LOGIN ════════════════════════════════════════════════════ */
+const LoginScreen=({t,onLogin})=>{
+  const [pw,setPw]=useState(''); const [err,setErr]=useState(null); const [busy,setBusy]=useState(false);
+  const submit=async(e)=>{ e.preventDefault(); setBusy(true); setErr(null);
+    const {error}=await onLogin(pw); if(error) setErr(error.message||'Login failed'); setBusy(false); };
+  return <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:t.bg}}>
+    <form onSubmit={submit} style={{width:320,background:t.surface,border:`1px solid ${t.border}`,
+      borderRadius:12,padding:28}}>
+      <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:18}}>
+        <div style={{width:32,height:32,borderRadius:8,background:t.accent,display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <span style={{...mono,fontSize:14,fontWeight:800,color:'#0a0e14'}}>BR</span></div>
+        <div style={{fontSize:15,fontWeight:700,color:t.text}}>Blotter Reports</div>
+      </div>
+      <label style={{...mono,fontSize:9.5,letterSpacing:'.1em',color:t.textMuted,textTransform:'uppercase'}}>Shared password</label>
+      <input type="password" value={pw} onChange={e=>setPw(e.target.value)} autoFocus
+        style={{width:'100%',height:38,marginTop:6,background:t.bg,border:`1px solid ${t.border}`,
+          borderRadius:8,padding:'0 12px',color:t.text,fontSize:13,outline:'none'}}/>
+      {err&&<div style={{color:t.critical,fontSize:11.5,marginTop:8}}>{err}</div>}
+      <button type="submit" disabled={busy} style={{width:'100%',height:38,marginTop:14,background:t.accent,
+        border:'none',borderRadius:8,color:'#0a0e14',fontSize:13,fontWeight:700,cursor:'pointer',opacity:busy?.6:1}}>
+        {busy?'…':'Enter'}</button>
+    </form>
+  </div>;
+};
+
+/* ═══ APP ══════════════════════════════════════════════════════ */
+const App=()=>{
+  const [dark,setDark]=useState(()=>localStorage.getItem('br_theme')!=='daylight');
+  const t=dark?THEMES.midnight:THEMES.daylight;
+  const [view,setView]=useState('dashboard');
+  const [query,setQuery]=useState('');
+  const {authed,loading,login,logout}=useAuth();
+  const {data,err}=useData(authed);
+  const toggleDark=()=>{ const nx=!dark; setDark(nx); localStorage.setItem('br_theme',nx?'midnight':'daylight'); };
+
+  useEffect(()=>{ document.body.style.background=t.bg; },[t]);
+
+  if(loading) return <div style={{height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',
+    background:t.bg,color:t.textMuted,...mono,fontSize:12}}>Loading…</div>;
+  if(sb&&!authed) return <LoginScreen t={t} onLogin={login}/>;
+
+  const body=()=>{
+    if(err) return <div style={{color:t.critical,fontSize:13,padding:20}}>Failed to load data: {err}
+      <div style={{color:t.textMuted,fontSize:11.5,marginTop:8}}>Expecting <code>dashboard_data.json</code> beside this page (run <code>blotter run</code>).</div></div>;
+    if(!data) return <div style={{color:t.textMuted,...mono,fontSize:12,padding:20}}>Loading data…</div>;
+    switch(view){
+      case 'incidents': return <Incidents t={t} data={data} query={query}/>;
+      case 'malls':     return <Malls t={t} data={data}/>;
+      case 'map':       return <MapView t={t} data={data}/>;
+      case 'trends':    return <Trends t={t} data={data}/>;
+      case 'quality':   return <Quality t={t} data={data}/>;
+      default:          return <Overview t={t} data={data}/>;
+    }
+  };
+
+  return <div style={{display:'flex',height:'100vh',background:t.bg}}>
+    <Sidebar t={t} view={view} setView={setView} data={data} onLogout={sb?logout:null}/>
+    <div style={{flex:1,display:'flex',flexDirection:'column',minWidth:0}}>
+      <TopBar t={t} view={view} data={data} dark={dark} toggleDark={toggleDark} query={query} setQuery={setQuery}/>
+      <main style={{flex:1,overflow:'auto',padding:22}}>{body()}</main>
+    </div>
+  </div>;
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

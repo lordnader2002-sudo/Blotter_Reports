@@ -13,7 +13,7 @@ from . import pipeline
 from .config import load_registry, load_settings
 from .http import HttpClient
 from .properties import load_properties
-from .report import excel, markdown
+from .report import excel, json_export, markdown
 from .report.rollup import build_rollup
 
 log = logging.getLogger("blotter")
@@ -51,18 +51,23 @@ def _run(args) -> int:
 
     result = pipeline.run(properties, registry, settings, http, now=now)
     rollup = build_rollup(result, properties)
+    rollup.metadata["radius_m"] = settings.radius_m  # surfaced in the dashboard JSON
 
     date_dir = Path(args.out) / now.strftime("%Y-%m-%d")
     date_dir.mkdir(parents=True, exist_ok=True)
     xlsx_path = date_dir / "blotter_report.xlsx"
     md_path = date_dir / "report.md"
+    json_path = date_dir / "dashboard_data.json"
     excel.write(rollup, xlsx_path)
     markdown.write(rollup, md_path)
+    # The trend ledger lives at the output root so it accumulates across daily runs.
+    json_export.write(rollup, json_path, trend_log_path=Path(args.out) / "trend_log.jsonl")
 
     latest = Path(args.out) / "latest"
     latest.mkdir(parents=True, exist_ok=True)
     shutil.copy2(xlsx_path, latest / "blotter_report.xlsx")
     shutil.copy2(md_path, latest / "report.md")
+    shutil.copy2(json_path, latest / "dashboard_data.json")
 
     md = rollup.metadata
     log.info(

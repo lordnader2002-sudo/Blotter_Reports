@@ -50,3 +50,45 @@ jobs:
             git commit -m "chore(report): daily blotter report $(date -u +%Y-%m-%d) [skip ci]"
             git push
           fi
+
+      # Upload the dashboard data to the PRIVATE Supabase bucket. No-ops until you
+      # set SUPABASE_URL + SUPABASE_SERVICE_KEY secrets (see docs/SUPABASE_SETUP.md).
+      - name: Upload data to Supabase (guarded)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_KEY" ]; then
+            echo "Supabase secrets not set — skipping upload (data publishes publicly as fallback)."
+            exit 0
+          fi
+          SUPABASE_URL="${SUPABASE_URL%/}"; SUPABASE_URL="${SUPABASE_URL%/rest/v1}"; SUPABASE_URL="${SUPABASE_URL%/}"
+          curl -fsS -X POST "${SUPABASE_URL}/storage/v1/object/blotter/blotter_data.json" \
+            -H "apikey: ${SUPABASE_SERVICE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_KEY}" \
+            -H "x-upsert: true" -H "Content-Type: application/json" \
+            --data-binary @reports/latest/dashboard_data.json >/dev/null
+          echo "Uploaded blotter_data.json to the private bucket."
+
+      # Deploy the single-file dashboard to GitHub Pages (gh-pages branch), mirroring
+      # the Protest-Tracker setup. The data file is published publicly ONLY when
+      # Supabase isn't configured yet — once secrets are set it lives in the private
+      # bucket and the public page loads it via the authenticated session instead.
+      - name: Deploy dashboard to GitHub Pages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        run: |
+          mkdir -p _site
+          cp dashboard.html _site/index.html
+          if [ -z "$SUPABASE_URL" ]; then
+            cp reports/latest/dashboard_data.json _site/ 2>/dev/null || true
+          fi
+          cd _site
+          git init -b gh-pages -q
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -q -m "Deploy dashboard $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          git push --force -q \
+            "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" gh-pages

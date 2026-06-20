@@ -46,11 +46,42 @@ Outputs land in `reports/<YYYY-MM-DD>/` (and a stable `reports/latest/`):
 Set `SOCRATA_APP_TOKEN` for higher rate limits. The program runs unauthenticated too.
 In CI, store it as the `SOCRATA_APP_TOKEN` repository secret.
 
+## Web dashboard
+
+A single-file React dashboard (`dashboard.html`) — styled to match the Protest-Tracker
+project (Inter + JetBrains Mono, midnight/daylight themes, lime accent, Leaflet map,
+Chart.js) — visualizes the data. Each `blotter run` writes `dashboard_data.json` (alongside
+the Excel/Markdown) and appends a per-run point to `reports/trend_log.jsonl` for the trend
+chart. Views: **Summary** (KPIs + category/mall breakdown + highlights), **Incidents**
+(sortable/filterable table), **By Mall**, **Map** (incidents colored by crime category),
+**Trends**, and **Data Quality** (per-source status + coverage gaps).
+
+### Local preview
+
+```bash
+python scripts/preview_data.py   # writes a populated SAMPLE dashboard_data.json
+python -m http.server            # then open http://localhost:8000/dashboard.html
+```
+
+(The live portals need internet; the sample lets you preview the UI offline. A real
+`blotter run` overwrites it with actual incidents.)
+
+### Hosting & access
+
+The daily Action publishes `dashboard.html` to **GitHub Pages** (the `gh-pages` branch —
+enable it under *Settings → Pages → Deploy from a branch → `gh-pages`*). By default the data
+is published publicly as `dashboard_data.json` and the page needs no login. To gate it behind
+a shared-password login with the data in a **private Supabase bucket**, follow
+[`docs/SUPABASE_SETUP.md`](docs/SUPABASE_SETUP.md) — fill the Supabase block in `dashboard.html`
+and add the `SUPABASE_URL` / `SUPABASE_SERVICE_KEY` repo secrets. The switch from public to
+gated is automatic.
+
 ## Daily schedule
 
-`.github/workflows/daily-report.yml` runs on a cron, generates the report, uploads it as
-an artifact, and commits `reports/` back to the repo. Trigger it manually from the Actions
-tab (`workflow_dispatch`) for a dry run before relying on the schedule.
+`.github/workflows/daily-report.yml` runs on a cron: it generates the report + dashboard JSON,
+uploads an artifact, commits `reports/` back to the repo, (optionally) uploads data to Supabase,
+and deploys the dashboard to GitHub Pages. Trigger it manually from the Actions tab
+(`workflow_dispatch`) for a dry run before relying on the schedule.
 
 ## Resilience
 
