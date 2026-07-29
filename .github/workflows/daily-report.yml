@@ -70,7 +70,9 @@ jobs:
             exit 0
           fi
           SUPABASE_URL="${SUPABASE_URL%/}"; SUPABASE_URL="${SUPABASE_URL%/rest/v1}"; SUPABASE_URL="${SUPABASE_URL%/}"
-          curl -fsS -X POST "${SUPABASE_URL}/storage/v1/object/blotter/blotter_data.json" \
+          # Reuses the PT project's existing private 'dashboard' bucket (its
+          # authenticated-read policy covers the whole bucket) — no new bucket needed.
+          curl -fsS -X POST "${SUPABASE_URL}/storage/v1/object/dashboard/blotter_data.json" \
             -H "apikey: ${SUPABASE_SERVICE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_SERVICE_KEY}" \
             -H "x-upsert: true" -H "Content-Type: application/json" \
