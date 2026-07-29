@@ -28,7 +28,12 @@ jobs:
       - name: Install
         run: pip install -e .
 
+      # continue-on-error: a report is produced even when every source fails, and the
+      # dashboard should still deploy that day. The final step re-fails the run so the
+      # red status still surfaces the data problem.
       - name: Generate report
+        id: generate
+        continue-on-error: true
         env:
           # Optional: higher Socrata rate limits. Runs fine unauthenticated too.
           SOCRATA_APP_TOKEN: ${{ secrets.SOCRATA_APP_TOKEN }}
@@ -94,3 +99,10 @@ jobs:
           git commit -q -m "Deploy dashboard $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
           git push --force -q \
             "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" gh-pages
+
+      # Surface data failures as a red run AFTER the dashboard has deployed.
+      - name: Fail run if report generation failed
+        if: steps.generate.outcome == 'failure'
+        run: |
+          echo "::error::blotter run exited non-zero (all sources failed?) — see 'Generate report' logs."
+          exit 1

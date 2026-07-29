@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from blotter.errors import RunReport, SourceStatus
 from blotter.pipeline import RunResult
@@ -8,7 +8,7 @@ from blotter.report import json_export
 from blotter.report.rollup import build_rollup
 from blotter.schema import PROPERTY, VIOLENT, NormalizedIncident
 
-NOW = datetime(2026, 6, 19, tzinfo=timezone.utc)
+NOW = datetime(2026, 6, 19, tzinfo=UTC)
 
 
 def _rollup():

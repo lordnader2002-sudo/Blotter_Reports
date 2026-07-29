@@ -1,4 +1,4 @@
-from datetime import timezone
+from datetime import UTC
 
 from blotter.normalize import parse_datetime, socrata_point, to_float
 
@@ -6,12 +6,12 @@ from blotter.normalize import parse_datetime, socrata_point, to_float
 def test_parse_socrata_floating_timestamp():
     dt = parse_datetime("2026-06-10T00:00:00.000")
     assert dt.year == 2026 and dt.month == 6 and dt.day == 10
-    assert dt.tzinfo == timezone.utc
+    assert dt.tzinfo == UTC
 
 
 def test_parse_epoch_ms():
     dt = parse_datetime(1749513600000)
-    assert dt.tzinfo == timezone.utc
+    assert dt.tzinfo == UTC
     assert dt.year == 2025
 
 

@@ -33,7 +33,7 @@ class OpenPoliceDataAdapter(SourceAdapter):
             src = opd.Source(e.base_url)
             table = src.load_from_url(year="latest", table_type=e.dataset_id)
             df = table.table
-        except Exception as ex:  # noqa: BLE001 - library raises broad errors
+        except Exception as ex:
             raise SourceError(f"OpenPoliceData load failed for {e.base_url}: {ex}") from ex
 
         # OPD has no geo query, so bound the box client-side then exact-filter downstream.

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from blotter import filters
 from blotter.config import Settings
@@ -13,18 +13,18 @@ MAPPING = {
 
 
 def _inc(**kw):
-    base = dict(
-        property_id="BEVCENTER",
-        source_id="s1",
-        incident_id=None,
-        occurred_at=datetime(2026, 6, 10, tzinfo=timezone.utc),
-        crime_type="ROBBERY",
-        crime_category=OTHER,
-        description=None,
-        address=None,
-        lat=34.0770,
-        lon=-118.3775,
-    )
+    base = {
+        "property_id": "BEVCENTER",
+        "source_id": "s1",
+        "incident_id": None,
+        "occurred_at": datetime(2026, 6, 10, tzinfo=UTC),
+        "crime_type": "ROBBERY",
+        "crime_category": OTHER,
+        "description": None,
+        "address": None,
+        "lat": 34.0770,
+        "lon": -118.3775,
+    }
     base.update(kw)
     return NormalizedIncident(**base)
 
@@ -39,10 +39,10 @@ def test_map_category_precedence_and_unknown():
 def test_apply_recency_radius_and_category():
     props = {"BEVCENTER": Property("BEVCENTER", "Beverly Center", "", "", 34.07533, -118.37738)}
     settings = Settings(radius_m=1000, crime_categories=MAPPING)
-    cutoff = datetime(2026, 6, 1, tzinfo=timezone.utc)
+    cutoff = datetime(2026, 6, 1, tzinfo=UTC)
     incidents = [
         _inc(crime_type="ROBBERY"),  # near + recent + violent -> kept
-        _inc(crime_type="BURGLARY", occurred_at=datetime(2026, 5, 1, tzinfo=timezone.utc)),  # old
+        _inc(crime_type="BURGLARY", occurred_at=datetime(2026, 5, 1, tzinfo=UTC)),  # old
         _inc(crime_type="THEFT", lat=34.1000, lon=-118.4000),  # far -> dropped
     ]
     out = filters.apply(incidents, cutoff, settings, props)
@@ -54,7 +54,7 @@ def test_apply_recency_radius_and_category():
 def test_apply_keep_list():
     props = {"BEVCENTER": Property("BEVCENTER", "Beverly Center", "", "", 34.07533, -118.37738)}
     settings = Settings(radius_m=1000, crime_categories=MAPPING, keep_categories=["VIOLENT"])
-    cutoff = datetime(2026, 6, 1, tzinfo=timezone.utc)
+    cutoff = datetime(2026, 6, 1, tzinfo=UTC)
     out = filters.apply([_inc(crime_type="BURGLARY")], cutoff, settings, props)
     assert out == []
 

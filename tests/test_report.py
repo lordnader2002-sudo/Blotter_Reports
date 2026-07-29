@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from openpyxl import load_workbook
 
@@ -9,7 +9,7 @@ from blotter.report import excel, markdown
 from blotter.report.rollup import build_rollup
 from blotter.schema import PROPERTY, VIOLENT, NormalizedIncident
 
-NOW = datetime(2026, 6, 19, tzinfo=timezone.utc)
+NOW = datetime(2026, 6, 19, tzinfo=UTC)
 
 
 def _result():

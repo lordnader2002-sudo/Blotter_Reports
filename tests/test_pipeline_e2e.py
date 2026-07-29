@@ -1,6 +1,6 @@
 """End-to-end: one mall, one mocked Socrata source, through the full pipeline."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import responses
 
@@ -9,7 +9,7 @@ from blotter.config import Registry, Settings, SourceEntry
 from blotter.http import HttpClient
 from blotter.properties import Property
 
-NOW = datetime(2026, 6, 19, tzinfo=timezone.utc)
+NOW = datetime(2026, 6, 19, tzinfo=UTC)
 
 
 def _registry():

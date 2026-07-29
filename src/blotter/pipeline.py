@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from . import filters
 from .errors import RunReport
@@ -27,9 +27,11 @@ class RunResult:
 
 def run(properties, registry, settings, http, now: datetime | None = None) -> RunResult:
     """Execute the full pipeline. One source failing never aborts the run."""
-    now = now or datetime.now(timezone.utc)
+    now = now or datetime.now(UTC)
     cutoff = now - timedelta(days=settings.recency_window_days)
-    since_iso = cutoff.replace(microsecond=0).isoformat()
+    # Naive UTC ISO string: Socrata floating timestamps reject timezone offsets
+    # (a '+00:00' suffix causes a 400); ArcGIS adapters re-attach UTC as needed.
+    since_iso = cutoff.astimezone(UTC).replace(tzinfo=None, microsecond=0).isoformat()
 
     incidents: list[NormalizedIncident] = []
     report = RunReport()

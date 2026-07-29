@@ -34,10 +34,22 @@ class HttpClient:
         self.session.headers.update({"User-Agent": "blotter-reports/0.1 (+ops analytics)"})
 
     def get_json(self, url: str, params: dict, *, socrata: bool = False):
-        """GET a URL and return parsed JSON, raising for HTTP errors."""
+        """GET a URL and return parsed JSON, raising with a response snippet on failure.
+
+        Portals put the actual diagnosis in the body (Socrata 400s explain the SoQL
+        error; migrated portals return HTML) — surfacing it makes CI logs actionable.
+        """
         headers = {}
         if socrata and self.socrata_app_token:
             headers["X-App-Token"] = self.socrata_app_token
         resp = self.session.get(url, params=params, headers=headers, timeout=self.timeout)
-        resp.raise_for_status()
-        return resp.json()
+        if resp.status_code >= 400:
+            snippet = " ".join(resp.text[:300].split())
+            raise requests.HTTPError(
+                f"HTTP {resp.status_code} for {resp.url} :: {snippet}", response=resp
+            )
+        try:
+            return resp.json()
+        except ValueError as ex:
+            snippet = " ".join(resp.text[:200].split())
+            raise ValueError(f"Non-JSON response from {resp.url} :: {snippet}") from ex

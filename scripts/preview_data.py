@@ -15,18 +15,18 @@ from __future__ import annotations
 
 import random
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from blotter.errors import RunReport  # noqa: E402
-from blotter.geo import haversine_m  # noqa: E402
-from blotter.pipeline import RunResult  # noqa: E402
-from blotter.properties import load_properties  # noqa: E402
-from blotter.report import json_export  # noqa: E402
-from blotter.report.rollup import build_rollup  # noqa: E402
-from blotter.schema import CATEGORIES, NormalizedIncident  # noqa: E402
+from blotter.errors import RunReport
+from blotter.geo import haversine_m
+from blotter.pipeline import RunResult
+from blotter.properties import load_properties
+from blotter.report import json_export
+from blotter.report.rollup import build_rollup
+from blotter.schema import CATEGORIES, NormalizedIncident
 
 PILOT = {
     "BEVCENTER": [("ROBBERY", "VIOLENT"), ("BURGLARY FROM VEHICLE", "PROPERTY"),
@@ -47,7 +47,7 @@ PILOT = {
 def main() -> int:
     rng = random.Random(42)
     props = load_properties("data/properties.csv")
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     incidents: list[NormalizedIncident] = []
     report = RunReport()
 

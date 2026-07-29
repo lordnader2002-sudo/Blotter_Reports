@@ -11,7 +11,7 @@ chart, analogous to Protest-Tracker's ``runs_log.jsonl``.
 from __future__ import annotations
 
 import json
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 import pandas as pd
@@ -68,7 +68,7 @@ def build_payload(rollup, trend: list[dict] | None = None) -> dict:
         "totals": {
             "incidents": int(md.get("total_incidents", 0)),
             "violent": int(md.get("violent_incidents", 0)),
-            "malls": int(len(rollup.summary)),
+            "malls": len(rollup.summary),
             "coverage_gaps": len(md.get("coverage_gaps", [])),
             **_category_totals(rollup.summary),
         },
@@ -86,7 +86,7 @@ def _update_trend_log(rollup, trend_log_path: str | Path) -> list[dict]:
     md = rollup.metadata
     summary = rollup.summary
     cats = _category_totals(summary)
-    generated = _jsonable(md.get("generated_at")) or datetime.utcnow().isoformat()
+    generated = _jsonable(md.get("generated_at")) or datetime.now(UTC).isoformat()
     label = pd.Timestamp(generated).strftime("%b %d") if generated else ""
     entry = {
         "ts": generated,
@@ -114,8 +114,7 @@ def _update_trend_log(rollup, trend_log_path: str | Path) -> list[dict]:
     history = [h for h in history if h.get("ts") != entry["ts"]]
     history.append(entry)
     with open(path, "w", encoding="utf-8") as fh:
-        for h in history:
-            fh.write(json.dumps(h) + "\n")
+        fh.writelines(json.dumps(h) + "\n" for h in history)
     return history
 
 

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import UTC
+
 import requests
 
 from ..normalize import parse_datetime, to_float
@@ -21,11 +23,11 @@ class ArcGISAdapter(SourceAdapter):
     def _date_clause(self, query: FetchQuery) -> str:
         e = self.entry
         if e.date_query_style == "epoch_ms":
-            from datetime import datetime, timezone
+            from datetime import datetime
 
             dt = datetime.fromisoformat(query.since_iso)
             if dt.tzinfo is None:
-                dt = dt.replace(tzinfo=timezone.utc)
+                dt = dt.replace(tzinfo=UTC)
             return f"{e.date_field} > {int(dt.timestamp() * 1000)}"
         # date_literal: ArcGIS understands DATE 'YYYY-MM-DD'
         return f"{e.date_field} > DATE '{query.since_iso[:10]}'"

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 
 def parse_datetime(value) -> datetime | None:
@@ -15,7 +15,7 @@ def parse_datetime(value) -> datetime | None:
         return None
     # ArcGIS returns epoch milliseconds.
     if isinstance(value, (int, float)):
-        return datetime.fromtimestamp(value / 1000.0, tz=timezone.utc)
+        return datetime.fromtimestamp(value / 1000.0, tz=UTC)
     s = str(value).strip()
     if not s:
         return None
@@ -27,13 +27,13 @@ def parse_datetime(value) -> datetime | None:
         # Last resort: date-only or space-separated.
         for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%m/%d/%Y %H:%M:%S", "%m/%d/%Y"):
             try:
-                dt = datetime.strptime(s, fmt)
+                dt = datetime.strptime(s, fmt)  # noqa: DTZ007 — UTC attached on return
                 break
             except ValueError:
                 continue
         else:
             return None
-    return dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt.astimezone(timezone.utc)
+    return dt.replace(tzinfo=UTC) if dt.tzinfo is None else dt.astimezone(UTC)
 
 
 def to_float(value) -> float | None:

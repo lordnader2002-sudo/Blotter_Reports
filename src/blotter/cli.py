@@ -6,7 +6,7 @@ import argparse
 import logging
 import shutil
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from . import pipeline
@@ -45,9 +45,9 @@ def _run(args) -> int:
     registry = load_registry(args.registry, valid_property_ids=set(properties))
     http = HttpClient()
 
-    now = datetime.fromisoformat(args.now) if args.now else datetime.now(timezone.utc)
+    now = datetime.fromisoformat(args.now) if args.now else datetime.now(UTC)
     if now.tzinfo is None:
-        now = now.replace(tzinfo=timezone.utc)
+        now = now.replace(tzinfo=UTC)
 
     result = pipeline.run(properties, registry, settings, http, now=now)
     rollup = build_rollup(result, properties)
