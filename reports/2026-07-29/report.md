@@ -1,22 +1,48 @@
 # Mall Blotter Report
 
-Generated **2026-07-29** · window **30 days** (since 2026-06-29) · **0** incidents (**0** violent) across 6 malls.
+Generated **2026-07-29** · window **30 days** (since 2026-06-29) · **177** incidents (**13** violent) across 6 malls.
 
 ## Summary by mall
 
 | Mall | Status | Total | VIOLENT | PROPERTY | QUALITY_OF_LIFE | OTHER | Nearest (m) | Most recent |
 |---|---|---|---|---|---|---|---|---|
-| Beverly Center | OK | 0 | 0 | 0 | 0 | 0 | - | - |
-| Cherry Creek Shopping Center | FAILED ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Lenox Square | FAILED ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Northgate Station | FAILED ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Opry Mills | FAILED ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| The Domain | FAILED ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
+| Beverly Center | OK | 12 | 0 | 12 | 0 | 0 | 112 | 2026-07-11 |
+| Cherry Creek Shopping Center | OK | 50 | 2 | 39 | 2 | 7 | 26 | 2026-07-26 |
+| Lenox Square | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
+| Northgate Station | OK | 67 | 7 | 41 | 3 | 16 | 145 | 2026-07-24 |
+| Opry Mills | OK | 48 | 4 | 31 | 0 | 13 | 114 | 2026-07-27 |
+| The Domain | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
 
 ## Data quality
 
-- **Source failed** (THEDOMAIN / Austin PD Crime Reports): Socrata fetch failed for fdj4-gpfu: HTTP 400 for https://data.austintexas.gov/resource/fdj4-gpfu.json?%24where=latitude+between+30.39270168394081+and+30.410688116059188+AND+longitude+between+-97.73691453289148+and+-97.71606066710852+AND+occ_date+%3E+%272026-06-29T07%3A26%3A39%27&%24limit=5000&%24order=occ_date+DESC :: {"message":"Query coordinator error: query.soql.no-such-column; No such column: latitude; position: Map(row -> 1, column -> 325, line -> \"SELECT `incident_report_number`, `crime_type`, `ucr_code`, `family_violence`, `occ_date_time`, `occ_date`, `occ_time`, `rep_date_time`, `rep_date`, `rep_time`, `
-- **Source failed** (OPRYMILLS / Metro Nashville PD Incidents): ArcGIS error for Metro Nashville PD Incidents: {'code': 400, 'message': 'Cannot perform query. Invalid query parameters.', 'details': ['Unable to perform query. Please check your parameters.']}
-- **Source failed** (NORTHGATE / Seattle PD Crime Data): Socrata fetch failed for tazs-3rd5: HTTP 400 for https://data.seattle.gov/resource/tazs-3rd5.json?%24where=latitude%3A%3Anumber+between+47.69905138394081+and+47.71703781605919+AND+longitude%3A%3Anumber+between+-122.33973349064095+and+-122.31300410935904+AND+offense_date+%3E+%272026-06-29T07%3A26%3A39%27&%24limit=5000&%24order=offense_date+DESC :: {"message":"Query coordinator error: 400; ERROR: invalid input syntax for type numeric: \"REDACTED\"","errorCode":"400","data":{"source":"soql-server"}}
-- **Source failed** (CHERRYCREEK / Denver PD Crime): ArcGIS error for Denver PD Crime: {'code': 400, 'message': 'Invalid URL', 'details': ['Invalid URL']}
-- **Source failed** (LENOX / Atlanta PD Crime): ArcGIS error for Atlanta PD Crime: {'code': 400, 'message': 'Invalid URL', 'details': ['Invalid URL']}
+- **No coverage:** LENOX, THEDOMAIN
+
+## Highlights (most notable)
+
+| Mall | Date | Category | Type | Distance (m) |
+|---|---|---|---|---|
+| Northgate Station | 2026-07-22 | VIOLENT | Simple Assault | 145 |
+| Northgate Station | 2026-07-21 | VIOLENT | Robbery | 145 |
+| Northgate Station | 2026-07-07 | VIOLENT | Simple Assault | 338 |
+| Cherry Creek Shopping Center | 2026-07-01 | VIOLENT | robbery-bank | 498 |
+| Northgate Station | 2026-07-17 | VIOLENT | Weapon Law Violations | 539 |
+| Cherry Creek Shopping Center | 2026-07-22 | VIOLENT | assault-simple | 566 |
+| Northgate Station | 2026-07-11 | VIOLENT | Robbery | 596 |
+| Northgate Station | 2026-07-11 | VIOLENT | Weapon Law Violations | 640 |
+| Northgate Station | 2026-07-02 | VIOLENT | Aggravated Assault | 798 |
+| Opry Mills | 2026-07-11 | VIOLENT | ASSAULT- FEAR OF BODILY INJURY | 808 |
+| Opry Mills | 2026-07-19 | VIOLENT | Assault, Aggravated - Deadly Weapon - Int/Kn | 936 |
+| Opry Mills | 2026-07-19 | VIOLENT | ASSAULT- OFFENSIVE OR PROVOCATIVE CONTACT | 936 |
+| Opry Mills | 2026-07-19 | VIOLENT | WEAPON OFFENSE, CRIMINAL ATTEMPT | 936 |
+| Cherry Creek Shopping Center | 2026-07-21 | PROPERTY | theft-shoplift | 26 |
+| Cherry Creek Shopping Center | 2026-07-15 | PROPERTY | theft-from-bldg | 26 |
+| Cherry Creek Shopping Center | 2026-07-09 | PROPERTY | theft-shoplift | 26 |
+| Cherry Creek Shopping Center | 2026-07-09 | PROPERTY | theft-shoplift | 26 |
+| Cherry Creek Shopping Center | 2026-07-08 | PROPERTY | theft-shoplift | 26 |
+| Cherry Creek Shopping Center | 2026-07-05 | PROPERTY | theft-shoplift | 26 |
+| Cherry Creek Shopping Center | 2026-07-02 | PROPERTY | theft-shoplift | 26 |
+| Cherry Creek Shopping Center | 2026-06-29 | PROPERTY | theft-shoplift | 26 |
+| Cherry Creek Shopping Center | 2026-07-20 | PROPERTY | theft-other | 100 |
+| Beverly Center | 2026-07-04 | PROPERTY | 594(B)(1) - PC - F - Vandalism ($400 Or More) - Felony - 290 | 112 |
+| Opry Mills | 2026-07-24 | PROPERTY | SHOPLIFTING | 114 |
+| Opry Mills | 2026-07-18 | PROPERTY | SHOPLIFTING | 114 |
