@@ -69,6 +69,14 @@ def main() -> int:
                     occurred_at=now - timedelta(days=rng.randint(0, 29), hours=rng.randint(0, 23)),
                     crime_type=ctype, crime_category=cat, description=ctype,
                     address=f"{rng.randint(100, 9999)} Sample St", lat=lat, lon=lon, distance_m=dist,
+                    raw={
+                        "Weapon_Description": rng.choice(["NONE", "HANDGUN", "KNIFE", "OTHER"]),
+                        "Location_Description": rng.choice(
+                            ["SPECIALTY STORE", "PARKING LOT", "DEPARTMENT STORE", "RESTAURANT"]),
+                        "Incident_Status_Description": rng.choice(
+                            ["OPEN", "CLEARED BY ARREST", "INACTIVE"]),
+                        "Victim_Number": rng.randint(0, 2),
+                    },
                 )
             )
         report.record_success(

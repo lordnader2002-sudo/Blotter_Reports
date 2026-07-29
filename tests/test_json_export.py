@@ -32,6 +32,30 @@ def _rollup():
     return rollup
 
 
+def test_synopsis_and_details_in_payload():
+    from blotter.report.rollup import build_synopsis
+
+    payload = json_export.build_payload(_rollup())
+    inc = payload["incidents"][0]
+    assert "synopsis" in inc and "Beverly Center" in inc["synopsis"]
+    assert "records request" in inc["synopsis"]
+    assert isinstance(inc["details"], dict)
+
+    # Rich raw row (Nashville-style) weaves weapon/premises/status/flags into the text.
+    rich = NormalizedIncident(
+        "BEVCENTER", "s1", "20260738001", NOW, "ROBBERY", VIOLENT, None,
+        "433 Opry Mills Dr", 36.20, -86.69, 114.0,
+        raw={"Weapon_Description": "HANDGUN", "Location_Description": "SPECIALTY STORE",
+             "Incident_Status_Description": "CLEARED BY ARREST", "Victim_Number": 1,
+             "Domestic_Related": "Y"},
+    )
+    prop = Property("BEVCENTER", "Beverly Center", "", "", 34.07533, -118.37738)
+    text = build_synopsis(rich, prop)
+    assert "HANDGUN" in text and "SPECIALTY STORE" in text
+    assert "CLEARED BY ARREST" in text and "domestic related" in text
+    assert "Case #20260738001" in text
+
+
 def test_payload_shape_and_totals():
     payload = json_export.build_payload(_rollup())
     assert payload["totals"]["incidents"] == 2
