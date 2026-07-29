@@ -28,9 +28,11 @@ class SocrataAdapter(SourceAdapter):
             min_lat, min_lon, max_lat, max_lon = bounding_box(
                 query.lat, query.lon, query.radius_m
             )
+            # Some datasets (e.g. Seattle) store lat/lon as text -> cast for BETWEEN.
+            cast = "::number" if e.point_cast_number else ""
             geo = (
-                f"{e.point_field} between {min_lat} and {max_lat} "
-                f"AND {e.point_field_lon} between {min_lon} and {max_lon}"
+                f"{e.point_field}{cast} between {min_lat} and {max_lat} "
+                f"AND {e.point_field_lon}{cast} between {min_lon} and {max_lon}"
             )
         else:
             raise SourceError(f"{e.name or e.dataset_id}: no point_field configured")

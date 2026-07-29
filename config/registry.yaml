@@ -44,21 +44,21 @@ sources:
     address_field: "address"
     incident_id_field: "incident_report_number"
 
-  # --- Opry Mills, Nashville, TN (Metro Nashville PD Incidents) ---
+  # --- Opry Mills, Nashville, TN (MNPD Incidents — official ArcGIS service; the
+  #     old Socrata portal was retired). Fields verified live via CI probe. ---
   - property_id: OPRYMILLS
-    type: socrata
+    type: arcgis
     name: "Metro Nashville PD Incidents"
-    base_url: "https://data.nashville.gov"
-    dataset_id: "2u6v-ujjs"
-    point_field: "latitude"
-    point_field_lon: "longitude"
-    date_field: "incident_occurred"
-    crime_type_field: "offense_description"
-    description_field: "offense_description"
-    address_field: "incident_location"
-    incident_id_field: "incident_number"
+    base_url: "https://services2.arcgis.com/HdTo6HJqh92wn4D8/arcgis/rest/services/Metro_Nashville_Police_Department_Incidents_view/FeatureServer/0"
+    date_query_style: "epoch_ms"
+    date_field: "Incident_Occurred"
+    crime_type_field: "Offense_Description"
+    description_field: "Weapon_Description"
+    address_field: "Incident_Location"
+    incident_id_field: "Primary_Key"
 
-  # --- Northgate Station, Seattle, WA (SPD Crime Data 2008-present) ---
+  # --- Northgate Station, Seattle, WA (SPD Crime Data). Fields verified live via
+  #     CI probe; latitude/longitude are TEXT columns, hence the ::number cast. ---
   - property_id: NORTHGATE
     type: socrata
     name: "Seattle PD Crime Data"
@@ -66,11 +66,12 @@ sources:
     dataset_id: "tazs-3rd5"
     point_field: "latitude"
     point_field_lon: "longitude"
-    date_field: "offense_start_datetime"
-    crime_type_field: "offense"
-    description_field: "offense"
-    address_field: "_100_block_address"
-    incident_id_field: "report_number"
+    point_cast_number: true
+    date_field: "offense_date"
+    crime_type_field: "nibrs_offense_code_description"
+    description_field: "offense_category"
+    address_field: "block_address"
+    incident_id_field: "offense_id"
 
   # --- Cherry Creek Shopping Center, Denver, CO (Denver Police crime, ArcGIS) ---
   - property_id: CHERRYCREEK

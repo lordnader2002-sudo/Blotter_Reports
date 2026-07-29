@@ -27,6 +27,7 @@ class SourceEntry(BaseModel):
     layer: str | None = None  # ArcGIS FeatureServer layer path (if not in base_url)
     point_field: str | None = None  # Socrata point column, or lat column if paired below
     point_field_lon: str | None = None  # set when the dataset has separate lat/lon columns
+    point_cast_number: bool = False  # lat/lon stored as text -> cast with ::number in SoQL
     date_field: str
     crime_type_field: str
     description_field: str | None = None

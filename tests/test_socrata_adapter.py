@@ -70,6 +70,22 @@ def test_socrata_point_field_uses_within_circle():
 
 
 @responses.activate
+def test_socrata_text_columns_get_number_cast():
+    entry = LA_ENTRY.model_copy(update={"point_cast_number": True})
+    responses.add(
+        responses.GET,
+        "https://data.lacity.org/resource/2nrs-mtv8.json",
+        body="[]",
+        content_type="application/json",
+    )
+    adapter = SocrataAdapter(entry, HttpClient())
+    adapter.fetch(FetchQuery(47.7, -122.3, 500, "2026-06-01T00:00:00"))
+    where = parse_qs(urlparse(responses.calls[0].request.url).query)["$where"][0]
+    assert "lat::number between" in where
+    assert "lon::number between" in where
+
+
+@responses.activate
 def test_socrata_to_normalized_maps_fields(fixtures_dir):
     body = (fixtures_dir / "socrata_la_response.json").read_text()
     responses.add(

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Probe open-data portals from CI to discover/validate registry endpoints.
 
-Round 2: authoritative Socrata column metadata, LA staleness + replacement search,
-Denver's official FeatureServer, Atlanta via the Hub DCAT catalog. Results are read
-from the workflow logs (see .github/workflows/probe-sources.yml).
+Round 3 targets the remaining unknowns: LA's replacement NIBRS dataset columns,
+an Austin dataset that still has geo columns, Denver's actual layer id, and
+Atlanta's full DCAT distribution URLs. Results are read from the workflow logs.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ import sys
 import requests
 
 S = requests.Session()
-S.headers["User-Agent"] = "blotter-reports-probe/0.2"
+S.headers["User-Agent"] = "blotter-reports-probe/0.3"
 
 
 def section(title):
@@ -39,12 +39,13 @@ def jsafe(r):
         return None
 
 
-def socrata_columns(domain, dataset):
-    """Authoritative field names + types from the dataset metadata."""
+def socrata_columns(domain, dataset, label=""):
     data = jsafe(get(f"https://{domain}/api/views/{dataset}/columns.json"))
     if data:
         cols = [(c.get("fieldName"), c.get("dataTypeName")) for c in data]
-        print(f"  columns: {cols}")
+        print(f"  [{label or dataset}] columns: {cols}")
+        return dict(cols)
+    return {}
 
 
 def socrata_test(domain, dataset, where, label):
@@ -66,7 +67,7 @@ def probe_layer(url, lat=None, lon=None):
     if not meta:
         return
     if "error" in meta:
-        print(f"  !! layer error: {meta['error']}")
+        print(f"  !! layer error at {url}: {meta['error']}")
         return
     fields = [(f["name"], f["type"].replace("esriFieldType", "")) for f in meta.get("fields", [])]
     print(f"  layer: {meta.get('name')}  maxRecordCount={meta.get('maxRecordCount')}")
@@ -78,9 +79,7 @@ def probe_layer(url, lat=None, lon=None):
         "geometry": f"{lon},{lat}", "geometryType": "esriGeometryPoint", "inSR": 4326,
         "spatialRel": "esriSpatialRelIntersects", "distance": 1500, "units": "esriSRUnit_Meter",
         "outFields": "*", "returnGeometry": "false", "resultRecordCount": 2,
-        "orderByFields": "1 DESC" if False else "",
     }
-    q.pop("orderByFields")
     data = jsafe(get(url.rstrip("/") + "/query", q))
     if not data:
         return
@@ -96,58 +95,56 @@ def probe_layer(url, lat=None, lon=None):
 def main():
     since = "2026-06-29T00:00:00"
 
-    section("LA (2nrs-mtv8): staleness check + column metadata")
-    r = get("https://data.lacity.org/resource/2nrs-mtv8.json",
-            {"$select": "max(date_occ) as max_date, count(*) as n"})
-    print(f"  max date probe: {jsafe(r)}")
-    socrata_columns("data.lacity.org", "2nrs-mtv8")
+    section("LA replacement: LAPD NIBRS Offenses 2026-present (k7nn-b2ep)")
+    cols = socrata_columns("data.lacity.org", "k7nn-b2ep", "LA-NIBRS-2026")
+    # Also check the 2024-2025 NIBRS dataset in case 2026 lacks geo columns.
+    socrata_columns("data.lacity.org", "y8y3-fqfu", "LA-NIBRS-2024-25")
+    # If geo columns are evident, run a live bbox test near Beverly Center.
+    latf = next((c for c in cols if c and "lat" in c.lower()), None)
+    lonf = next((c for c in cols if c and "lon" in c.lower()), None)
+    datef = next((c for c in cols if c and ("date_occ" in c.lower() or "occ" in c.lower())), None)
+    print(f"  guessed fields: lat={latf} lon={lonf} date={datef}")
+    if latf and lonf and datef:
+        socrata_test("data.lacity.org", "k7nn-b2ep",
+                     f"{latf} between 34.066 and 34.084 AND {lonf} between -118.389 and -118.366 "
+                     f"AND {datef} > '{since}'", "LA-NIBRS-test")
 
-    section("LA replacement search (Socrata discovery)")
+    section("Austin: find a crime dataset WITH geo columns")
     data = jsafe(get("https://api.us.socrata.com/api/catalog/v1",
-                     {"domains": "data.lacity.org", "q": "crime", "only": "datasets", "limit": 8}))
+                     {"domains": "data.austintexas.gov", "q": "crime", "only": "datasets",
+                      "limit": 10}))
+    ids = []
     for it in (data or {}).get("results", []):
         res = it.get("resource", {})
         print(f"  - {res.get('name')!r} id={res.get('id')} updated={res.get('updatedAt')}")
+        ids.append((res.get("id"), res.get("name")))
+    for ds_id, name in ids[:6]:
+        cols = socrata_columns("data.austintexas.gov", ds_id, name)
+        geo = [c for c in cols if c and any(k in c.lower() for k in ("lat", "lon", "point", "location"))]
+        if geo:
+            print(f"    ^^ HAS GEO: {geo}")
 
-    section("Austin (fdj4-gpfu): column metadata")
-    socrata_columns("data.austintexas.gov", "fdj4-gpfu")
+    section("Denver: list layers of ODC_CRIME_OFFENSES_P")
+    meta = jsafe(get("https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/"
+                     "ODC_CRIME_OFFENSES_P/FeatureServer", {"f": "json"}))
+    if meta:
+        layers = [(l.get("id"), l.get("name")) for l in (meta.get("layers") or [])]
+        tables = [(t.get("id"), t.get("name")) for t in (meta.get("tables") or [])]
+        print(f"  layers: {layers}  tables: {tables}")
+        for lid, _ in (layers or tables)[:2]:
+            probe_layer("https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/"
+                        f"ODC_CRIME_OFFENSES_P/FeatureServer/{lid}", 39.7168661, -104.9527576)
 
-    section("Seattle (tazs-3rd5): column metadata + corrected test query")
-    socrata_columns("data.seattle.gov", "tazs-3rd5")
-    socrata_test("data.seattle.gov", "tazs-3rd5",
-                 f"latitude between 47.699 and 47.717 AND longitude between -122.340 and -122.313 "
-                 f"AND offense_date > '{since}'", "Seattle-fixed")
-
-    section("Denver official: ODC_CRIME_OFFENSES_P")
-    probe_layer("https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/"
-                "ODC_CRIME_OFFENSES_P/FeatureServer/0", 39.7168661, -104.9527576)
-
-    section("Nashville official (confirm layer 0 works)")
-    probe_layer("https://services2.arcgis.com/HdTo6HJqh92wn4D8/arcgis/rest/services/"
-                "Metro_Nashville_Police_Department_Incidents_view/FeatureServer/0",
-                36.2029647, -86.6922661)
-
-    section("Atlanta: Hub DCAT catalog")
-    for host in ("atlanta-police-opendata-atlantapd.hub.arcgis.com",
-                 "opendata-1-atlantapd.hub.arcgis.com"):
-        print(f"  --- {host}")
-        data = jsafe(get(f"https://{host}/api/feed/dcat-us/1.1.json"))
-        if not data:
-            continue
-        hits = []
-        for ds in data.get("dataset", []):
-            title = ds.get("title", "")
-            if any(k in title.lower() for k in ("crime", "cobra", "incident", "offense")):
-                urls = [d.get("accessURL") for d in ds.get("distribution", [])
-                        if "rest/services" in (d.get("accessURL") or "")]
-                print(f"  - {title!r}: {urls}")
-                hits.extend(urls)
-        if hits:
-            layer = hits[0]
-            if not layer.rstrip("/").split("/")[-1].isdigit():
-                layer = layer.rstrip("/") + "/0"
-            probe_layer(layer, 33.8467259, -84.3624199)
-            break
+    section("Atlanta: full DCAT distributions (all formats)")
+    data = jsafe(get("https://atlanta-police-opendata-atlantapd.hub.arcgis.com/api/feed/dcat-us/1.1.json"))
+    for ds in (data or {}).get("dataset", []):
+        title = ds.get("title", "")
+        if any(k in title.lower() for k in ("crime", "cobra", "incident", "offense", "download")):
+            dists = [(d.get("format"), d.get("accessURL") or d.get("downloadURL"))
+                     for d in ds.get("distribution", [])]
+            print(f"  - {title!r}:")
+            for fmt, u in dists:
+                print(f"      [{fmt}] {u}")
 
     print("\nProbe complete.")
     return 0
