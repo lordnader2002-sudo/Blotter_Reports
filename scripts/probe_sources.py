@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Probe open-data portals from CI to discover/validate registry endpoints.
 
-The dev sandbox cannot reach the portals (egress-blocked), so this runs in a GitHub
-runner (see .github/workflows/probe-sources.yml) and prints everything needed to fix
-config/registry.yaml: real ArcGIS FeatureServer URLs + field lists, and live Socrata
-query validation with error bodies. Read the workflow logs for the results.
+Round 2: authoritative Socrata column metadata, LA staleness + replacement search,
+Denver's official FeatureServer, Atlanta via the Hub DCAT catalog. Results are read
+from the workflow logs (see .github/workflows/probe-sources.yml).
 """
 
 from __future__ import annotations
@@ -15,178 +14,140 @@ import sys
 import requests
 
 S = requests.Session()
-S.headers["User-Agent"] = "blotter-reports-probe/0.1"
-ARCGIS_SEARCH = "https://www.arcgis.com/sharing/rest/search"
-ARCGIS_ITEM = "https://www.arcgis.com/sharing/rest/content/items/{id}"
+S.headers["User-Agent"] = "blotter-reports-probe/0.2"
 
 
 def section(title):
     print(f"\n{'=' * 70}\n== {title}\n{'=' * 70}")
 
 
-def get(url, params=None, timeout=30):
+def get(url, params=None, timeout=45):
     try:
-        r = S.get(url, params=params or {}, timeout=timeout)
-        return r
+        return S.get(url, params=params or {}, timeout=timeout)
     except requests.RequestException as ex:
         print(f"  !! request failed: {ex}")
         return None
 
 
-def arcgis_search(query, num=8):
-    r = get(ARCGIS_SEARCH, {"f": "json", "q": query, "num": num})
+def jsafe(r):
     if r is None:
-        return []
+        return None
     try:
-        results = r.json().get("results", [])
+        return r.json()
     except ValueError:
-        print(f"  !! non-JSON from search: {r.text[:200]}")
-        return []
-    for it in results:
-        print(f"  - [{it.get('type')}] {it.get('title')!r} owner={it.get('owner')}")
-        print(f"      id={it.get('id')}  url={it.get('url')}")
-    return results
+        print(f"  !! non-JSON (HTTP {r.status_code}): {' '.join(r.text[:200].split())}")
+        return None
 
 
-def probe_layer(url):
-    """Print layer metadata + field names for a FeatureServer layer url."""
-    if not url:
-        return
-    if not url.rstrip("/").split("/")[-1].isdigit():
-        # Service root: list layers first, then probe layer 0.
-        r = get(url, {"f": "json"})
-        if r is not None:
-            try:
-                layers = r.json().get("layers", [])
-                print(f"    layers: {[(l.get('id'), l.get('name')) for l in layers]}")
-            except ValueError:
-                print(f"    !! non-JSON service root: {r.text[:150]}")
-        url = url.rstrip("/") + "/0"
-    r = get(url, {"f": "json"})
+def socrata_columns(domain, dataset):
+    """Authoritative field names + types from the dataset metadata."""
+    data = jsafe(get(f"https://{domain}/api/views/{dataset}/columns.json"))
+    if data:
+        cols = [(c.get("fieldName"), c.get("dataTypeName")) for c in data]
+        print(f"  columns: {cols}")
+
+
+def socrata_test(domain, dataset, where, label):
+    r = get(f"https://{domain}/resource/{dataset}.json", {"$where": where, "$limit": 2})
     if r is None:
         return
-    try:
-        meta = r.json()
-    except ValueError:
-        print(f"    !! non-JSON layer meta: {r.text[:150]}")
+    print(f"  [{label}] {where!r}: HTTP {r.status_code}")
+    if r.status_code != 200:
+        print(f"    error: {' '.join(r.text[:300].split())}")
+    else:
+        rows = jsafe(r)
+        print(f"    -> {len(rows or [])} row(s)")
+        if rows:
+            print(f"    sample: {json.dumps(rows[0], default=str)[:400]}")
+
+
+def probe_layer(url, lat=None, lon=None):
+    meta = jsafe(get(url, {"f": "json"}))
+    if not meta:
         return
     if "error" in meta:
-        print(f"    !! layer error: {meta['error']}")
+        print(f"  !! layer error: {meta['error']}")
         return
     fields = [(f["name"], f["type"].replace("esriFieldType", "")) for f in meta.get("fields", [])]
-    print(f"    layer: {meta.get('name')}  maxRecordCount={meta.get('maxRecordCount')}")
-    print(f"    fields: {fields}")
-
-
-def probe_arcgis_query(layer_url, lat, lon, date_field=None):
-    """Run a live radius query to prove the endpoint + geometry params work."""
-    params = {
+    print(f"  layer: {meta.get('name')}  maxRecordCount={meta.get('maxRecordCount')}")
+    print(f"  fields: {fields}")
+    if lat is None:
+        return
+    q = {
         "f": "json", "where": "1=1",
         "geometry": f"{lon},{lat}", "geometryType": "esriGeometryPoint", "inSR": 4326,
         "spatialRel": "esriSpatialRelIntersects", "distance": 1500, "units": "esriSRUnit_Meter",
         "outFields": "*", "returnGeometry": "false", "resultRecordCount": 2,
+        "orderByFields": "1 DESC" if False else "",
     }
-    r = get(layer_url.rstrip("/") + "/query", params)
-    if r is None:
-        return
-    try:
-        data = r.json()
-    except ValueError:
-        print(f"    !! non-JSON query response: {r.text[:150]}")
+    q.pop("orderByFields")
+    data = jsafe(get(url.rstrip("/") + "/query", q))
+    if not data:
         return
     if "error" in data:
-        print(f"    !! query error: {data['error']}")
+        print(f"  !! query error: {data['error']}")
         return
     feats = data.get("features", [])
-    print(f"    query OK — {len(feats)} sample feature(s)")
+    print(f"  radius query OK — {len(feats)} sample feature(s)")
     if feats:
-        print(f"    sample attrs: {json.dumps(feats[0].get('attributes', {}), default=str)[:500]}")
-
-
-def probe_socrata(domain, dataset, where=None, label=""):
-    base = f"https://{domain}/resource/{dataset}.json"
-    r = get(base, {"$limit": 1})
-    if r is None:
-        return
-    print(f"  [{label}] no-filter probe: HTTP {r.status_code}")
-    if r.status_code != 200:
-        print(f"    body: {' '.join(r.text[:250].split())}")
-        return
-    try:
-        rows = r.json()
-        if rows:
-            print(f"    fields: {sorted(rows[0].keys())}")
-    except ValueError:
-        print(f"    !! non-JSON (portal migrated?): {' '.join(r.text[:200].split())}")
-        return
-    if where:
-        r2 = get(base, {"$where": where, "$limit": 2})
-        status = r2.status_code if r2 is not None else "n/a"
-        print(f"    filtered probe [{where}]: HTTP {status}")
-        if r2 is not None and r2.status_code != 200:
-            print(f"    error body: {' '.join(r2.text[:300].split())}")
-        elif r2 is not None:
-            try:
-                print(f"    -> {len(r2.json())} row(s)")
-            except ValueError:
-                print(f"    !! non-JSON: {r2.text[:150]}")
+        print(f"  sample attrs: {json.dumps(feats[0].get('attributes', {}), default=str)[:450]}")
 
 
 def main():
-    since = "2026-06-29T00:00:00"  # naive UTC — the format the pipeline now emits
+    since = "2026-06-29T00:00:00"
 
-    section("SOCRATA: LA / Beverly Center (2nrs-mtv8)")
-    probe_socrata("data.lacity.org", "2nrs-mtv8", label="LA",
-                  where=f"lat between 34.066 and 34.084 AND lon between -118.389 and -118.366 "
-                        f"AND date_occ > '{since}'")
+    section("LA (2nrs-mtv8): staleness check + column metadata")
+    r = get("https://data.lacity.org/resource/2nrs-mtv8.json",
+            {"$select": "max(date_occ) as max_date, count(*) as n"})
+    print(f"  max date probe: {jsafe(r)}")
+    socrata_columns("data.lacity.org", "2nrs-mtv8")
 
-    section("SOCRATA: Austin / The Domain (fdj4-gpfu)")
-    probe_socrata("data.austintexas.gov", "fdj4-gpfu", label="Austin",
-                  where=f"latitude between 30.392 and 30.411 AND longitude between -97.737 and -97.716 "
-                        f"AND occ_date > '{since}'")
+    section("LA replacement search (Socrata discovery)")
+    data = jsafe(get("https://api.us.socrata.com/api/catalog/v1",
+                     {"domains": "data.lacity.org", "q": "crime", "only": "datasets", "limit": 8}))
+    for it in (data or {}).get("results", []):
+        res = it.get("resource", {})
+        print(f"  - {res.get('name')!r} id={res.get('id')} updated={res.get('updatedAt')}")
 
-    section("SOCRATA: Seattle / Northgate (tazs-3rd5)")
-    probe_socrata("data.seattle.gov", "tazs-3rd5", label="Seattle",
-                  where=f"latitude between 47.699 and 47.717 AND longitude between -122.340 and -122.313 "
-                        f"AND offense_start_datetime > '{since}'")
+    section("Austin (fdj4-gpfu): column metadata")
+    socrata_columns("data.austintexas.gov", "fdj4-gpfu")
 
-    section("SOCRATA (legacy check): Nashville 2u6v-ujjs — expected migrated to ArcGIS Hub")
-    probe_socrata("data.nashville.gov", "2u6v-ujjs", label="Nashville-legacy")
+    section("Seattle (tazs-3rd5): column metadata + corrected test query")
+    socrata_columns("data.seattle.gov", "tazs-3rd5")
+    socrata_test("data.seattle.gov", "tazs-3rd5",
+                 f"latitude between 47.699 and 47.717 AND longitude between -122.340 and -122.313 "
+                 f"AND offense_date > '{since}'", "Seattle-fixed")
 
-    section("ARCGIS SEARCH: Nashville MNPD Incidents")
-    results = arcgis_search('title:"Metro Nashville Police Department Incidents" type:"Feature Service"')
-    for it in results[:2]:
-        if it.get("url"):
-            probe_layer(it["url"])
-            probe_arcgis_query(it["url"].rstrip("/") + ("/0" if not it["url"].rstrip("/").endswith("/0") else ""),
-                               36.2029647, -86.6922661)
+    section("Denver official: ODC_CRIME_OFFENSES_P")
+    probe_layer("https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/"
+                "ODC_CRIME_OFFENSES_P/FeatureServer/0", 39.7168661, -104.9527576)
 
-    section("ARCGIS SEARCH: Denver crime (owner geospatialDenver)")
-    results = arcgis_search('crime owner:geospatialDenver type:"Feature Service"')
-    if not results:
-        results = arcgis_search('title:Crime denver NIBRS type:"Feature Service"')
-    for it in results[:3]:
-        if it.get("url") and "crime" in (it.get("title") or "").lower():
-            probe_layer(it["url"])
-            probe_arcgis_query(it["url"].rstrip("/") + "/0", 39.7168661, -104.9527576)
+    section("Nashville official (confirm layer 0 works)")
+    probe_layer("https://services2.arcgis.com/HdTo6HJqh92wn4D8/arcgis/rest/services/"
+                "Metro_Nashville_Police_Department_Incidents_view/FeatureServer/0",
+                36.2029647, -86.6922661)
 
-    section("ARCGIS ITEM: Atlanta Crime Stats (2f68476999b74aa0b8dc9769822854d2)")
-    r = get(ARCGIS_ITEM.format(id="2f68476999b74aa0b8dc9769822854d2"), {"f": "json"})
-    if r is not None:
-        try:
-            item = r.json()
-            print(f"  title={item.get('title')!r} type={item.get('type')} url={item.get('url')}")
-            if item.get("url"):
-                probe_layer(item["url"])
-                probe_arcgis_query(item["url"].rstrip("/") + "/0", 33.8467259, -84.3624199)
-        except ValueError:
-            print(f"  !! non-JSON: {r.text[:200]}")
-
-    section("ARCGIS SEARCH: Atlanta PD (owner:atlantapd)")
-    results = arcgis_search('owner:atlantapd type:"Feature Service"')
-    for it in results[:3]:
-        if it.get("url"):
-            probe_layer(it["url"])
+    section("Atlanta: Hub DCAT catalog")
+    for host in ("atlanta-police-opendata-atlantapd.hub.arcgis.com",
+                 "opendata-1-atlantapd.hub.arcgis.com"):
+        print(f"  --- {host}")
+        data = jsafe(get(f"https://{host}/api/feed/dcat-us/1.1.json"))
+        if not data:
+            continue
+        hits = []
+        for ds in data.get("dataset", []):
+            title = ds.get("title", "")
+            if any(k in title.lower() for k in ("crime", "cobra", "incident", "offense")):
+                urls = [d.get("accessURL") for d in ds.get("distribution", [])
+                        if "rest/services" in (d.get("accessURL") or "")]
+                print(f"  - {title!r}: {urls}")
+                hits.extend(urls)
+        if hits:
+            layer = hits[0]
+            if not layer.rstrip("/").split("/")[-1].isdigit():
+                layer = layer.rstrip("/") + "/0"
+            probe_layer(layer, 33.8467259, -84.3624199)
+            break
 
     print("\nProbe complete.")
     return 0
