@@ -70,8 +70,8 @@ def test_socrata_point_field_uses_within_circle():
 
 
 @responses.activate
-def test_socrata_text_columns_get_number_cast():
-    entry = LA_ENTRY.model_copy(update={"point_cast_number": True})
+def test_socrata_text_columns_use_string_bounds():
+    entry = LA_ENTRY.model_copy(update={"point_is_text": True})
     responses.add(
         responses.GET,
         "https://data.lacity.org/resource/2nrs-mtv8.json",
@@ -81,8 +81,11 @@ def test_socrata_text_columns_get_number_cast():
     adapter = SocrataAdapter(entry, HttpClient())
     adapter.fetch(FetchQuery(47.7, -122.3, 500, "2026-06-01T00:00:00"))
     where = parse_qs(urlparse(responses.calls[0].request.url).query)["$where"][0]
-    assert "lat::number between" in where
-    assert "lon::number between" in where
+    # Bounds are quoted strings; for negative longitudes the lexicographically
+    # smaller bound comes first (string order is reversed numeric for negatives).
+    assert "lat between '47.6" in where
+    assert "lon between '-122.29" in where and "and '-122.30" in where
+    assert "::number" not in where
 
 
 @responses.activate

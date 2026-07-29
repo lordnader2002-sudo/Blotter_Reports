@@ -1,64 +1,66 @@
 # Mall -> open-data crime source bindings (the pilot).
 #
 # Each entry maps a property_id (must exist in data/properties.csv) to one
-# jurisdiction dataset and the portal-specific field names. Field names VARY per
-# portal and must be validated against the live schema before a source is trusted
-# (see the project README, "Adding a mall"). A source with wrong field names fails
-# gracefully and shows as FAILED in the report rather than crashing the run.
+# jurisdiction dataset and the portal-specific field names. All enabled entries
+# below were VERIFIED LIVE via the CI probe (scripts/probe_sources.py — run it
+# from the Actions tab after any registry change; results are in the job log).
 #
 # type: "socrata" | "arcgis"
-#   socrata  -> base_url + dataset_id (4x4). within_circle needs a true point column;
-#               datasets exposing separate lat/lon columns set point_field + point_field_lon
-#               (a bounding box is used, then the pipeline re-filters by exact distance).
-#   arcgis   -> base_url is the FeatureServer LAYER url; date_query_style epoch_ms|date_literal.
+#   socrata -> base_url + dataset_id. Datasets with separate lat/lon columns set
+#              point_field + point_field_lon (bounding-box query, exact-radius
+#              re-filter downstream); point_is_text for text-typed lat/lon.
+#   arcgis  -> base_url is the FeatureServer LAYER url; AGOL-hosted services
+#              want date_query_style: date_literal (epoch_ms 400s on them).
 
 defaults:
   radius_m: 1000
 
 sources:
-  # --- Beverly Center, Los Angeles, CA (LA City Crime Data 2020-present) ---
+  # --- Beverly Center, Los Angeles, CA ---
+  # LAPD moved to NIBRS in 2024 and froze 2nrs-mtv8 (max date 2024-12-30).
+  # k7nn-b2ep is "LAPD NIBRS Offenses 2026 to Present"; lat/lon are 100th-block
+  # anonymized (hndrdth_*). Probe-verified columns.
   - property_id: BEVCENTER
     type: socrata
-    name: "LAPD Crime Data 2020-present"
+    name: "LAPD NIBRS Offenses 2026-present"
     base_url: "https://data.lacity.org"
-    dataset_id: "2nrs-mtv8"
-    point_field: "lat"            # LA exposes separate lat/lon numeric columns
-    point_field_lon: "lon"
+    dataset_id: "k7nn-b2ep"
+    point_field: "hndrdth_lat"
+    point_field_lon: "hndrdth_lon"
     date_field: "date_occ"
-    crime_type_field: "crm_cd_desc"
-    description_field: "crm_cd_desc"
-    address_field: "location"
-    incident_id_field: "dr_no"
+    crime_type_field: "nibr_description"
+    description_field: "weapon_desc"
+    address_field: "hndrdth_loc_chk"
+    incident_id_field: "uniquenibrno"
 
-  # --- The Domain, Austin, TX (APD Crime Reports) ---
+  # --- The Domain, Austin, TX — DISABLED ---
+  # fdj4-gpfu ("Crime Reports") no longer exposes ANY location columns
+  # (probe-verified via columns.json), so radius filtering is impossible.
+  # Needs a replacement dataset with geo columns; shows as NO COVERAGE until then.
   - property_id: THEDOMAIN
+    enabled: false
     type: socrata
-    name: "Austin PD Crime Reports"
+    name: "Austin PD Crime Reports (geo columns removed upstream)"
     base_url: "https://data.austintexas.gov"
     dataset_id: "fdj4-gpfu"
-    point_field: "latitude"
-    point_field_lon: "longitude"
     date_field: "occ_date"
     crime_type_field: "crime_type"
-    description_field: "crime_type"
-    address_field: "address"
-    incident_id_field: "incident_report_number"
 
-  # --- Opry Mills, Nashville, TN (MNPD Incidents — official ArcGIS service; the
-  #     old Socrata portal was retired). Fields verified live via CI probe. ---
+  # --- Opry Mills, Nashville, TN (official MNPD ArcGIS service; old Socrata
+  #     portal retired). AGOL-hosted -> date_literal. Probe-verified. ---
   - property_id: OPRYMILLS
     type: arcgis
     name: "Metro Nashville PD Incidents"
     base_url: "https://services2.arcgis.com/HdTo6HJqh92wn4D8/arcgis/rest/services/Metro_Nashville_Police_Department_Incidents_view/FeatureServer/0"
-    date_query_style: "epoch_ms"
+    date_query_style: "date_literal"
     date_field: "Incident_Occurred"
     crime_type_field: "Offense_Description"
     description_field: "Weapon_Description"
     address_field: "Incident_Location"
     incident_id_field: "Primary_Key"
 
-  # --- Northgate Station, Seattle, WA (SPD Crime Data). Fields verified live via
-  #     CI probe; latitude/longitude are TEXT columns, hence the ::number cast. ---
+  # --- Northgate Station, Seattle, WA (SPD Crime Data). latitude/longitude are
+  #     TEXT and contain 'REDACTED' rows -> point_is_text string comparison. ---
   - property_id: NORTHGATE
     type: socrata
     name: "Seattle PD Crime Data"
@@ -66,33 +68,33 @@ sources:
     dataset_id: "tazs-3rd5"
     point_field: "latitude"
     point_field_lon: "longitude"
-    point_cast_number: true
+    point_is_text: true
     date_field: "offense_date"
     crime_type_field: "nibrs_offense_code_description"
     description_field: "offense_category"
     address_field: "block_address"
     incident_id_field: "offense_id"
 
-  # --- Cherry Creek Shopping Center, Denver, CO (Denver Police crime, ArcGIS) ---
+  # --- Cherry Creek, Denver, CO (official ODC service — layer id 324!).
+  #     AGOL-hosted -> date_literal. Probe-verified fields + radius query. ---
   - property_id: CHERRYCREEK
     type: arcgis
     name: "Denver PD Crime"
-    base_url: "https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/ArcGIS/rest/services/ODC_CRIME_CRIMES_P/FeatureServer/0"
-    date_query_style: "epoch_ms"
+    base_url: "https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/ODC_CRIME_OFFENSES_P/FeatureServer/324"
+    date_query_style: "date_literal"
     date_field: "FIRST_OCCURRENCE_DATE"
     crime_type_field: "OFFENSE_TYPE_ID"
     description_field: "OFFENSE_CATEGORY_ID"
     address_field: "INCIDENT_ADDRESS"
-    incident_id_field: "INCIDENT_ID"
+    incident_id_field: "OFFENSE_ID"
 
-  # --- Lenox Square, Atlanta, GA (Atlanta PD COBRA crime, ArcGIS) ---
+  # --- Lenox Square, Atlanta, GA — DISABLED ---
+  # APD's portal is dashboard-only (DCAT catalog probe: Web Pages, no FeatureServer
+  # or data downloads). Would need a COBRA CSV-download adapter; NO COVERAGE until then.
   - property_id: LENOX
+    enabled: false
     type: arcgis
-    name: "Atlanta PD Crime"
-    base_url: "https://services3.arcgis.com/Et5Qfajgiyosiw4d/arcgis/rest/services/CrimeDataExport_4/FeatureServer/0"
-    date_query_style: "epoch_ms"
+    name: "Atlanta PD (no public query API)"
+    base_url: "https://atlanta-police-opendata-atlantapd.hub.arcgis.com"
     date_field: "occur_date"
     crime_type_field: "UC2_Literal"
-    description_field: "UC2_Literal"
-    address_field: "location"
-    incident_id_field: "offense_id"
