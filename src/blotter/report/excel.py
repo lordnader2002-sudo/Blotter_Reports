@@ -38,8 +38,9 @@ def write(rollup, path: str | Path) -> None:
     path = Path(path)
     md = rollup.metadata
     summary = _naive(rollup.summary)
-    incidents = _naive(rollup.incidents)
-    highlights = _naive(rollup.highlights)
+    # `details` is a per-row dict for the dashboard modal — not representable in a cell.
+    incidents = _naive(rollup.incidents.drop(columns=["details"], errors="ignore"))
+    highlights = _naive(rollup.highlights.drop(columns=["details"], errors="ignore"))
 
     meta_df = pd.DataFrame(
         [

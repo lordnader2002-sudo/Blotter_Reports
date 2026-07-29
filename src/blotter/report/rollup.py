@@ -20,6 +20,77 @@ class Rollup:
     metadata: dict
 
 
+# Candidate raw-field names per context detail, across the different portals.
+# Feeds never publish officer narratives, so the synopsis is composed from every
+# structured context field the PD does release.
+_DETAIL_FIELDS = {
+    "weapon": ("weapon_desc", "weapon_description", "weapon_primary"),
+    "premises": ("premis_desc", "location_description", "location_type"),
+    "status": ("status_desc", "incident_status_description", "clearance_status",
+               "investigation_status"),
+    "victims": ("totalvictimcount", "victim_count", "victim_number"),
+    "case": ("caseno", "incident_number", "incident_id", "report_number", "case_number"),
+    "neighborhood": ("area_name", "neighborhood", "neighborhood_id"),
+}
+
+_FLAG_FIELDS = {
+    "domestic_violence_crime": "domestic violence",
+    "domestic_related": "domestic related",
+    "hate_crime": "hate crime",
+    "gang_related_crime": "gang related",
+    "victim_shot": "victim shot",
+    "family_violence": "family violence",
+}
+
+
+def _raw_lookup(raw: dict, candidates) -> str | None:
+    low = {str(k).lower(): v for k, v in (raw or {}).items()}
+    for key in candidates:
+        val = low.get(key)
+        if val not in (None, "", "0", 0):
+            return str(val)
+    return None
+
+
+def build_synopsis(inc, prop) -> str:
+    """One readable sentence of everything the PD published about the incident."""
+    raw = inc.raw or {}
+    when = inc.occurred_at.strftime("%b %d, %Y") if inc.occurred_at else "unknown date"
+    where = f"{round(inc.distance_m)} m from {prop.name}" if (
+        inc.distance_m is not None and prop) else (prop.name if prop else "the property")
+    head = f"{(inc.crime_type or 'Incident').strip().capitalize()} on {when}, {where}"
+    if inc.address:
+        head += f" ({inc.address})"
+    parts = [head + "."]
+    for label, keys in (("Weapon", _DETAIL_FIELDS["weapon"]),
+                        ("Premises", _DETAIL_FIELDS["premises"]),
+                        ("Status", _DETAIL_FIELDS["status"]),
+                        ("Victims", _DETAIL_FIELDS["victims"])):
+        val = _raw_lookup(raw, keys)
+        if val and val.upper() not in ("NONE", "UNKNOWN", "N/A"):
+            parts.append(f"{label}: {val}.")
+    low = {str(k).lower(): str(v).upper() for k, v in raw.items() if v is not None}
+    flags = [text for key, text in _FLAG_FIELDS.items()
+             if low.get(key) in ("Y", "YES", "TRUE", "1")]
+    if flags:
+        parts.append(f"Flags: {', '.join(flags)}.")
+    case = _raw_lookup(raw, _DETAIL_FIELDS["case"]) or inc.incident_id
+    if case:
+        parts.append(f"Case #{case} (use for a records request — full narratives "
+                     f"are not published in open data).")
+    return " ".join(parts)
+
+
+def _details(inc) -> dict:
+    """Every non-empty raw field the portal returned, stringified for display."""
+    out = {}
+    for k, v in (inc.raw or {}).items():
+        if v in (None, "") or isinstance(v, (dict, list)):
+            continue
+        out[str(k)] = str(v)
+    return out
+
+
 def _incidents_frame(result, properties) -> pd.DataFrame:
     rows = []
     for inc in result.incidents:
@@ -38,9 +109,11 @@ def _incidents_frame(result, properties) -> pd.DataFrame:
                 "lat": inc.lat,
                 "lon": inc.lon,
                 "distance_m": round(inc.distance_m, 1) if inc.distance_m is not None else None,
+                "synopsis": build_synopsis(inc, prop),
+                "details": _details(inc),
             }
         )
-    return pd.DataFrame(rows, columns=COLUMNS)
+    return pd.DataFrame(rows, columns=[*COLUMNS, "synopsis", "details"])
 
 
 def _source_status_by_mall(result) -> dict[str, str]:
