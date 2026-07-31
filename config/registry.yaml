@@ -101,6 +101,43 @@ sources:
     address_field: "INCIDENT_ADDRESS"
     incident_id_field: "OFFENSE_ID"
 
+  # --- SouthPark, Charlotte, NC (CMPD Incidents — on-prem ArcGIS, probe-verified;
+  #     DATE_INCIDENT_BEGAN is the occurrence date, not DATE_REPORTED). ---
+  - property_id: SOUTHPARK
+    type: arcgis
+    name: "CMPD Incidents"
+    base_url: "https://gis.charlottenc.gov/arcgis/rest/services/CMPD/CMPDIncidents/MapServer/0"
+    date_query_style: "date_literal"
+    date_field: "DATE_INCIDENT_BEGAN"
+    crime_type_field: "HIGHEST_NIBRS_DESCRIPTION"
+    description_field: "HIGHEST_NIBRS_CODE"
+    address_field: "LOCATION"
+    incident_id_field: "INCIDENT_REPORT_ID"
+
+  # --- Charlotte Premium Outlets (Steele Creek — inside Charlotte city, CMPD). ---
+  - property_id: CHARLOTTE
+    type: arcgis
+    name: "CMPD Incidents"
+    base_url: "https://gis.charlottenc.gov/arcgis/rest/services/CMPD/CMPDIncidents/MapServer/0"
+    date_query_style: "date_literal"
+    date_field: "DATE_INCIDENT_BEGAN"
+    crime_type_field: "HIGHEST_NIBRS_DESCRIPTION"
+    description_field: "HIGHEST_NIBRS_CODE"
+    address_field: "LOCATION"
+    incident_id_field: "INCIDENT_REPORT_ID"
+
+  # --- ABQ Uptown, Albuquerque, NM (APD Incidents — probe-verified; only a
+  #     reported-date field exists and no native incident id). ---
+  - property_id: ABQUP
+    type: arcgis
+    name: "Albuquerque PD Incidents"
+    base_url: "https://services.arcgis.com/CWv1abTnC3urn4bV/arcgis/rest/services/Incidents/FeatureServer/0"
+    date_query_style: "date_literal"
+    date_field: "ReportDateTime"
+    crime_type_field: "IncidentType"
+    description_field: "CMLegend"
+    address_field: "BlockAddress"
+
   # --- Lenox Square, Atlanta, GA — DISABLED ---
   # APD's portal is dashboard-only (DCAT catalog probe: Web Pages, no FeatureServer
   # or data downloads). Would need a COBRA CSV-download adapter; NO COVERAGE until then.
