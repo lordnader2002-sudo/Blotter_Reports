@@ -23,9 +23,12 @@ def render(rollup) -> str:
     lines: list[str] = []
     lines.append("# Mall Blotter Report")
     lines.append("")
+    radius = md.get("radius_m")
+    radius_txt = f"**{radius} m** (~{radius / 1609.34:.1f} mi) radius · " if radius else ""
     lines.append(
         f"Generated **{_fmt_dt(md['generated_at'])}** · "
         f"window **{md['window_days']} days** (since {_fmt_dt(md['cutoff'])}) · "
+        f"{radius_txt}"
         f"**{md['total_incidents']}** incidents "
         f"(**{md['violent_incidents']}** violent) across {len(rollup.summary)} malls."
     )

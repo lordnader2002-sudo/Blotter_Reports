@@ -4,8 +4,9 @@
 # late-posted incident still shows up. Kept short — a wider window gets data-busy.
 recency_window_days: 7
 
-# Default search radius around each mall (meters). Override per-source in registry.yaml.
-radius_m: 1000
+# Default search radius around each mall (meters). 1600 m ~= 1 mile.
+# Override per-source with radius_m on a registry entry.
+radius_m: 1600
 
 # Max rows fetched per source per run. Hitting this flags the mall as "truncated".
 result_limit: 5000

@@ -12,9 +12,8 @@
 #   arcgis  -> base_url is the FeatureServer LAYER url; AGOL-hosted services
 #              want date_query_style: date_literal (epoch_ms 400s on them).
 
-defaults:
-  radius_m: 1000
-
+# Radius comes from settings.yaml (radius_m) — set radius_m on an individual
+# entry only when a specific mall needs a different search circle.
 sources:
   # --- Beverly Center, Los Angeles, CA ---
   # LAPD moved to NIBRS in 2024 and froze 2nrs-mtv8 (max date 2024-12-30).
