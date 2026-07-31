@@ -1,7 +1,7 @@
 {
-  "generated": "2026-07-31T07:34:21.761817+00:00",
+  "generated": "2026-07-31T07:36:57.686613+00:00",
   "window_days": 7,
-  "cutoff": "2026-07-24T07:34:21.761817+00:00",
+  "cutoff": "2026-07-24T07:36:57.686613+00:00",
   "radius_m": 1600,
   "totals": {
     "incidents": 133,
@@ -7887,6 +7887,30 @@
     },
     {
       "ts": "2026-07-31T07:34:21.761817+00:00",
+      "label": "Jul 31",
+      "total": 133,
+      "violent": 12,
+      "property": 61,
+      "qol": 5,
+      "other": 55,
+      "malls": {
+        "ABQUP": 0,
+        "ARZMILLS": 28,
+        "BEVCENTER": 0,
+        "CHARLOTTE": 3,
+        "CHERRYCREEK": 12,
+        "GREENHILLS": 7,
+        "INTLPLAZA": 0,
+        "LENOX": 0,
+        "NORTHGATE": 12,
+        "OPRYMILLS": 15,
+        "SOUTHPARK": 14,
+        "THEDOMAIN": 0,
+        "TOWNEEAST": 42
+      }
+    },
+    {
+      "ts": "2026-07-31T07:36:57.686613+00:00",
       "label": "Jul 31",
       "total": 133,
       "violent": 12,
