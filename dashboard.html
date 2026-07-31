@@ -454,10 +454,14 @@ const Incidents=({t,data,query,onRow})=>{
   </div>;
 };
 
-const Malls=({t,data})=>{
+const Malls=({t,data,onSelect})=>{
   const malls=[...(data.malls||[])].sort((a,b)=>(b.total||0)-(a.total||0));
   return <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))',gap:14}}>
-    {malls.map(m=><div key={m.property_id} style={{background:t.surface,border:`1px solid ${t.border}`,borderRadius:8,padding:16}}>
+    {malls.map(m=><div key={m.property_id} onClick={()=>onSelect&&onSelect(m)}
+      onMouseEnter={e=>{e.currentTarget.style.borderColor=t.accent;}}
+      onMouseLeave={e=>{e.currentTarget.style.borderColor=t.border;}}
+      style={{background:t.surface,border:`1px solid ${t.border}`,borderRadius:8,padding:16,
+        cursor:'pointer',transition:'border-color .12s'}}>
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:8,marginBottom:12}}>
         <div style={{minWidth:0}}>
           <div style={{fontSize:13.5,fontWeight:600,color:t.text}}>{m.property_name||m.property_id}</div>
@@ -478,6 +482,88 @@ const Malls=({t,data})=>{
         <span>Recent: <b style={{color:t.textSub}}>{fmtDate(m.most_recent)}</b></span>
       </div>
     </div>)}
+  </div>;
+};
+
+/* Per-mall drill-in: incident list, daily + run-over-run trend, source contact. */
+const DailyBars=({t,rows,windowDays})=>{
+  const ref=useRef(null); const chartRef=useRef(null);
+  useEffect(()=>{
+    if(!ref.current||!window.Chart) return;
+    if(chartRef.current) chartRef.current.destroy();
+    const days=[];
+    for(let i=windowDays-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);
+      days.push(d.toISOString().slice(0,10));}
+    const bucket=(cat)=>days.map(day=>rows.filter(r=>
+      (r.occurred_at||'').slice(0,10)===day&&r.crime_category===cat).length);
+    const ds=(cat)=>({label:CAT_LABEL[cat],data:bucket(cat),
+      backgroundColor:catColor(cat,t),borderRadius:3,stack:'s'});
+    chartRef.current=new Chart(ref.current,{type:'bar',
+      data:{labels:days.map(d=>d.slice(5)),datasets:CATS.map(ds)},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{labels:{color:t.textSub,font:{family:'Inter',size:10}}}},
+        scales:{x:{stacked:true,ticks:{color:t.textMuted},grid:{display:false}},
+                y:{stacked:true,ticks:{color:t.textMuted,precision:0},grid:{color:t.border}}}}});
+    return ()=>chartRef.current&&chartRef.current.destroy();
+  },[rows,t,windowDays]);
+  return <div style={{height:200}}><canvas ref={ref}/></div>;
+};
+
+const MallDetail=({t,data,mall,onBack,onRow})=>{
+  const pid=mall.property_id;
+  const rows=(data.incidents||[]).filter(r=>r.property_id===pid);
+  const srcs=(data.sources||[]).filter(s=>s.property_id===pid);
+  const history=(data.trend||[]).filter(x=>x.malls&&x.malls[pid]!=null).map(x=>x.malls[pid]);
+  const linkStyle={color:t.accent,textDecoration:'none',fontSize:12};
+  return <div style={{display:'flex',flexDirection:'column',gap:16}}>
+    <div style={{display:'flex',alignItems:'center',gap:12}}>
+      <button onClick={onBack} style={{height:30,padding:'0 12px',background:t.surface,
+        border:`1px solid ${t.border}`,borderRadius:7,color:t.textSub,cursor:'pointer',fontSize:12}}>← All malls</button>
+      <div style={{minWidth:0}}>
+        <div style={{display:'flex',alignItems:'center',gap:10}}>
+          <span style={{fontSize:16,fontWeight:700,color:t.text}}>{mall.property_name}</span>
+          <Pill label={mall.status} color={statusColor(mall.status,t)}/>
+          {mall.truncated&&<Pill label="truncated" color={t.high}/>}
+        </div>
+        <div style={{...mono,fontSize:10.5,color:t.textMuted,marginTop:3}}>
+          {mall.property_id}{mall.address?` · ${mall.address}`:''}</div>
+      </div>
+    </div>
+    <div style={{display:'flex',gap:12}}>
+      <StatCard t={t} label="Incidents (window)" value={mall.total||0} color={t.accent}
+        spark={history.length>1?history:null} sub={history.length>1?'spark: run-over-run history':null}/>
+      <StatCard t={t} label="Violent" value={mall.VIOLENT||0} color={t.critical}/>
+      <StatCard t={t} label="Nearest" value={mall.nearest_m!=null?`${Math.round(mall.nearest_m)}m`:'—'}/>
+      <StatCard t={t} label="Most recent" value={fmtDate(mall.most_recent)}/>
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'2fr 1fr',gap:16}}>
+      <Card t={t} title={`Daily breakdown — last ${data.window_days||7} days`}>
+        {rows.length?<DailyBars t={t} rows={rows} windowDays={data.window_days||7}/>
+          :<div style={{fontSize:12,color:t.textMuted,padding:10}}>No incidents in the current window.</div>}
+      </Card>
+      <Card t={t} title="Source & contact">
+        {srcs.length===0&&<div style={{fontSize:12,color:t.textMuted}}>
+          No data source configured for this mall — see the Data Quality tab for the reason.</div>}
+        {srcs.map((s,i)=><div key={i} style={{display:'flex',flexDirection:'column',gap:7,
+          paddingBottom:i<srcs.length-1?12:0}}>
+          <div style={{display:'flex',alignItems:'center',gap:8}}>
+            <Pill label={s.status} color={statusColor(s.status,t)}/>
+            <span style={{fontSize:12.5,fontWeight:600,color:t.text}}>{s.name}</span>
+          </div>
+          {s.contact?.agency&&<div style={{fontSize:12,color:t.textSub}}>{s.contact.agency}</div>}
+          {s.contact?.agency_url&&<a href={s.contact.agency_url} target="_blank" rel="noreferrer"
+            style={linkStyle}>Agency website ↗</a>}
+          {s.url&&<a href={s.url} target="_blank" rel="noreferrer" style={linkStyle}>Dataset / API ↗</a>}
+          <div style={{...mono,fontSize:10,color:t.textMuted}}>fetched {s.fetched_count} row(s) this run</div>
+          <div style={{fontSize:10.5,color:t.textMuted,lineHeight:1.5,borderTop:`1px solid ${t.border}`,paddingTop:8}}>
+            For full incident narratives, submit a public-records request to the agency citing the
+            case number from any incident's detail view.</div>
+        </div>)}
+      </Card>
+    </div>
+    <Card t={t} title={`All ${rows.length} incident(s) — click a row for details`} pad={false}>
+      <IncidentTable t={t} rows={rows} onRow={onRow}/>
+    </Card>
   </div>;
 };
 
@@ -632,6 +718,7 @@ const App=()=>{
   const [view,setView]=useState('dashboard');
   const [query,setQuery]=useState('');
   const [detail,setDetail]=useState(null);  // incident shown in the context modal
+  const [mall,setMall]=useState(null);      // mall drill-in page (By Mall tab)
   const {authed,loading,login,logout}=useAuth();
   const {data,err}=useData(authed);
   const toggleDark=()=>{ const nx=!dark; setDark(nx); localStorage.setItem('br_theme',nx?'midnight':'daylight'); };
@@ -648,7 +735,9 @@ const App=()=>{
     if(!data) return <div style={{color:t.textMuted,...mono,fontSize:12,padding:20}}>Loading data…</div>;
     switch(view){
       case 'incidents': return <Incidents t={t} data={data} query={query} onRow={setDetail}/>;
-      case 'malls':     return <Malls t={t} data={data}/>;
+      case 'malls':     return mall
+        ? <MallDetail t={t} data={data} mall={mall} onBack={()=>setMall(null)} onRow={setDetail}/>
+        : <Malls t={t} data={data} onSelect={setMall}/>;
       case 'map':       return <MapView t={t} data={data}/>;
       case 'trends':    return <Trends t={t} data={data}/>;
       case 'quality':   return <Quality t={t} data={data}/>;
@@ -656,8 +745,9 @@ const App=()=>{
     }
   };
 
+  const nav=(v)=>{ setView(v); setMall(null); };  // sidebar always resets the drill-in
   return <div style={{display:'flex',height:'100vh',background:t.bg}}>
-    <Sidebar t={t} view={view} setView={setView} data={data} onLogout={sb?logout:null}/>
+    <Sidebar t={t} view={view} setView={nav} data={data} onLogout={sb?logout:null}/>
     <div style={{flex:1,display:'flex',flexDirection:'column',minWidth:0}}>
       <TopBar t={t} view={view} data={data} dark={dark} toggleDark={toggleDark} query={query} setQuery={setQuery}/>
       <main style={{flex:1,overflow:'auto',padding:22}}>{body()}</main>

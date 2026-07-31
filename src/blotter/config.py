@@ -36,6 +36,7 @@ class SourceEntry(BaseModel):
     date_query_style: str = "date_literal"  # ArcGIS: "date_literal" | "epoch_ms"
     radius_m: int | None = None
     enabled: bool = True
+    contact: dict | None = None  # e.g. {agency, agency_url} for the dashboard source card
 
 
 class Settings(BaseModel):

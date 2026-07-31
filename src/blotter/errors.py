@@ -18,6 +18,16 @@ class SourceStatus:
     fetched_count: int = 0
     truncated: bool = False
     error: str | None = None
+    url: str | None = None  # dataset/API endpoint, for the dashboard source card
+    contact: dict | None = None  # registry contact block (agency, agency_url, ...)
+
+
+def _entry_url(entry) -> str | None:
+    base = getattr(entry, "base_url", None)
+    dataset = getattr(entry, "dataset_id", None)
+    if base and dataset:
+        return f"{base.rstrip('/')}/resource/{dataset}"
+    return base
 
 
 @dataclass
@@ -34,6 +44,8 @@ class RunReport:
                 status="OK",
                 fetched_count=result.fetched_count,
                 truncated=result.truncated,
+                url=_entry_url(entry),
+                contact=getattr(entry, "contact", None),
             )
         )
 
@@ -45,6 +57,8 @@ class RunReport:
                 name=entry.name or entry.dataset_id or entry.type,
                 status="FAILED",
                 error=str(error),
+                url=_entry_url(entry),
+                contact=getattr(entry, "contact", None),
             )
         )
 

@@ -80,7 +80,12 @@ def main() -> int:
                 )
             )
         report.record_success(
-            type("E", (), {"property_id": pid, "dataset_id": "sample", "name": f"{pid} sample", "type": "socrata"})(),
+            type("E", (), {
+                "property_id": pid, "dataset_id": "sample", "name": f"{pid} sample",
+                "type": "socrata", "base_url": "https://data.example.gov",
+                "contact": {"agency": f"{prop.name} PD (sample)",
+                            "agency_url": "https://example.gov/police"},
+            })(),
             type("R", (), {"source_id": f"{pid}:sample", "fetched_count": n, "truncated": False})(),
         )
 

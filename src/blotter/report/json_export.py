@@ -57,6 +57,8 @@ def build_payload(rollup, trend: list[dict] | None = None) -> dict:
             "fetched_count": s.fetched_count,
             "truncated": s.truncated,
             "error": s.error,
+            "url": getattr(s, "url", None),
+            "contact": getattr(s, "contact", None),
         }
         for s in md.get("sources", [])
     ]
@@ -97,6 +99,11 @@ def _update_trend_log(rollup, trend_log_path: str | Path) -> list[dict]:
         "property": cats.get(PROPERTY, 0),
         "qol": cats.get(QUALITY_OF_LIFE, 0),
         "other": cats.get(OTHER, 0),
+        # Per-mall totals power the mall drill-in trend; accumulates run over run.
+        "malls": {
+            str(r["property_id"]): int(r["total"])
+            for r in summary.to_dict("records")
+        } if len(summary) else {},
     }
 
     path = Path(trend_log_path)
