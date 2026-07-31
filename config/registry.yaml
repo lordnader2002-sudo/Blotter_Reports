@@ -138,6 +138,45 @@ sources:
     description_field: "CMLegend"
     address_field: "BlockAddress"
 
+  # --- International Plaza, Tampa, FL (TPD rolling-365-day crimes; occurfrdate
+  #     is occurred-from — reportdate exists but is not used). Probe-verified. ---
+  - property_id: INTLPLAZA
+    type: arcgis
+    name: "Tampa PD Crimes (365d)"
+    base_url: "https://services1.arcgis.com/IbNXlmt2RVVRCZ6M/arcgis/rest/services/crimes_public_365days/FeatureServer/0"
+    date_query_style: "date_literal"
+    date_field: "occurfrdate"
+    crime_type_field: "nibrsdesc"
+    description_field: "nibrsoffense"
+    address_field: "fulladdr"
+    incident_id_field: "offenseid"
+
+  # --- Towne East Square, Wichita, KS (90-day rolling window; one row per
+  #     offense — dedupe by INCREPORT collapses duplicates). Probe-verified. ---
+  - property_id: TOWNEEAST
+    type: arcgis
+    name: "Wichita PD Crimes (90d)"
+    base_url: "https://gismaps.wichita.gov/ageweb/rest/services/OpenData/Crime/MapServer/0"
+    date_query_style: "date_literal"
+    date_field: "STARTDATETIME"
+    crime_type_field: "OFFENSE_DE"
+    description_field: "CATEGORY"
+    address_field: "PBADDRESS"
+    incident_id_field: "INCREPORT"
+
+  # --- Arizona Mills, Tempe, AZ (General Offenses full-history dataset; our
+  #     date filter scopes it — a 0-count would indicate a stale feed). ---
+  - property_id: ARZMILLS
+    type: arcgis
+    name: "Tempe PD General Offenses"
+    base_url: "https://services.arcgis.com/lQySeXwbBg53XWDi/arcgis/rest/services/General_Offenses_(Open_Data)/FeatureServer/0"
+    date_query_style: "date_literal"
+    date_field: "OccurrenceDatetime"
+    crime_type_field: "OffenseCustom"
+    description_field: "Offense"
+    address_field: "ObfuscatedAddress"
+    incident_id_field: "PrimaryKey"
+
   # --- Lenox Square, Atlanta, GA — DISABLED ---
   # APD's portal is dashboard-only (DCAT catalog probe: Web Pages, no FeatureServer
   # or data downloads). Would need a COBRA CSV-download adapter; NO COVERAGE until then.
