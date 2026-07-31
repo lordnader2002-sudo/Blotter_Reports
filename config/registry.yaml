@@ -59,6 +59,19 @@ sources:
     address_field: "Incident_Location"
     incident_id_field: "Primary_Key"
 
+  # --- The Mall at Green Hills, Nashville, TN — same verified MNPD service as
+  #     Opry Mills; different mall coordinates drive the radius query. ---
+  - property_id: GREENHILLS
+    type: arcgis
+    name: "Metro Nashville PD Incidents"
+    base_url: "https://services2.arcgis.com/HdTo6HJqh92wn4D8/arcgis/rest/services/Metro_Nashville_Police_Department_Incidents_view/FeatureServer/0"
+    date_query_style: "date_literal"
+    date_field: "Incident_Occurred"
+    crime_type_field: "Offense_Description"
+    description_field: "Weapon_Description"
+    address_field: "Incident_Location"
+    incident_id_field: "Primary_Key"
+
   # --- Northgate Station, Seattle, WA (SPD Crime Data). latitude/longitude are
   #     TEXT and contain 'REDACTED' rows -> point_is_text string comparison. ---
   - property_id: NORTHGATE
