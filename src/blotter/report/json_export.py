@@ -77,6 +77,7 @@ def build_payload(rollup, trend: list[dict] | None = None) -> dict:
         "highlights": _records(rollup.highlights),
         "sources": sources,
         "coverage_gaps": list(md.get("coverage_gaps", [])),
+        "uncovered": list(md.get("uncovered", [])),
         "trend": trend or [],
     }
 

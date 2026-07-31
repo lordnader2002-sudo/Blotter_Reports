@@ -548,13 +548,38 @@ const Trends=({t,data})=>{
 
 const Quality=({t,data})=>{
   const sources=data.sources||[];
+  const uncovered=[...(data.uncovered||[])].sort((a,b)=>
+    (b.known_issue?1:0)-(a.known_issue?1:0) || (a.name||'').localeCompare(b.name||''));
+  const [unSearch,setUnSearch]=useState('');
+  const unRows=uncovered.filter(u=>!unSearch||
+    `${u.name} ${u.property_id} ${u.address} ${u.reason}`.toLowerCase().includes(unSearch.toLowerCase()));
   return <div style={{display:'flex',flexDirection:'column',gap:16}}>
-    {(data.coverage_gaps||[]).length>0&&<Card t={t} title="Coverage gaps">
-      <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-        {data.coverage_gaps.map(g=><Pill key={g} label={g} color={t.high}/>)}
+    <Card t={t} title={`Malls without data — ${uncovered.length} of ${uncovered.length+(data.malls?.length||0)-(data.coverage_gaps?.length||0)} properties`}
+      right={<input value={unSearch} onChange={e=>setUnSearch(e.target.value)} placeholder="Filter…"
+        style={{height:28,background:t.bg,border:`1px solid ${t.border}`,borderRadius:6,
+          padding:'0 10px',color:t.text,fontSize:11.5,outline:'none',width:180}}/>}
+      pad={false}>
+      <div style={{fontSize:11,color:t.textMuted,padding:'10px 14px',borderBottom:`1px solid ${t.border}`}}>
+        A zero here means <b>unknown</b>, not "no crime." Orange rows have a known upstream
+        issue; the rest have no open-data source configured yet.</div>
+      <div style={{overflowY:'auto',maxHeight:'46vh'}}>
+        <table style={{width:'100%',borderCollapse:'collapse',fontSize:12}}>
+          <tbody>
+            {unRows.map(u=><tr key={u.property_id} style={{borderBottom:`1px solid ${t.border}`}}>
+              <td style={{padding:'7px 14px',color:t.text,whiteSpace:'nowrap'}}>{u.name}</td>
+              <td style={{...mono,padding:'7px 8px',color:t.textMuted,fontSize:10}}>{u.property_id}</td>
+              <td style={{padding:'7px 14px'}}>
+                {u.known_issue
+                  ? <Pill label="known issue" color={t.high}/>
+                  : <Pill label="not configured" color={t.textMuted}/>}
+              </td>
+              <td style={{padding:'7px 14px',color:t.textSub,maxWidth:340,overflow:'hidden',
+                textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{u.reason}</td>
+            </tr>)}
+          </tbody>
+        </table>
       </div>
-      <div style={{fontSize:11,color:t.textMuted,marginTop:10}}>These malls have no configured source — a zero here is "unknown", not "no crime."</div>
-    </Card>}
+    </Card>
     <Card t={t} title="Sources" pad={false}>
       <table style={{width:'100%',borderCollapse:'collapse',fontSize:12.5}}>
         <thead><tr>{['Mall','Source','Status','Fetched','Note'].map(h=><th key={h} style={{

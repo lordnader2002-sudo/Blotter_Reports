@@ -88,7 +88,13 @@ def main() -> int:
     pilot_ids = set(PILOT) | {"SOUTHPARK"}
     report.note_coverage_gaps({"SOUTHPARK"})
 
-    result = RunResult(incidents, report, now, 30, now - timedelta(days=30), pilot_ids=sorted(pilot_ids))
+    uncovered = [
+        {"property_id": pid, "name": p.name, "address": p.address,
+         "reason": "no source configured yet", "known_issue": False}
+        for pid, p in sorted(props.items()) if pid not in PILOT
+    ]
+    result = RunResult(incidents, report, now, 7, now - timedelta(days=7),
+                       pilot_ids=sorted(pilot_ids), uncovered=uncovered)
     rollup = build_rollup(result, props)
     rollup.metadata["radius_m"] = 1000
     payload = json_export.write(rollup, "dashboard_data.json", trend_log_path="reports/trend_log.jsonl")
