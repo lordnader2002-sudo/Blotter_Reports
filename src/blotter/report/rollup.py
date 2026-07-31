@@ -171,5 +171,6 @@ def build_rollup(result, properties) -> Rollup:
         "violent_incidents": int((df["crime_category"] == VIOLENT).sum()) if not df.empty else 0,
         "sources": result.run_report.sources,
         "coverage_gaps": result.run_report.coverage_gaps,
+        "uncovered": result.uncovered,
     }
     return Rollup(incidents=df, summary=summary, highlights=highlights, metadata=metadata)

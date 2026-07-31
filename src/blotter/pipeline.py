@@ -23,6 +23,9 @@ class RunResult:
     window_days: int
     cutoff: datetime
     pilot_ids: list[str] = field(default_factory=list)
+    # Every property with no enabled source, with the reason — so "no data" is
+    # always explicit and never mistaken for "no crime".
+    uncovered: list[dict] = field(default_factory=list)
 
 
 def run(properties, registry, settings, http, now: datetime | None = None) -> RunResult:
@@ -60,6 +63,24 @@ def run(properties, registry, settings, http, now: datetime | None = None) -> Ru
     pilot_ids = set(registry.property_ids())
     report.note_coverage_gaps(registry.malls_without_sources(pilot_ids))
 
+    covered = {e.property_id for e in registry.enabled_sources()}
+    disabled_reason = {
+        e.property_id: (e.name or "source disabled")
+        for e in registry.entries
+        if not e.enabled
+    }
+    uncovered = [
+        {
+            "property_id": pid,
+            "name": prop.name,
+            "address": prop.address,
+            "reason": disabled_reason.get(pid, "no source configured yet"),
+            "known_issue": pid in disabled_reason,
+        }
+        for pid, prop in sorted(properties.items())
+        if pid not in covered
+    ]
+
     return RunResult(
         incidents=incidents,
         run_report=report,
@@ -67,4 +88,5 @@ def run(properties, registry, settings, http, now: datetime | None = None) -> Ru
         window_days=settings.recency_window_days,
         cutoff=cutoff,
         pilot_ids=sorted(pilot_ids),
+        uncovered=uncovered,
     )

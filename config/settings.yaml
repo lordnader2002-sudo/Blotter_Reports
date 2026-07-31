@@ -1,8 +1,8 @@
 # Global pipeline settings.
 
 # How far back to pull incidents (days). Daily runs use a rolling window so a
-# late-posted incident still shows up.
-recency_window_days: 30
+# late-posted incident still shows up. Kept short — a wider window gets data-busy.
+recency_window_days: 7
 
 # Default search radius around each mall (meters). Override per-source in registry.yaml.
 radius_m: 1000

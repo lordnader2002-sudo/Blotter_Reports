@@ -59,13 +59,21 @@ def render(rollup) -> str:
 
     # Coverage gaps & failures.
     failures = [s for s in md["sources"] if s.status == "FAILED"]
-    if md["coverage_gaps"] or failures:
+    uncovered = md.get("uncovered", [])
+    if md["coverage_gaps"] or failures or uncovered:
         lines.append("## Data quality")
         lines.append("")
         if md["coverage_gaps"]:
             lines.append(f"- **No coverage:** {', '.join(md['coverage_gaps'])}")
         for s in failures:
             lines.append(f"- **Source failed** ({s.property_id} / {s.name}): {s.error}")
+        if uncovered:
+            known = sum(1 for u in uncovered if u.get("known_issue"))
+            lines.append(
+                f"- **Properties without data:** {len(uncovered)} "
+                f"({known} known upstream issues, {len(uncovered) - known} not yet configured) "
+                f"— full list on the dashboard's Data Quality tab"
+            )
         lines.append("")
 
     # Highlights.
