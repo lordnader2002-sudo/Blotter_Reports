@@ -486,7 +486,9 @@ const Malls=({t,data,onSelect})=>{
 };
 
 /* Per-mall drill-in: incident list, daily + run-over-run trend, source contact. */
-const DailyBars=({t,rows,windowDays})=>{
+const axisTitle=(t,text)=>({display:!!text,text,color:t.textSub,font:{family:'Inter',size:11}});
+
+const DailyBars=({t,rows,windowDays,height=200,xTitle,yTitle})=>{
   const ref=useRef(null); const chartRef=useRef(null);
   useEffect(()=>{
     if(!ref.current||!window.Chart) return;
@@ -502,11 +504,43 @@ const DailyBars=({t,rows,windowDays})=>{
       data:{labels:days.map(d=>d.slice(5)),datasets:CATS.map(ds)},
       options:{responsive:true,maintainAspectRatio:false,
         plugins:{legend:{labels:{color:t.textSub,font:{family:'Inter',size:10}}}},
-        scales:{x:{stacked:true,ticks:{color:t.textMuted},grid:{display:false}},
-                y:{stacked:true,ticks:{color:t.textMuted,precision:0},grid:{color:t.border}}}}});
+        scales:{x:{stacked:true,ticks:{color:t.textMuted},grid:{display:false},
+                   title:axisTitle(t,xTitle)},
+                y:{stacked:true,ticks:{color:t.textMuted,precision:0},grid:{color:t.border},
+                   title:axisTitle(t,yTitle)}}}});
     return ()=>chartRef.current&&chartRef.current.destroy();
-  },[rows,t,windowDays]);
-  return <div style={{height:200}}><canvas ref={ref}/></div>;
+  },[rows,t,windowDays,xTitle,yTitle]);
+  return <div style={{height}}><canvas ref={ref}/></div>;
+};
+
+/* Run-over-run history: the trend ledger logs every pipeline run, so collapse
+   to the LAST run of each calendar day for a readable series. */
+const RunHistory=({t,trend})=>{
+  const ref=useRef(null); const chartRef=useRef(null);
+  const byDay={};
+  (trend||[]).forEach(x=>{const d=(x.ts||'').slice(0,10); if(d) byDay[d]=x;});
+  const days=Object.keys(byDay).sort();
+  useEffect(()=>{
+    if(!ref.current||!window.Chart||days.length<2) return;
+    if(chartRef.current) chartRef.current.destroy();
+    const line=(label,key,color)=>({label,data:days.map(d=>byDay[d][key]||0),
+      borderColor:color,backgroundColor:`${color}30`,fill:key==='total',
+      tension:.3,pointRadius:3,borderWidth:2});
+    chartRef.current=new Chart(ref.current,{type:'line',
+      data:{labels:days.map(d=>d.slice(5)),
+        datasets:[line('All incidents in window','total',t.accent),
+                  line('Violent','violent',t.critical)]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{labels:{color:t.textSub,font:{family:'Inter',size:10}}}},
+        scales:{x:{ticks:{color:t.textMuted},grid:{display:false},
+                   title:axisTitle(t,'Report run date (one point per day)')},
+                y:{ticks:{color:t.textMuted,precision:0},grid:{color:t.border},
+                   title:axisTitle(t,'Incidents in the window at that run')}}}});
+    return ()=>chartRef.current&&chartRef.current.destroy();
+  },[trend,t]);
+  if(days.length<2) return <div style={{fontSize:12,color:t.textMuted,padding:16}}>
+    History builds one point per daily run — a line appears after the second day.</div>;
+  return <div style={{height:240}}><canvas ref={ref}/></div>;
 };
 
 const MallDetail=({t,data,mall,onBack,onRow})=>{
@@ -538,7 +572,8 @@ const MallDetail=({t,data,mall,onBack,onRow})=>{
     </div>
     <div style={{display:'grid',gridTemplateColumns:'2fr 1fr',gap:16}}>
       <Card t={t} title={`Daily breakdown — last ${data.window_days||7} days`}>
-        {rows.length?<DailyBars t={t} rows={rows} windowDays={data.window_days||7}/>
+        {rows.length?<DailyBars t={t} rows={rows} windowDays={data.window_days||7}
+            xTitle="Date the incident occurred" yTitle="Incidents"/>
           :<div style={{fontSize:12,color:t.textMuted,padding:10}}>No incidents in the current window.</div>}
       </Card>
       <Card t={t} title="Source & contact">
@@ -609,27 +644,25 @@ const MapView=({t,data})=>{
 };
 
 const Trends=({t,data})=>{
-  const ref=useRef(null); const chartRef=useRef(null);
-  const trend=data.trend||[];
-  useEffect(()=>{
-    if(!ref.current||!window.Chart) return;
-    if(chartRef.current) chartRef.current.destroy();
-    const labels=trend.map(x=>x.label);
-    const ds=(key,cat)=>({label:CAT_LABEL[cat],data:trend.map(x=>x[key]||0),
-      backgroundColor:catColor(cat,t),borderRadius:3,stack:'s'});
-    chartRef.current=new Chart(ref.current,{type:'bar',
-      data:{labels,datasets:[ds('violent','VIOLENT'),ds('property','PROPERTY'),ds('qol','QUALITY_OF_LIFE'),ds('other','OTHER')]},
-      options:{responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{labels:{color:t.textSub,font:{family:'Inter'}}}},
-        scales:{x:{stacked:true,ticks:{color:t.textMuted},grid:{color:t.border}},
-                y:{stacked:true,ticks:{color:t.textMuted},grid:{color:t.border}}}}});
-    return ()=>chartRef.current&&chartRef.current.destroy();
-  },[trend,t]);
-  if(trend.length===0) return <Card t={t} title="Trends"><div style={{color:t.textMuted,fontSize:12,padding:20}}>
-    No trend history yet — it accumulates one point per daily run.</div></Card>;
-  return <Card t={t} title="Incidents over time (by category)">
-    <div style={{height:'calc(100vh - 220px)',minHeight:300}}><canvas ref={ref}/></div>
-  </Card>;
+  const rows=data.incidents||[];
+  return <div style={{display:'flex',flexDirection:'column',gap:16}}>
+    <Card t={t} title={`When incidents occurred — all malls, last ${data.window_days||7} days`}>
+      {rows.length
+        ? <DailyBars t={t} rows={rows} windowDays={data.window_days||7} height={300}
+            xTitle="Date the incident occurred" yTitle="Incidents (stacked by category)"/>
+        : <div style={{fontSize:12,color:t.textMuted,padding:16}}>No incidents in the current window.</div>}
+      <div style={{fontSize:10.5,color:t.textMuted,marginTop:10,lineHeight:1.5}}>
+        Bars are the dates crimes actually happened. The most recent day or two often looks low
+        because agencies post incidents with a lag — not because activity dropped.</div>
+    </Card>
+    <Card t={t} title="Report-run history — network totals over time">
+      <RunHistory t={t} trend={data.trend||[]}/>
+      <div style={{fontSize:10.5,color:t.textMuted,marginTop:10,lineHeight:1.5}}>
+        One point per day (last run of the day). Level shifts here usually reflect configuration
+        changes — malls added, window or radius resized — not crime spikes; use the chart above
+        for actual incident timing.</div>
+    </Card>
+  </div>;
 };
 
 const Quality=({t,data})=>{
