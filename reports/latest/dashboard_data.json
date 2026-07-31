@@ -1,7 +1,7 @@
 {
-  "generated": "2026-07-31T07:22:12.812075+00:00",
+  "generated": "2026-07-31T07:28:37.517868+00:00",
   "window_days": 7,
-  "cutoff": "2026-07-24T07:22:12.812075+00:00",
+  "cutoff": "2026-07-24T07:28:37.517868+00:00",
   "radius_m": 1000,
   "totals": {
     "incidents": 86,
@@ -17,6 +17,7 @@
     {
       "property_id": "ABQUP",
       "property_name": "ABQ Uptown",
+      "address": "2200 Louisiana Boulevard Northeast Albuquerque NM 87110",
       "status": "OK",
       "total": 0,
       "VIOLENT": 0,
@@ -30,6 +31,7 @@
     {
       "property_id": "ARZMILLS",
       "property_name": "Arizona Mill",
+      "address": "5000 South Arizona Mills Circle Tempe AZ 85282",
       "status": "OK",
       "total": 16,
       "VIOLENT": 2,
@@ -43,6 +45,7 @@
     {
       "property_id": "BEVCENTER",
       "property_name": "Beverly Center",
+      "address": "8500 Beverly Boulevard, Los Angeles CA 90048",
       "status": "OK",
       "total": 0,
       "VIOLENT": 0,
@@ -56,6 +59,7 @@
     {
       "property_id": "CHARLOTTE",
       "property_name": "Charlotte Premium Outlets",
+      "address": "5404 New Fashion Way Charlotte NC 28278",
       "status": "OK",
       "total": 2,
       "VIOLENT": 0,
@@ -69,6 +73,7 @@
     {
       "property_id": "CHERRYCREEK",
       "property_name": "Cherry Creek Shopping Center",
+      "address": "3000 East 1st Avenue, Denver CO 80206",
       "status": "OK",
       "total": 11,
       "VIOLENT": 1,
@@ -82,6 +87,7 @@
     {
       "property_id": "GREENHILLS",
       "property_name": "The Mall at Green Hills",
+      "address": "2126 Abbott Martin Road, Nashville, TN 37215",
       "status": "OK",
       "total": 7,
       "VIOLENT": 0,
@@ -95,6 +101,7 @@
     {
       "property_id": "INTLPLAZA",
       "property_name": "International Plaza",
+      "address": "2223 North West Shore Boulevard Tampa FL 33607",
       "status": "OK",
       "total": 0,
       "VIOLENT": 0,
@@ -108,6 +115,7 @@
     {
       "property_id": "LENOX",
       "property_name": "Lenox Square",
+      "address": "3393 Peachtree Road Northeast Atlanta GA 30326",
       "status": "NO COVERAGE",
       "total": 0,
       "VIOLENT": 0,
@@ -121,6 +129,7 @@
     {
       "property_id": "NORTHGATE",
       "property_name": "Northgate Station",
+      "address": "401 Northeast Northgate Way Seattle WA 98125",
       "status": "OK",
       "total": 6,
       "VIOLENT": 1,
@@ -134,6 +143,7 @@
     {
       "property_id": "OPRYMILLS",
       "property_name": "Opry Mills",
+      "address": "433 Opry Mills Drive Nashville TN 37214",
       "status": "OK",
       "total": 14,
       "VIOLENT": 0,
@@ -147,6 +157,7 @@
     {
       "property_id": "SOUTHPARK",
       "property_name": "Southpark",
+      "address": "4400 Sharon Road Charlotte NC 28211",
       "status": "OK",
       "total": 13,
       "VIOLENT": 1,
@@ -160,6 +171,7 @@
     {
       "property_id": "THEDOMAIN",
       "property_name": "The Domain",
+      "address": "11410 Century Oaks Terrace Austin TX 78758",
       "status": "NO COVERAGE",
       "total": 0,
       "VIOLENT": 0,
@@ -173,6 +185,7 @@
     {
       "property_id": "TOWNEEAST",
       "property_name": "Towne East Square",
+      "address": "7700 East Kellogg Wichita KS 67207",
       "status": "OK",
       "total": 17,
       "VIOLENT": 0,
@@ -4534,7 +4547,12 @@
       "status": "OK",
       "fetched_count": 0,
       "truncated": false,
-      "error": null
+      "error": null,
+      "url": "https://data.lacity.org/resource/k7nn-b2ep",
+      "contact": {
+        "agency": "Los Angeles Police Department",
+        "agency_url": "https://www.lapdonline.org"
+      }
     },
     {
       "property_id": "OPRYMILLS",
@@ -4542,7 +4560,12 @@
       "status": "OK",
       "fetched_count": 14,
       "truncated": false,
-      "error": null
+      "error": null,
+      "url": "https://services2.arcgis.com/HdTo6HJqh92wn4D8/arcgis/rest/services/Metro_Nashville_Police_Department_Incidents_view/FeatureServer/0",
+      "contact": {
+        "agency": "Metro Nashville Police Department",
+        "agency_url": "https://www.nashville.gov/departments/police"
+      }
     },
     {
       "property_id": "GREENHILLS",
@@ -4550,7 +4573,12 @@
       "status": "OK",
       "fetched_count": 9,
       "truncated": false,
-      "error": null
+      "error": null,
+      "url": "https://services2.arcgis.com/HdTo6HJqh92wn4D8/arcgis/rest/services/Metro_Nashville_Police_Department_Incidents_view/FeatureServer/0",
+      "contact": {
+        "agency": "Metro Nashville Police Department",
+        "agency_url": "https://www.nashville.gov/departments/police"
+      }
     },
     {
       "property_id": "NORTHGATE",
@@ -4558,7 +4586,12 @@
       "status": "OK",
       "fetched_count": 6,
       "truncated": false,
-      "error": null
+      "error": null,
+      "url": "https://data.seattle.gov/resource/tazs-3rd5",
+      "contact": {
+        "agency": "Seattle Police Department",
+        "agency_url": "https://www.seattle.gov/police"
+      }
     },
     {
       "property_id": "CHERRYCREEK",
@@ -4566,7 +4599,12 @@
       "status": "OK",
       "fetched_count": 11,
       "truncated": false,
-      "error": null
+      "error": null,
+      "url": "https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/ODC_CRIME_OFFENSES_P/FeatureServer/324",
+      "contact": {
+        "agency": "Denver Police Department",
+        "agency_url": "https://www.denvergov.org/Government/Agencies-Departments-Offices/Police-Department"
+      }
     },
     {
       "property_id": "SOUTHPARK",
@@ -4574,7 +4612,12 @@
       "status": "OK",
       "fetched_count": 13,
       "truncated": false,
-      "error": null
+      "error": null,
+      "url": "https://gis.charlottenc.gov/arcgis/rest/services/CMPD/CMPDIncidents/MapServer/0",
+      "contact": {
+        "agency": "Charlotte-Mecklenburg Police Department",
+        "agency_url": "https://www.charlottenc.gov/CMPD"
+      }
     },
     {
       "property_id": "CHARLOTTE",
@@ -4582,7 +4625,12 @@
       "status": "OK",
       "fetched_count": 2,
       "truncated": false,
-      "error": null
+      "error": null,
+      "url": "https://gis.charlottenc.gov/arcgis/rest/services/CMPD/CMPDIncidents/MapServer/0",
+      "contact": {
+        "agency": "Charlotte-Mecklenburg Police Department",
+        "agency_url": "https://www.charlottenc.gov/CMPD"
+      }
     },
     {
       "property_id": "ABQUP",
@@ -4590,7 +4638,12 @@
       "status": "OK",
       "fetched_count": 0,
       "truncated": false,
-      "error": null
+      "error": null,
+      "url": "https://services.arcgis.com/CWv1abTnC3urn4bV/arcgis/rest/services/Incidents/FeatureServer/0",
+      "contact": {
+        "agency": "Albuquerque Police Department",
+        "agency_url": "https://www.cabq.gov/police"
+      }
     },
     {
       "property_id": "INTLPLAZA",
@@ -4598,7 +4651,12 @@
       "status": "OK",
       "fetched_count": 0,
       "truncated": false,
-      "error": null
+      "error": null,
+      "url": "https://services1.arcgis.com/IbNXlmt2RVVRCZ6M/arcgis/rest/services/crimes_public_365days/FeatureServer/0",
+      "contact": {
+        "agency": "Tampa Police Department",
+        "agency_url": "https://www.tampa.gov/police"
+      }
     },
     {
       "property_id": "TOWNEEAST",
@@ -4606,7 +4664,12 @@
       "status": "OK",
       "fetched_count": 38,
       "truncated": false,
-      "error": null
+      "error": null,
+      "url": "https://gismaps.wichita.gov/ageweb/rest/services/OpenData/Crime/MapServer/0",
+      "contact": {
+        "agency": "Wichita Police Department",
+        "agency_url": "https://www.wichita.gov/police"
+      }
     },
     {
       "property_id": "ARZMILLS",
@@ -4614,7 +4677,12 @@
       "status": "OK",
       "fetched_count": 16,
       "truncated": false,
-      "error": null
+      "error": null,
+      "url": "https://services.arcgis.com/lQySeXwbBg53XWDi/arcgis/rest/services/General_Offenses_(Open_Data)/FeatureServer/0",
+      "contact": {
+        "agency": "Tempe Police Department",
+        "agency_url": "https://www.tempe.gov/government/police"
+      }
     }
   ],
   "coverage_gaps": [
@@ -6154,6 +6222,30 @@
       "property": 51,
       "qol": 3,
       "other": 27
+    },
+    {
+      "ts": "2026-07-31T07:28:37.517868+00:00",
+      "label": "Jul 31",
+      "total": 86,
+      "violent": 5,
+      "property": 51,
+      "qol": 3,
+      "other": 27,
+      "malls": {
+        "ABQUP": 0,
+        "ARZMILLS": 16,
+        "BEVCENTER": 0,
+        "CHARLOTTE": 2,
+        "CHERRYCREEK": 11,
+        "GREENHILLS": 7,
+        "INTLPLAZA": 0,
+        "LENOX": 0,
+        "NORTHGATE": 6,
+        "OPRYMILLS": 14,
+        "SOUTHPARK": 13,
+        "THEDOMAIN": 0,
+        "TOWNEEAST": 17
+      }
     }
   ]
 }
