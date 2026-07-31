@@ -48,8 +48,8 @@ jobs:
 
       - name: Commit report
         run: |
-          git config user.name "blotter-bot"
-          git config user.email "blotter-bot@users.noreply.github.com"
+          git config user.name "Claude"
+          git config user.email "noreply@anthropic.com"
           git add reports/
           if git diff --cached --quiet; then
             echo "No report changes to commit."
