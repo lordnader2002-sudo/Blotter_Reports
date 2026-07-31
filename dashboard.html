@@ -258,7 +258,7 @@ const TopBar=({t,view,data,dark,toggleDark,query,setQuery})=>{
       <span style={{fontSize:14,fontWeight:600,color:t.text}}>{LABELS[view]||view}</span>
       <span style={{color:t.textMuted,fontSize:13}}>/</span>
       <span style={{...mono,fontSize:11.5,color:t.textMuted,whiteSpace:'nowrap'}}>
-        {data?`${data.window_days}-day window · generated ${genStr}`:'loading…'}</span>
+        {data?`${data.window_days}-day window · ${data.radius_m?`${data.radius_m} m (${(data.radius_m/1609.34).toFixed(1)} mi) radius · `:''}generated ${genStr}`:'loading…'}</span>
     </div>
     {(view==='incidents')&&<div style={{marginLeft:'auto',position:'relative',width:320,maxWidth:'34vw'}}>
       <input value={query||''} onChange={e=>setQuery&&setQuery(e.target.value)}

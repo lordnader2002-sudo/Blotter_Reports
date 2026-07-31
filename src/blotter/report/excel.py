@@ -46,6 +46,7 @@ def write(rollup, path: str | Path) -> None:
         [
             {"key": "generated_at", "value": str(md["generated_at"])},
             {"key": "window_days", "value": md["window_days"]},
+            {"key": "radius_m", "value": md.get("radius_m", "")},
             {"key": "cutoff", "value": str(md["cutoff"])},
             {"key": "total_incidents", "value": md["total_incidents"]},
             {"key": "violent_incidents", "value": md["violent_incidents"]},
