@@ -144,6 +144,7 @@ def build_rollup(result, properties) -> Rollup:
             {
                 "property_id": pid,
                 "property_name": prop.name if prop else pid,
+                "address": prop.address if prop else None,
                 "status": status_by_mall.get(pid, "OK"),
                 "total": len(sub),
                 **cat_counts,

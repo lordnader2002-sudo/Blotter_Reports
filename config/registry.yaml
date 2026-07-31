@@ -32,6 +32,9 @@ sources:
     description_field: "weapon_desc"
     address_field: "hndrdth_loc_chk"
     incident_id_field: "uniquenibrno"
+    contact:
+      agency: "Los Angeles Police Department"
+      agency_url: "https://www.lapdonline.org"
 
   # --- The Domain, Austin, TX — DISABLED ---
   # fdj4-gpfu ("Crime Reports") no longer exposes ANY location columns
@@ -58,6 +61,9 @@ sources:
     description_field: "Weapon_Description"
     address_field: "Incident_Location"
     incident_id_field: "Primary_Key"
+    contact:
+      agency: "Metro Nashville Police Department"
+      agency_url: "https://www.nashville.gov/departments/police"
 
   # --- The Mall at Green Hills, Nashville, TN — same verified MNPD service as
   #     Opry Mills; different mall coordinates drive the radius query. ---
@@ -71,6 +77,9 @@ sources:
     description_field: "Weapon_Description"
     address_field: "Incident_Location"
     incident_id_field: "Primary_Key"
+    contact:
+      agency: "Metro Nashville Police Department"
+      agency_url: "https://www.nashville.gov/departments/police"
 
   # --- Northgate Station, Seattle, WA (SPD Crime Data). latitude/longitude are
   #     TEXT and contain 'REDACTED' rows -> point_is_text string comparison. ---
@@ -87,6 +96,9 @@ sources:
     description_field: "offense_category"
     address_field: "block_address"
     incident_id_field: "offense_id"
+    contact:
+      agency: "Seattle Police Department"
+      agency_url: "https://www.seattle.gov/police"
 
   # --- Cherry Creek, Denver, CO (official ODC service — layer id 324!).
   #     AGOL-hosted -> date_literal. Probe-verified fields + radius query. ---
@@ -100,6 +112,9 @@ sources:
     description_field: "OFFENSE_CATEGORY_ID"
     address_field: "INCIDENT_ADDRESS"
     incident_id_field: "OFFENSE_ID"
+    contact:
+      agency: "Denver Police Department"
+      agency_url: "https://www.denvergov.org/Government/Agencies-Departments-Offices/Police-Department"
 
   # --- SouthPark, Charlotte, NC (CMPD Incidents — on-prem ArcGIS, probe-verified;
   #     DATE_INCIDENT_BEGAN is the occurrence date, not DATE_REPORTED). ---
@@ -113,6 +128,9 @@ sources:
     description_field: "HIGHEST_NIBRS_CODE"
     address_field: "LOCATION"
     incident_id_field: "INCIDENT_REPORT_ID"
+    contact:
+      agency: "Charlotte-Mecklenburg Police Department"
+      agency_url: "https://www.charlottenc.gov/CMPD"
 
   # --- Charlotte Premium Outlets (Steele Creek — inside Charlotte city, CMPD). ---
   - property_id: CHARLOTTE
@@ -125,6 +143,9 @@ sources:
     description_field: "HIGHEST_NIBRS_CODE"
     address_field: "LOCATION"
     incident_id_field: "INCIDENT_REPORT_ID"
+    contact:
+      agency: "Charlotte-Mecklenburg Police Department"
+      agency_url: "https://www.charlottenc.gov/CMPD"
 
   # --- ABQ Uptown, Albuquerque, NM (APD Incidents — probe-verified; only a
   #     reported-date field exists and no native incident id). ---
@@ -137,6 +158,9 @@ sources:
     crime_type_field: "IncidentType"
     description_field: "CMLegend"
     address_field: "BlockAddress"
+    contact:
+      agency: "Albuquerque Police Department"
+      agency_url: "https://www.cabq.gov/police"
 
   # --- International Plaza, Tampa, FL (TPD rolling-365-day crimes; occurfrdate
   #     is occurred-from — reportdate exists but is not used). Probe-verified. ---
@@ -150,6 +174,9 @@ sources:
     description_field: "nibrsoffense"
     address_field: "fulladdr"
     incident_id_field: "offenseid"
+    contact:
+      agency: "Tampa Police Department"
+      agency_url: "https://www.tampa.gov/police"
 
   # --- Towne East Square, Wichita, KS (90-day rolling window; one row per
   #     offense — dedupe by INCREPORT collapses duplicates). Probe-verified. ---
@@ -163,6 +190,9 @@ sources:
     description_field: "CATEGORY"
     address_field: "PBADDRESS"
     incident_id_field: "INCREPORT"
+    contact:
+      agency: "Wichita Police Department"
+      agency_url: "https://www.wichita.gov/police"
 
   # --- Arizona Mills, Tempe, AZ (General Offenses full-history dataset; our
   #     date filter scopes it — a 0-count would indicate a stale feed). ---
@@ -176,6 +206,9 @@ sources:
     description_field: "Offense"
     address_field: "ObfuscatedAddress"
     incident_id_field: "PrimaryKey"
+    contact:
+      agency: "Tempe Police Department"
+      agency_url: "https://www.tempe.gov/government/police"
 
   # --- Lenox Square, Atlanta, GA — DISABLED ---
   # APD's portal is dashboard-only (DCAT catalog probe: Web Pages, no FeatureServer
