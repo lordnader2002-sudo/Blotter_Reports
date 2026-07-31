@@ -113,8 +113,11 @@ const MiniBar=({value,max,color,t})=><div style={{height:6,background:t.border,b
   <div style={{width:`${max?Math.min(100,(value/max)*100):0}%`,height:'100%',background:color,borderRadius:2,transition:'width .4s ease'}}/>
 </div>;
 
-const StatCard=({t,label,value,sub,spark,color})=><div style={{
-  flex:1,minWidth:0,background:t.surface,border:`1px solid ${t.border}`,borderRadius:8,padding:'18px 20px'}}>
+const StatCard=({t,label,value,sub,spark,color,onClick})=><div onClick={onClick}
+  onMouseEnter={e=>{if(onClick)e.currentTarget.style.borderColor=t.accent;}}
+  onMouseLeave={e=>{e.currentTarget.style.borderColor=t.border;}}
+  style={{flex:1,minWidth:0,background:t.surface,border:`1px solid ${t.border}`,borderRadius:8,
+    padding:'18px 20px',cursor:onClick?'pointer':'default',transition:'border-color .12s'}}>
   <div style={{...mono,fontSize:9.5,fontWeight:600,letterSpacing:'.13em',textTransform:'uppercase',color:t.textMuted,marginBottom:12}}>{label}</div>
   <div style={{display:'flex',alignItems:'flex-end',justifyContent:'space-between',gap:8}}>
     <div style={{minWidth:0}}>
@@ -275,9 +278,13 @@ const TopBar=({t,view,data,dark,toggleDark,query,setQuery})=>{
 };
 
 /* ═══ VIEWS ════════════════════════════════════════════════════ */
-const Overview=({t,data,onRow})=>{
+const Overview=({t,data,onRow,go})=>{
   const tot=data.totals||{};
   const covered=(data.malls||[]).filter(m=>m.status==='OK').length;
+  const failing=(data.malls||[]).filter(m=>m.status==='FAILED').length;
+  const knownIssue=(data.malls||[]).filter(m=>m.status==='NO COVERAGE').length;
+  const issues=failing+knownIssue;
+  const notConfigured=(data.uncovered||[]).filter(u=>!u.known_issue).length;
   const catMax=Math.max(1,...CATS.map(c=>tot[c]||0));
   const topMalls=[...(data.malls||[])].sort((a,b)=>(b.total||0)-(a.total||0)).slice(0,8);
   const mallMax=Math.max(1,...topMalls.map(m=>m.total||0));
@@ -287,8 +294,12 @@ const Overview=({t,data,onRow})=>{
     <div style={{display:'flex',gap:12}}>
       <StatCard t={t} label="Total Incidents" value={tot.incidents??0} sub={`within ${data.radius_m||1000} m of malls`} spark={spark} color={t.accent}/>
       <StatCard t={t} label="Violent" value={tot.violent??0} sub="highest-severity bucket" color={t.critical}/>
-      <StatCard t={t} label="Malls Covered" value={`${covered}/${data.malls?.length??0}`} sub="sources returning data"/>
-      <StatCard t={t} label="Coverage Gaps" value={tot.coverage_gaps??0} sub="malls with no source" color={(tot.coverage_gaps?t.high:t.low)}/>
+      <StatCard t={t} label="Malls Covered" value={`${covered}/${data.malls?.length??0}`} sub="tracked malls returning data"/>
+      <StatCard t={t} label="Issues / Unreachable" value={issues}
+        sub={issues?`${failing} source failure(s) · ${knownIssue} known upstream issue(s)`:'all tracked sources healthy'}
+        color={issues?t.critical:t.low} onClick={go?()=>go('quality'):null}/>
+      <StatCard t={t} label="Not Yet Configured" value={notConfigured}
+        sub="properties awaiting onboarding" color={t.textSub} onClick={go?()=>go('quality'):null}/>
     </div>
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
       <Card t={t} title="By category">
@@ -774,7 +785,7 @@ const App=()=>{
       case 'map':       return <MapView t={t} data={data}/>;
       case 'trends':    return <Trends t={t} data={data}/>;
       case 'quality':   return <Quality t={t} data={data}/>;
-      default:          return <Overview t={t} data={data} onRow={setDetail}/>;
+      default:          return <Overview t={t} data={data} onRow={setDetail} go={nav}/>;
     }
   };
 
