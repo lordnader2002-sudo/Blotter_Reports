@@ -12,3 +12,4 @@
 {"ts": "2026-07-31T07:14:26.378748+00:00", "label": "Jul 31", "total": 556, "violent": 36, "property": 310, "qol": 25, "other": 185}
 {"ts": "2026-07-31T07:22:12.812075+00:00", "label": "Jul 31", "total": 86, "violent": 5, "property": 51, "qol": 3, "other": 27}
 {"ts": "2026-07-31T07:28:37.517868+00:00", "label": "Jul 31", "total": 86, "violent": 5, "property": 51, "qol": 3, "other": 27, "malls": {"ABQUP": 0, "ARZMILLS": 16, "BEVCENTER": 0, "CHARLOTTE": 2, "CHERRYCREEK": 11, "GREENHILLS": 7, "INTLPLAZA": 0, "LENOX": 0, "NORTHGATE": 6, "OPRYMILLS": 14, "SOUTHPARK": 13, "THEDOMAIN": 0, "TOWNEEAST": 17}}
+{"ts": "2026-07-31T07:31:55.362213+00:00", "label": "Jul 31", "total": 86, "violent": 5, "property": 51, "qol": 3, "other": 27, "malls": {"ABQUP": 0, "ARZMILLS": 16, "BEVCENTER": 0, "CHARLOTTE": 2, "CHERRYCREEK": 11, "GREENHILLS": 7, "INTLPLAZA": 0, "LENOX": 0, "NORTHGATE": 6, "OPRYMILLS": 14, "SOUTHPARK": 13, "THEDOMAIN": 0, "TOWNEEAST": 17}}

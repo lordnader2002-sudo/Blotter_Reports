@@ -1,7 +1,7 @@
 {
-  "generated": "2026-07-31T07:28:37.517868+00:00",
+  "generated": "2026-07-31T07:31:55.362213+00:00",
   "window_days": 7,
-  "cutoff": "2026-07-24T07:28:37.517868+00:00",
+  "cutoff": "2026-07-24T07:31:55.362213+00:00",
   "radius_m": 1000,
   "totals": {
     "incidents": 86,
@@ -30,7 +30,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "address": "5000 South Arizona Mills Circle Tempe AZ 85282",
       "status": "OK",
       "total": 16,
@@ -2889,7 +2889,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202675652         ",
       "occurred_at": "2026-07-27T18:37:00+00:00",
@@ -2900,7 +2900,7 @@
       "lat": 33.383141675319266,
       "lon": -111.96456745297117,
       "distance_m": 14.7,
-      "synopsis": "[13b] assault [dv] on Jul 27, 2026, 15 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202675652          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[13b] assault [dv] on Jul 27, 2026, 15 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202675652          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377224",
         "PrimaryKey": "TE202675652         ",
@@ -2930,7 +2930,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202674996         ",
       "occurred_at": "2026-07-25T15:46:00+00:00",
@@ -2941,7 +2941,7 @@
       "lat": 33.383141675319266,
       "lon": -111.96456745297117,
       "distance_m": 14.7,
-      "synopsis": "[sc-0] info - information other (non-criminal) on Jul 25, 2026, 15 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202674996          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] info - information other (non-criminal) on Jul 25, 2026, 15 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202674996          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377283",
         "PrimaryKey": "TE202674996         ",
@@ -2970,7 +2970,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202674783         ",
       "occurred_at": "2026-07-24T21:55:00+00:00",
@@ -2981,7 +2981,7 @@
       "lat": 33.383141675319266,
       "lon": -111.96456745297117,
       "distance_m": 14.7,
-      "synopsis": "[13b] assault on Jul 24, 2026, 15 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202674783          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[13b] assault on Jul 24, 2026, 15 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202674783          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377389",
         "PrimaryKey": "TE202674783         ",
@@ -3011,7 +3011,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202675415         ",
       "occurred_at": "2026-07-26T22:48:00+00:00",
@@ -3022,7 +3022,7 @@
       "lat": 33.38341075529574,
       "lon": -111.96524902811315,
       "distance_m": 68.6,
-      "synopsis": "[90j] trespassing on Jul 26, 2026, 69 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202675415          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[90j] trespassing on Jul 26, 2026, 69 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202675415          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377127",
         "PrimaryKey": "TE202675415         ",
@@ -3052,7 +3052,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202675399         ",
       "occurred_at": "2026-07-26T21:36:00+00:00",
@@ -3063,7 +3063,7 @@
       "lat": 33.38552975305072,
       "lon": -111.96532883468599,
       "distance_m": 262.0,
-      "synopsis": "[sc-0] trespass warning - private property on Jul 26, 2026, 262 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202675399          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] trespass warning - private property on Jul 26, 2026, 262 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202675399          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "376354",
         "PrimaryKey": "TE202675399         ",
@@ -3093,7 +3093,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202676101         ",
       "occurred_at": "2026-07-29T05:03:00+00:00",
@@ -3104,7 +3104,7 @@
       "lat": 33.38580430470485,
       "lon": -111.96606285284828,
       "distance_m": 315.7,
-      "synopsis": "[240] motor vehicle theft on Jul 29, 2026, 316 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202676101          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[240] motor vehicle theft on Jul 29, 2026, 316 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202676101          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377367",
         "PrimaryKey": "TE202676101         ",
@@ -3134,7 +3134,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202676030         ",
       "occurred_at": "2026-07-28T19:58:00+00:00",
@@ -3145,7 +3145,7 @@
       "lat": 33.3805974892332,
       "lon": -111.9623154538272,
       "distance_m": 361.4,
-      "synopsis": "[sc-0] trespass warning - private property on Jul 28, 2026, 361 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202676030          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] trespass warning - private property on Jul 28, 2026, 361 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202676030          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377495",
         "PrimaryKey": "TE202676030         ",
@@ -3175,7 +3175,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202674893         ",
       "occurred_at": "2026-07-25T08:38:00+00:00",
@@ -3186,7 +3186,7 @@
       "lat": 33.38130369903515,
       "lon": -111.96957547257618,
       "distance_m": 517.0,
-      "synopsis": "[go-0] assist other agency on Jul 25, 2026, 517 m from Arizona Mill (4XXX S WENDLER DR). Case #TE202674893          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[go-0] assist other agency on Jul 25, 2026, 517 m from Arizona Mills (4XXX S WENDLER DR). Case #TE202674893          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "376392",
         "PrimaryKey": "TE202674893         ",
@@ -3216,7 +3216,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202675649         ",
       "occurred_at": "2026-07-27T18:28:00+00:00",
@@ -3227,7 +3227,7 @@
       "lat": 33.381282915778314,
       "lon": -111.95930515454887,
       "distance_m": 533.1,
-      "synopsis": "[sc-0] welfare check on Jul 27, 2026, 533 m from Arizona Mill (4XXX S DARROW DR). Case #TE202675649          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] welfare check on Jul 27, 2026, 533 m from Arizona Mills (4XXX S DARROW DR). Case #TE202675649          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377545",
         "PrimaryKey": "TE202675649         ",
@@ -3256,7 +3256,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202674654         ",
       "occurred_at": "2026-07-24T15:03:00+00:00",
@@ -3267,7 +3267,7 @@
       "lat": 33.37825351544224,
       "lon": -111.96113818085328,
       "distance_m": 640.6,
-      "synopsis": "[go-0] accident - hit and run on Jul 24, 2026, 641 m from Arizona Mill (BASELINE RD / S DARROW DR). Case #TE202674654          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[go-0] accident - hit and run on Jul 24, 2026, 641 m from Arizona Mills (BASELINE RD / S DARROW DR). Case #TE202674654          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377095",
         "PrimaryKey": "TE202674654         ",
@@ -3296,7 +3296,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202675235         ",
       "occurred_at": "2026-07-26T07:35:00+00:00",
@@ -3307,7 +3307,7 @@
       "lat": 33.37824262058852,
       "lon": -111.96800446274752,
       "distance_m": 645.4,
-      "synopsis": "[sc-0] trespass warning - public places on Jul 26, 2026, 645 m from Arizona Mill (BASELINE RD / I10). Case #TE202675235          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] trespass warning - public places on Jul 26, 2026, 645 m from Arizona Mills (BASELINE RD / I10). Case #TE202675235          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "376353",
         "PrimaryKey": "TE202675235         ",
@@ -3336,7 +3336,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202675001         ",
       "occurred_at": "2026-07-25T16:04:00+00:00",
@@ -3347,7 +3347,7 @@
       "lat": 33.377865729326,
       "lon": -111.96185540262725,
       "distance_m": 650.2,
-      "synopsis": "[sc-0] trespass warning - private property on Jul 25, 2026, 650 m from Arizona Mill (1XXX W BASELINE RD). Case #TE202675001          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] trespass warning - private property on Jul 25, 2026, 650 m from Arizona Mills (1XXX W BASELINE RD). Case #TE202675001          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "376358",
         "PrimaryKey": "TE202675001         ",
@@ -3377,7 +3377,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202676035         ",
       "occurred_at": "2026-07-28T20:32:00+00:00",
@@ -3388,7 +3388,7 @@
       "lat": 33.38909587497265,
       "lon": -111.961540133513,
       "distance_m": 704.8,
-      "synopsis": "[sc-0] service - order of protection (oop) / injunction (p1) on Jul 28, 2026, 705 m from Arizona Mill (1XXX W LA JOLLA DR). Case #TE202676035          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] service - order of protection (oop) / injunction (p1) on Jul 28, 2026, 705 m from Arizona Mills (1XXX W LA JOLLA DR). Case #TE202676035          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377532",
         "PrimaryKey": "TE202676035         ",
@@ -3417,7 +3417,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202675946         ",
       "occurred_at": "2026-07-28T15:20:00+00:00",
@@ -3428,7 +3428,7 @@
       "lat": 33.377957382608244,
       "lon": -111.95914956498603,
       "distance_m": 773.7,
-      "synopsis": "[sc-0] trespass warning - private property on Jul 28, 2026, 774 m from Arizona Mill (1XXX W BASELINE RD). Case #TE202675946          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] trespass warning - private property on Jul 28, 2026, 774 m from Arizona Mills (1XXX W BASELINE RD). Case #TE202675946          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377237",
         "PrimaryKey": "TE202675946         ",
@@ -3458,7 +3458,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202674935         ",
       "occurred_at": "2026-07-25T11:20:00+00:00",
@@ -3469,7 +3469,7 @@
       "lat": 33.37594547787401,
       "lon": -111.95932875672145,
       "distance_m": 946.9,
-      "synopsis": "[sc-0] assist - mentally ill (other than mhp/emhetr) on Jul 25, 2026, 947 m from Arizona Mill (1XXX W BASELINE RD). Case #TE202674935          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] assist - mentally ill (other than mhp/emhetr) on Jul 25, 2026, 947 m from Arizona Mills (1XXX W BASELINE RD). Case #TE202674935          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377028",
         "PrimaryKey": "TE202674935         ",
@@ -3499,7 +3499,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202674869         ",
       "occurred_at": "2026-07-25T06:20:00+00:00",
@@ -3510,7 +3510,7 @@
       "lat": 33.381699550201915,
       "lon": -111.95428320349201,
       "distance_m": 967.3,
-      "synopsis": "[sc-0] lost - property (non-firearm, other than gov't issued id) on Jul 25, 2026, 967 m from Arizona Mill (PARKSIDE DR / W FREMONT DR). Case #TE202674869          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] lost - property (non-firearm, other than gov't issued id) on Jul 25, 2026, 967 m from Arizona Mills (PARKSIDE DR / W FREMONT DR). Case #TE202674869          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "376004",
         "PrimaryKey": "TE202674869         ",
@@ -3542,7 +3542,7 @@
   "highlights": [
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202675652         ",
       "occurred_at": "2026-07-27T18:37:00+00:00",
@@ -3553,7 +3553,7 @@
       "lat": 33.383141675319266,
       "lon": -111.96456745297117,
       "distance_m": 14.7,
-      "synopsis": "[13b] assault [dv] on Jul 27, 2026, 15 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202675652          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[13b] assault [dv] on Jul 27, 2026, 15 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202675652          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377224",
         "PrimaryKey": "TE202675652         ",
@@ -3583,7 +3583,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202674783         ",
       "occurred_at": "2026-07-24T21:55:00+00:00",
@@ -3594,7 +3594,7 @@
       "lat": 33.383141675319266,
       "lon": -111.96456745297117,
       "distance_m": 14.7,
-      "synopsis": "[13b] assault on Jul 24, 2026, 15 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202674783          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[13b] assault on Jul 24, 2026, 15 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202674783          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377389",
         "PrimaryKey": "TE202674783         ",
@@ -4381,7 +4381,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202675399         ",
       "occurred_at": "2026-07-26T21:36:00+00:00",
@@ -4392,7 +4392,7 @@
       "lat": 33.38552975305072,
       "lon": -111.96532883468599,
       "distance_m": 262.0,
-      "synopsis": "[sc-0] trespass warning - private property on Jul 26, 2026, 262 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202675399          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] trespass warning - private property on Jul 26, 2026, 262 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202675399          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "376354",
         "PrimaryKey": "TE202675399         ",
@@ -4422,7 +4422,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202676101         ",
       "occurred_at": "2026-07-29T05:03:00+00:00",
@@ -4433,7 +4433,7 @@
       "lat": 33.38580430470485,
       "lon": -111.96606285284828,
       "distance_m": 315.7,
-      "synopsis": "[240] motor vehicle theft on Jul 29, 2026, 316 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202676101          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[240] motor vehicle theft on Jul 29, 2026, 316 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202676101          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377367",
         "PrimaryKey": "TE202676101         ",
@@ -4500,7 +4500,7 @@
     },
     {
       "property_id": "ARZMILLS",
-      "property_name": "Arizona Mill",
+      "property_name": "Arizona Mills",
       "source_id": "ARZMILLS:Tempe PD General Offenses",
       "incident_id": "TE202676030         ",
       "occurred_at": "2026-07-28T19:58:00+00:00",
@@ -4511,7 +4511,7 @@
       "lat": 33.3805974892332,
       "lon": -111.9623154538272,
       "distance_m": 361.4,
-      "synopsis": "[sc-0] trespass warning - private property on Jul 28, 2026, 361 m from Arizona Mill (5XXX S ARIZONA MILLS CIR). Case #TE202676030          (use for a records request \u2014 full narratives are not published in open data).",
+      "synopsis": "[sc-0] trespass warning - private property on Jul 28, 2026, 361 m from Arizona Mills (5XXX S ARIZONA MILLS CIR). Case #TE202676030          (use for a records request \u2014 full narratives are not published in open data).",
       "details": {
         "OBJECTID": "377495",
         "PrimaryKey": "TE202676030         ",
@@ -6225,6 +6225,30 @@
     },
     {
       "ts": "2026-07-31T07:28:37.517868+00:00",
+      "label": "Jul 31",
+      "total": 86,
+      "violent": 5,
+      "property": 51,
+      "qol": 3,
+      "other": 27,
+      "malls": {
+        "ABQUP": 0,
+        "ARZMILLS": 16,
+        "BEVCENTER": 0,
+        "CHARLOTTE": 2,
+        "CHERRYCREEK": 11,
+        "GREENHILLS": 7,
+        "INTLPLAZA": 0,
+        "LENOX": 0,
+        "NORTHGATE": 6,
+        "OPRYMILLS": 14,
+        "SOUTHPARK": 13,
+        "THEDOMAIN": 0,
+        "TOWNEEAST": 17
+      }
+    },
+    {
+      "ts": "2026-07-31T07:31:55.362213+00:00",
       "label": "Jul 31",
       "total": 86,
       "violent": 5,
