@@ -275,7 +275,7 @@ const TopBar=({t,view,data,dark,toggleDark,query,setQuery})=>{
 };
 
 /* ═══ VIEWS ════════════════════════════════════════════════════ */
-const Overview=({t,data})=>{
+const Overview=({t,data,onRow})=>{
   const tot=data.totals||{};
   const covered=(data.malls||[]).filter(m=>m.status==='OK').length;
   const catMax=Math.max(1,...CATS.map(c=>tot[c]||0));
@@ -316,9 +316,63 @@ const Overview=({t,data})=>{
         </div>
       </Card>
     </div>
-    <Card t={t} title="Highlights — most notable" pad={false}>
-      <IncidentTable t={t} rows={data.highlights||[]} compact/>
+    <Card t={t} title="Highlights — most notable (click a row for details)" pad={false}>
+      <IncidentTable t={t} rows={data.highlights||[]} compact onRow={onRow}/>
     </Card>
+  </div>;
+};
+
+/* Click-to-open incident context. Open-data feeds do not publish officer
+   narratives; the modal shows the synopsis + every field the PD released,
+   including the case number for records requests. */
+const DetailModal=({t,inc,onClose})=>{
+  if(!inc) return null;
+  const details=inc.details||{};
+  const keys=Object.keys(details);
+  return <div onClick={onClose} style={{position:'fixed',inset:0,zIndex:1000,
+    background:'rgba(0,0,0,.55)',display:'flex',alignItems:'center',justifyContent:'center',padding:24}}>
+    <div onClick={e=>e.stopPropagation()} style={{width:640,maxWidth:'92vw',maxHeight:'86vh',
+      display:'flex',flexDirection:'column',background:t.surface,border:`1px solid ${t.borderStrong}`,
+      borderRadius:12,boxShadow:'0 24px 60px rgba(0,0,0,.45)'}}>
+      <div style={{padding:'16px 20px',borderBottom:`1px solid ${t.border}`,display:'flex',
+        alignItems:'flex-start',gap:12}}>
+        <div style={{minWidth:0,flex:1}}>
+          <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
+            <CatPill cat={inc.crime_category} t={t}/>
+            <span style={{fontSize:14.5,fontWeight:700,color:t.text}}>{inc.crime_type||'Incident'}</span>
+          </div>
+          <div style={{...mono,fontSize:11,color:t.textMuted,marginTop:5}}>
+            {inc.property_name} · {fmtDate(inc.occurred_at)} · {fmtM(inc.distance_m)} from mall
+            {inc.incident_id?` · case ${inc.incident_id}`:''}
+          </div>
+        </div>
+        <button onClick={onClose} style={{background:'transparent',border:'none',color:t.textMuted,
+          cursor:'pointer',fontSize:18,lineHeight:1,padding:4}}>✕</button>
+      </div>
+      <div style={{padding:'16px 20px',overflowY:'auto'}}>
+        <div style={{...mono,fontSize:9.5,fontWeight:600,letterSpacing:'.13em',textTransform:'uppercase',
+          color:t.textMuted,marginBottom:8}}>Synopsis</div>
+        <div style={{fontSize:13,lineHeight:1.65,color:t.text,background:t.accentBg,
+          border:`1px solid ${t.accent}30`,borderRadius:8,padding:'12px 14px'}}>
+          {inc.synopsis||'No additional context published by the source.'}</div>
+        {keys.length>0&&<div style={{marginTop:16}}>
+          <div style={{...mono,fontSize:9.5,fontWeight:600,letterSpacing:'.13em',textTransform:'uppercase',
+            color:t.textMuted,marginBottom:8}}>All published fields</div>
+          <table style={{width:'100%',borderCollapse:'collapse',fontSize:12}}>
+            <tbody>
+              {keys.map(k=><tr key={k} style={{borderBottom:`1px solid ${t.border}`}}>
+                <td style={{...mono,padding:'6px 10px 6px 0',color:t.textMuted,fontSize:10.5,
+                  whiteSpace:'nowrap',verticalAlign:'top'}}>{k}</td>
+                <td style={{padding:'6px 0',color:t.textSub}}>{details[k]}</td>
+              </tr>)}
+            </tbody>
+          </table>
+        </div>}
+        <div style={{fontSize:10.5,color:t.textMuted,marginTop:14,lineHeight:1.5}}>
+          Police open-data feeds omit the narrative report. For the full account, submit a records
+          request to the agency citing the case number above.</div>
+      </div>
+    </div>
   </div>;
 };
 
@@ -330,7 +384,7 @@ const COLS=[
   {key:'distance_m',label:'Distance'},
   {key:'address',label:'Address'},
 ];
-const IncidentTable=({t,rows,compact})=>{
+const IncidentTable=({t,rows,compact,onRow})=>{
   const [sortCol,setSortCol]=useState('occurred_at');
   const [asc,setAsc]=useState(false);
   const sorted=useMemo(()=>{
@@ -353,7 +407,10 @@ const IncidentTable=({t,rows,compact})=>{
       <thead><tr>{COLS.map(th)}</tr></thead>
       <tbody>
         {sorted.length===0&&<tr><td colSpan={COLS.length} style={{padding:18,color:t.textMuted,fontSize:12}}>No incidents.</td></tr>}
-        {sorted.map((r,i)=><tr key={i} style={{borderBottom:`1px solid ${t.border}`}}>
+        {sorted.map((r,i)=><tr key={i} onClick={()=>onRow&&onRow(r)}
+          style={{borderBottom:`1px solid ${t.border}`,cursor:onRow?'pointer':'default'}}
+          onMouseEnter={e=>{if(onRow)e.currentTarget.style.background=t.bg;}}
+          onMouseLeave={e=>{e.currentTarget.style.background='transparent';}}>
           <td style={{padding:'9px 14px',color:t.text,whiteSpace:'nowrap'}}>{r.property_name}</td>
           <td style={{padding:'9px 14px',color:t.textSub,...mono,fontSize:11.5,whiteSpace:'nowrap'}}>{fmtDate(r.occurred_at)}</td>
           <td style={{padding:'9px 14px'}}><CatPill cat={r.crime_category} t={t}/></td>
@@ -366,7 +423,7 @@ const IncidentTable=({t,rows,compact})=>{
   </div>;
 };
 
-const Incidents=({t,data,query})=>{
+const Incidents=({t,data,query,onRow})=>{
   const [cat,setCat]=useState('');
   const [mall,setMall]=useState('');
   const malls=[...new Set((data.incidents||[]).map(r=>r.property_name))].sort();
@@ -392,7 +449,7 @@ const Incidents=({t,data,query})=>{
       <span style={{...mono,fontSize:11.5,color:t.textMuted,marginLeft:'auto'}}>{rows.length} incidents</span>
     </div>
     <div style={{background:t.surface,border:`1px solid ${t.border}`,borderRadius:8,overflow:'hidden'}}>
-      <IncidentTable t={t} rows={rows}/>
+      <IncidentTable t={t} rows={rows} onRow={onRow}/>
     </div>
   </div>;
 };
@@ -443,8 +500,10 @@ const MapView=({t,data})=>{
     });
     (data.incidents||[]).forEach(ev=>{ if(ev.lat==null||ev.lon==null) return;
       const c=catColor(ev.crime_category,t);
+      const syn=ev.synopsis?`<div style="margin-top:6px;max-width:260px">${ev.synopsis}</div>`:'';
       L.circleMarker([ev.lat,ev.lon],{radius:5,fillColor:c,color:'#fff',weight:1,fillOpacity:.85})
-        .bindPopup(`<b>${ev.crime_type||ev.crime_category}</b><br>${CAT_LABEL[ev.crime_category]||''} · ${fmtM(ev.distance_m)}<br>${fmtDate(ev.occurred_at)} — ${ev.property_name}`).addTo(m);
+        .bindPopup(`<b>${ev.crime_type||ev.crime_category}</b><br>${CAT_LABEL[ev.crime_category]||''} · ${fmtM(ev.distance_m)}<br>${fmtDate(ev.occurred_at)} — ${ev.property_name}${syn}`,
+          {maxWidth:300}).addTo(m);
       bounds.push([ev.lat,ev.lon]);
     });
     if(bounds.length) m.fitBounds(bounds,{padding:[40,40],maxZoom:13});
@@ -547,6 +606,7 @@ const App=()=>{
   const t=dark?THEMES.midnight:THEMES.daylight;
   const [view,setView]=useState('dashboard');
   const [query,setQuery]=useState('');
+  const [detail,setDetail]=useState(null);  // incident shown in the context modal
   const {authed,loading,login,logout}=useAuth();
   const {data,err}=useData(authed);
   const toggleDark=()=>{ const nx=!dark; setDark(nx); localStorage.setItem('br_theme',nx?'midnight':'daylight'); };
@@ -562,12 +622,12 @@ const App=()=>{
       <div style={{color:t.textMuted,fontSize:11.5,marginTop:8}}>Expecting <code>dashboard_data.json</code> beside this page (run <code>blotter run</code>).</div></div>;
     if(!data) return <div style={{color:t.textMuted,...mono,fontSize:12,padding:20}}>Loading data…</div>;
     switch(view){
-      case 'incidents': return <Incidents t={t} data={data} query={query}/>;
+      case 'incidents': return <Incidents t={t} data={data} query={query} onRow={setDetail}/>;
       case 'malls':     return <Malls t={t} data={data}/>;
       case 'map':       return <MapView t={t} data={data}/>;
       case 'trends':    return <Trends t={t} data={data}/>;
       case 'quality':   return <Quality t={t} data={data}/>;
-      default:          return <Overview t={t} data={data}/>;
+      default:          return <Overview t={t} data={data} onRow={setDetail}/>;
     }
   };
 
@@ -577,6 +637,7 @@ const App=()=>{
       <TopBar t={t} view={view} data={data} dark={dark} toggleDark={toggleDark} query={query} setQuery={setQuery}/>
       <main style={{flex:1,overflow:'auto',padding:22}}>{body()}</main>
     </div>
+    <DetailModal t={t} inc={detail} onClose={()=>setDetail(null)}/>
   </div>;
 };
 
