@@ -1,6 +1,6 @@
 # Mall Blotter Report
 
-Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **411** incidents (**34** violent) across 27 malls.
+Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **530** incidents (**34** violent) across 27 malls.
 
 ## Summary by mall
 
@@ -17,10 +17,10 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 | The Shops at Clearfork | OK | 1 | 0 | 1 | 0 | 0 | 1086 | 2026-07-25 |
 | Copley Place | OK | 61 | 6 | 25 | 4 | 26 | 129 | 2026-07-27 |
 | Empire Mall | OK | 123 | 5 | 12 | 27 | 79 | 316 | 2026-07-31 |
-| Fashion Valley ✂️ | OK | 0 | 0 | 0 | 0 | 0 | - | - |
+| Fashion Valley | OK | 114 | 0 | 0 | 0 | 114 | 258 | 2026-07-30 |
 | The Mall at Green Hills | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | Houston Galleria | OK | 57 | 4 | 43 | 1 | 9 | 164 | 2026-07-30 |
-| International Market Place | OK | 62 | 8 | 48 | 4 | 2 | 100 | 2026-07-30 |
+| International Market Place | OK | 67 | 8 | 52 | 4 | 3 | 100 | 2026-07-30 |
 | International Plaza | OK | 1 | 0 | 1 | 0 | 0 | 1534 | 2026-07-29 |
 | Lenox Square | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
 | The Mall at Millenia | OK | 0 | 0 | 0 | 0 | 0 | - | - |
