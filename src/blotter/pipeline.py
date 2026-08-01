@@ -28,7 +28,8 @@ class RunResult:
     uncovered: list[dict] = field(default_factory=list)
 
 
-def run(properties, registry, settings, http, now: datetime | None = None) -> RunResult:
+def run(properties, registry, settings, http, now: datetime | None = None,
+        geocoder=None) -> RunResult:
     """Execute the full pipeline. One source failing never aborts the run."""
     now = now or datetime.now(UTC)
     cutoff = now - timedelta(days=settings.recency_window_days)
@@ -50,6 +51,17 @@ def run(properties, registry, settings, http, now: datetime | None = None) -> Ru
             adapter = build_adapter(entry, http)
             raw = adapter.fetch(query)
             normalized = adapter.to_normalized(raw)
+            if entry.geocode_hint:
+                if geocoder is not None:
+                    from .geocode import fill_coordinates
+
+                    filled = fill_coordinates(normalized, entry, geocoder)
+                    log.info("Geocoded %d/%d incidents for %s", filled, len(normalized),
+                             entry.property_id)
+                # Geocode sources fetch citywide (no geo columns to filter on), so
+                # anything still unlocated must be dropped — otherwise citywide
+                # rows would bypass the radius filter and pollute mall counts.
+                normalized = [i for i in normalized if i.lat is not None]
             report.record_success(entry, raw)
             incidents.extend(normalized)
         except SourceError as ex:

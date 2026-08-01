@@ -49,7 +49,11 @@ def _run(args) -> int:
     if now.tzinfo is None:
         now = now.replace(tzinfo=UTC)
 
-    result = pipeline.run(properties, registry, settings, http, now=now)
+    from .geocode import Geocoder
+
+    geocoder = Geocoder(Path(args.out) / "geocode_cache.json")
+    result = pipeline.run(properties, registry, settings, http, now=now, geocoder=geocoder)
+    geocoder.save()  # cache lives in reports/ and is committed by the daily run
     rollup = build_rollup(result, properties)
     rollup.metadata["radius_m"] = settings.radius_m  # surfaced in the dashboard JSON
 

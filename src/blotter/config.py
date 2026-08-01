@@ -37,6 +37,7 @@ class SourceEntry(BaseModel):
     radius_m: int | None = None
     enabled: bool = True
     contact: dict | None = None  # e.g. {agency, agency_url} for the dashboard source card
+    geocode_hint: str | None = None  # "City, ST" -> geocode address-only incidents
 
 
 class Settings(BaseModel):

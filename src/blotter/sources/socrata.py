@@ -45,6 +45,10 @@ class SocrataAdapter(SourceAdapter):
                     f"{e.point_field} between {min_lat} and {max_lat} "
                     f"AND {e.point_field_lon} between {min_lon} and {max_lon}"
                 )
+        elif e.geocode_hint:
+            # No geo columns at all: fetch citywide by date; the pipeline
+            # geocodes addresses and drops anything unlocated.
+            return date_clause
         else:
             raise SourceError(f"{e.name or e.dataset_id}: no point_field configured")
         return f"{geo} AND {date_clause}"
