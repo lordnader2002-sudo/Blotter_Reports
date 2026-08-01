@@ -1,6 +1,6 @@
 # Mall Blotter Report
 
-Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **298** incidents (**39** violent) across 15 malls.
+Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **160** incidents (**15** violent) across 15 malls.
 
 ## Summary by mall
 
@@ -18,7 +18,7 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 | Northgate Station | OK | 14 | 3 | 10 | 0 | 1 | 145 | 2026-07-30 |
 | Opry Mills | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | Southpark | OK | 7 | 1 | 5 | 0 | 1 | 179 | 2026-07-29 |
-| Tacoma Mall | OK | 147 | 27 | 81 | 8 | 31 | - | 2026-07-30 |
+| Tacoma Mall | OK | 9 | 3 | 3 | 0 | 3 | 471 | 2026-07-30 |
 | The Domain | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
 | Towne East Square | OK | 33 | 1 | 8 | 1 | 23 | 289 | 2026-07-30 |
 
@@ -37,22 +37,22 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 | Houston Galleria | 2026-07-27 | VIOLENT | Robbery | 588 |
 | Cherry Creek Shopping Center | 2026-07-26 | VIOLENT | assault-simple | 696 |
 | Southpark | 2026-07-29 | VIOLENT | Simple Assault | 851 |
+| Tacoma Mall | 2026-07-26 | VIOLENT | Assault Simple | 853 |
 | Northgate Station | 2026-07-27 | VIOLENT | Robbery | 939 |
+| Tacoma Mall | 2026-07-29 | VIOLENT | Assault Simple | 1074 |
 | Northgate Station | 2026-07-28 | VIOLENT | Aggravated Assault | 1146 |
 | Northgate Station | 2026-07-28 | VIOLENT | Simple Assault | 1146 |
 | Towne East Square | 2026-07-27 | VIOLENT | BATTERY ABW | 1252 |
 | Houston Galleria | 2026-07-29 | VIOLENT | Aggravated Assault | 1323 |
 | Arizona Mills | 2026-07-25 | VIOLENT | [13B] ASSAULT                                                                    | 1345 |
-| Tacoma Mall | 2026-07-30 | VIOLENT | Assault Simple | - |
-| Tacoma Mall | 2026-07-30 | VIOLENT | Assault Aggravated | - |
-| Tacoma Mall | 2026-07-30 | VIOLENT | Assault Aggravated | - |
-| Tacoma Mall | 2026-07-30 | VIOLENT | Assault Simple | - |
-| Tacoma Mall | 2026-07-30 | VIOLENT | Assault Aggravated | - |
-| Tacoma Mall | 2026-07-29 | VIOLENT | Assault Simple | - |
-| Tacoma Mall | 2026-07-29 | VIOLENT | Assault Aggravated | - |
-| Tacoma Mall | 2026-07-29 | VIOLENT | Assault Simple | - |
-| Tacoma Mall | 2026-07-29 | VIOLENT | Assault Simple | - |
-| Tacoma Mall | 2026-07-29 | VIOLENT | Assault Aggravated | - |
-| Tacoma Mall | 2026-07-29 | VIOLENT | Assault Simple | - |
-| Tacoma Mall | 2026-07-29 | VIOLENT | Assault Simple | - |
-| Tacoma Mall | 2026-07-29 | VIOLENT | Assault Aggravated | - |
+| Tacoma Mall | 2026-07-30 | VIOLENT | Assault Simple | 1578 |
+| Cherry Creek Shopping Center | 2026-07-28 | PROPERTY | theft-shoplift | 145 |
+| Cherry Creek Shopping Center | 2026-07-27 | PROPERTY | fraud-by-telephone | 145 |
+| Northgate Station | 2026-07-29 | PROPERTY | Shoplifting | 145 |
+| Northgate Station | 2026-07-28 | PROPERTY | Shoplifting | 145 |
+| Northgate Station | 2026-07-28 | PROPERTY | Shoplifting | 145 |
+| Houston Galleria | 2026-07-30 | PROPERTY | Shoplifting | 164 |
+| Houston Galleria | 2026-07-28 | PROPERTY | Theft from motor vehicle | 164 |
+| Houston Galleria | 2026-07-28 | PROPERTY | Shoplifting | 164 |
+| Southpark | 2026-07-28 | PROPERTY | Shoplifting | 179 |
+| Southpark | 2026-07-28 | PROPERTY | Shoplifting | 179 |
