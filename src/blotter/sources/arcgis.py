@@ -101,8 +101,12 @@ class ArcGISAdapter(SourceAdapter):
                     crime_category=OTHER,
                     description=attrs.get(e.description_field) if e.description_field else None,
                     address=build_address(attrs),
-                    lat=to_float(geom.get("y")),
-                    lon=to_float(geom.get("x")),
+                    # Some layers return empty geometry but carry coordinate
+                    # attributes — registry point_field(_lon) names them.
+                    lat=to_float(geom.get("y")) if geom.get("y") is not None
+                    else (to_float(attrs.get(e.point_field)) if e.point_field else None),
+                    lon=to_float(geom.get("x")) if geom.get("x") is not None
+                    else (to_float(attrs.get(e.point_field_lon)) if e.point_field_lon else None),
                     raw=attrs,
                 )
             )
