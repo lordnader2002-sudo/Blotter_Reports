@@ -1,13 +1,13 @@
 {
-  "generated": "2026-08-01T04:22:40.060082+00:00",
+  "generated": "2026-08-01T04:25:02.895488+00:00",
   "window_days": 7,
-  "cutoff": "2026-07-25T04:22:40.060082+00:00",
+  "cutoff": "2026-07-25T04:25:02.895488+00:00",
   "radius_m": 1600,
   "totals": {
     "incidents": 284,
     "violent": 20,
-    "malls": 19,
-    "coverage_gaps": 2,
+    "malls": 20,
+    "coverage_gaps": 3,
     "VIOLENT": 20,
     "PROPERTY": 102,
     "QUALITY_OF_LIFE": 31,
@@ -47,6 +47,20 @@
       "property_name": "Beverly Center",
       "address": "8500 Beverly Boulevard, Los Angeles CA 90048",
       "status": "OK",
+      "total": 0,
+      "VIOLENT": 0,
+      "PROPERTY": 0,
+      "QUALITY_OF_LIFE": 0,
+      "OTHER": 0,
+      "nearest_m": null,
+      "most_recent": null,
+      "truncated": false
+    },
+    {
+      "property_id": "CASTLETON",
+      "property_name": "Castleton Square",
+      "address": "6020 East 82nd Street Indianapolis IN 46250",
+      "status": "NO COVERAGE",
       "total": 0,
       "VIOLENT": 0,
       "PROPERTY": 0,
@@ -10863,6 +10877,7 @@
     }
   ],
   "coverage_gaps": [
+    "CASTLETON",
     "LENOX",
     "THEDOMAIN"
   ],
@@ -11025,8 +11040,8 @@
       "property_id": "CASTLETON",
       "name": "Castleton Square",
       "address": "6020 East 82nd Street Indianapolis IN 46250",
-      "reason": "no source configured yet",
-      "known_issue": false
+      "reason": "IMPD NIBRS (zip-level only, no coordinates)",
+      "known_issue": true
     },
     {
       "property_id": "CHESTNUTHILL",
@@ -12590,6 +12605,37 @@
         "ABQUP": 0,
         "ARZMILLS": 23,
         "BEVCENTER": 0,
+        "CHARLOTTE": 4,
+        "CHERRYCREEK": 12,
+        "CLEARFORK": 1,
+        "EMPIRE": 123,
+        "GREENHILLS": 0,
+        "HOUSTONGAL": 57,
+        "INTLPLAZA": 1,
+        "LENOX": 0,
+        "MALLATMILLENIA": 0,
+        "NORTHGATE": 14,
+        "OPRYMILLS": 0,
+        "SOUTHPARK": 7,
+        "TACOMAMALL": 9,
+        "THEDOMAIN": 0,
+        "TOWNEEAST": 33,
+        "UNIVPARKVILLAGE": 0
+      }
+    },
+    {
+      "ts": "2026-08-01T04:25:02.895488+00:00",
+      "label": "Aug 01",
+      "total": 284,
+      "violent": 20,
+      "property": 102,
+      "qol": 31,
+      "other": 131,
+      "malls": {
+        "ABQUP": 0,
+        "ARZMILLS": 23,
+        "BEVCENTER": 0,
+        "CASTLETON": 0,
         "CHARLOTTE": 4,
         "CHERRYCREEK": 12,
         "CLEARFORK": 1,
