@@ -5,12 +5,14 @@ from __future__ import annotations
 from .arcgis import ArcGISAdapter
 from .base import SourceAdapter, SourceError
 from .ckan import CkanAdapter
+from .csvfile import CsvAdapter
 from .socrata import SocrataAdapter
 
 _REGISTRY = {
     SocrataAdapter.type_name: SocrataAdapter,
     ArcGISAdapter.type_name: ArcGISAdapter,
     CkanAdapter.type_name: CkanAdapter,
+    CsvAdapter.type_name: CsvAdapter,
 }
 
 

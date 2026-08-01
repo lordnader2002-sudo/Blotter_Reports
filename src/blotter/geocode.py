@@ -85,10 +85,18 @@ class Geocoder:
 
 
 def fill_coordinates(incidents, entry, geocoder: Geocoder) -> int:
-    """Geocode incidents missing lat/lon for a geocode_hint source. Returns fill count."""
+    """Geocode incidents missing lat/lon for a geocode_hint source. Returns fill count.
+
+    When the entry lists geocode_priority_streets, ONLY addresses on those
+    streets are geocoded — high-volume citywide feeds (San Diego CFS) would
+    otherwise burn the whole lookup budget far from the mall.
+    """
+    streets = [s.upper() for s in getattr(entry, "geocode_priority_streets", [])]
     filled = 0
     for inc in incidents:
         if inc.lat is not None or not inc.address:
+            continue
+        if streets and not any(s in inc.address.upper() for s in streets):
             continue
         result = geocoder.geocode(inc.address, entry.geocode_hint)
         if result:
