@@ -56,12 +56,23 @@ class CsvAdapter(SourceAdapter):
                         f"CSV {url}: missing {e.date_field!r} in header {header!r:.120}")
                 idx = {name: i for i, name in enumerate(header)}
                 date_i = idx[e.date_field]
+                # Priority streets prune citywide noise DURING the stream: only
+                # rows near the mall survive, so the row cap never truncates on
+                # far-away records and the geocoder sees only relevant addresses.
+                streets = [s.upper() for s in
+                           getattr(e, "geocode_priority_streets", [])]
+                addr_is = [idx[f.strip()] for f in (e.address_field or "").split(",")
+                           if f.strip() in idx]
                 for row in reader:
                     if len(row) <= date_i:
                         continue
                     # "YYYY-MM-DD ..." string compare on the date part.
                     if row[date_i][:10] < since_day:
                         continue
+                    if streets:
+                        addr = " ".join(row[i] for i in addr_is if i < len(row)).upper()
+                        if not any(s in addr for s in streets):
+                            continue
                     records.append({name: row[i] if i < len(row) else ""
                                     for name, i in idx.items()})
                     if len(records) >= query.limit:
