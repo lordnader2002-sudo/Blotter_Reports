@@ -1,6 +1,6 @@
 # Mall Blotter Report
 
-Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **525** incidents (**35** violent) across 27 malls.
+Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **529** incidents (**35** violent) across 27 malls.
 
 ## Summary by mall
 
@@ -32,7 +32,7 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 | The Domain | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
 | Towne East Square | OK | 41 | 1 | 9 | 4 | 27 | 289 | 2026-07-31 |
 | University Park Village | OK | 0 | 0 | 0 | 0 | 0 | - | - |
-| Waikele Premium Outlets | OK | 1 | 1 | 0 | 0 | 0 | 1491 | 2026-07-28 |
+| Waikele Premium Outlets | OK | 5 | 1 | 3 | 0 | 1 | 265 | 2026-07-28 |
 
 ## Data quality
 
