@@ -38,6 +38,7 @@ class SourceEntry(BaseModel):
     enabled: bool = True
     contact: dict | None = None  # e.g. {agency, agency_url} for the dashboard source card
     geocode_hint: str | None = None  # "City, ST" -> geocode address-only incidents
+    geocode_priority_streets: list[str] = Field(default_factory=list)  # only geocode these streets
 
 
 class Settings(BaseModel):

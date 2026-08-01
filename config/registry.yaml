@@ -442,6 +442,37 @@ sources:
     geocode_hint: "Waipahu, HI"
     contact: *hpd_hi_contact
 
+  # --- Fashion Valley, San Diego, CA (SDPD calls-for-service per-year CSV
+  #     files — CAD dispatches with CALL_TYPE codes, not verified reports; no
+  #     coordinates -> geocoded, restricted to Mission Valley streets so the
+  #     lookup budget stays near the mall). Probe-verified path + headers. ---
+  - property_id: FASHIONVAL
+    type: csv
+    name: "San Diego PD Calls for Service"
+    base_url: "https://seshat.datasd.org/police_calls_for_service/pd_calls_for_service_{year}_datasd.csv"
+    date_field: "DATE_TIME"
+    crime_type_field: "CALL_TYPE"
+    description_field: "DISPOSITION"
+    address_field: "ADDRESS_NUMBER_PRIMARY,ADDRESS_DIR_PRIMARY,ADDRESS_ROAD_PRIMARY,ADDRESS_SFX_PRIMARY"
+    incident_id_field: "INCIDENT_NUM"
+    geocode_hint: "San Diego, CA"
+    geocode_priority_streets:
+      - "FRIARS"
+      - "FASHION VALLEY"
+      - "HOTEL CIRCLE"
+      - "CAMINO DE LA REINA"
+      - "CAMINO DEL RIO"
+      - "MISSION CENTER"
+      - "AVENIDA DEL RIO"
+      - "RIVER RUN"
+      - "HAZARD CENTER"
+      - "FRAZEE"
+      - "STATION VILLAGE"
+      - "ULRIC"
+    contact:
+      agency: "San Diego Police Department"
+      agency_url: "https://www.sandiego.gov/police"
+
   # --- Castleton Square, Indianapolis — DISABLED ---
   # IMPD's NIBRS layer is fresh but publishes NO coordinates or addresses (zip/
   # beat level only) and silently ignores spatial filters — radius queries return
