@@ -473,6 +473,49 @@ sources:
       agency: "San Diego Police Department"
       agency_url: "https://www.sandiego.gov/police"
 
+  # --- Las Vegas cluster (6 properties, one official LVMPD service — Metro
+  #     polices the city AND the unincorporated Strip). ReportedOn is the
+  #     REPORTED date (occurred date not published). Probe-verified with
+  #     geometry + Latitude/Longitude attrs. ---
+  - &lvmpd_src
+    property_id: VEGASNORTHPO
+    type: arcgis
+    name: "LVMPD Reported NIBRS Crimes"
+    base_url: "https://services.arcgis.com/jjSk6t82vIntwDbs/arcgis/rest/services/Weekly_Public_Crimes/FeatureServer/0"
+    date_query_style: "date_literal"
+    point_field: "Latitude"
+    point_field_lon: "Longitude"
+    date_field: "ReportedOn"
+    crime_type_field: "Offense"
+    description_field: "OffenseCategory"
+    address_field: "Location"
+    incident_id_field: "Event_Number"
+    contact:
+      agency: "Las Vegas Metropolitan Police Department"
+      agency_url: "https://www.lvmpd.com"
+  - <<: *lvmpd_src
+    property_id: VEGASSOUTHPO
+  - <<: *lvmpd_src
+    property_id: SHOPSATCAESARS
+  - <<: *lvmpd_src
+    property_id: SHOPSCRYSTALS
+  - <<: *lvmpd_src
+    property_id: ENCOREWYNNVEGAS
+  - <<: *lvmpd_src
+    property_id: VEGASCONVENTION
+
+  # --- College Mall, Bloomington IN — DISABLED ---
+  # BPD's CFS datasets are same-day fresh but publish NO address or location
+  # columns (district codes only) — nothing to geocode; unusable for radius.
+  - property_id: COLLEGE
+    enabled: false
+    type: socrata
+    name: "Bloomington PD CFS (no address columns published)"
+    base_url: "https://data.bloomington.in.gov"
+    dataset_id: "t5xf-ggw6"
+    date_field: "datetime"
+    crime_type_field: "nature"
+
   # --- Castleton Square, Indianapolis — DISABLED ---
   # IMPD's NIBRS layer is fresh but publishes NO coordinates or addresses (zip/
   # beat level only) and silently ignores spatial filters — radius queries return
