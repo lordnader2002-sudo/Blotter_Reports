@@ -1,6 +1,6 @@
 # Mall Blotter Report
 
-Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **390** incidents (**31** violent) across 26 malls.
+Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **411** incidents (**34** violent) across 27 malls.
 
 ## Summary by mall
 
@@ -17,9 +17,10 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 | The Shops at Clearfork | OK | 1 | 0 | 1 | 0 | 0 | 1086 | 2026-07-25 |
 | Copley Place | OK | 61 | 6 | 25 | 4 | 26 | 129 | 2026-07-27 |
 | Empire Mall | OK | 123 | 5 | 12 | 27 | 79 | 316 | 2026-07-31 |
+| Fashion Valley ✂️ | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | The Mall at Green Hills | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | Houston Galleria | OK | 57 | 4 | 43 | 1 | 9 | 164 | 2026-07-30 |
-| International Market Place | OK | 41 | 5 | 31 | 3 | 2 | 100 | 2026-07-30 |
+| International Market Place | OK | 62 | 8 | 48 | 4 | 2 | 100 | 2026-07-30 |
 | International Plaza | OK | 1 | 0 | 1 | 0 | 0 | 1534 | 2026-07-29 |
 | Lenox Square | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
 | The Mall at Millenia | OK | 0 | 0 | 0 | 0 | 0 | - | - |
@@ -36,7 +37,7 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 ## Data quality
 
 - **No coverage:** CASTLETON, LENOX, THEDOMAIN
-- **Properties without data:** 190 (3 known upstream issues, 187 not yet configured) — full list on the dashboard's Data Quality tab
+- **Properties without data:** 189 (3 known upstream issues, 186 not yet configured) — full list on the dashboard's Data Quality tab
 
 ## Highlights (most notable)
 
@@ -45,7 +46,9 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 | Arizona Mills | 2026-07-27 | VIOLENT | [13B] ASSAULT [DV]                                                               | 15 |
 | International Market Place | 2026-07-25 | VIOLENT | ASSAULT | 100 |
 | Houston Galleria | 2026-07-26 | VIOLENT | Simple assault | 217 |
+| International Market Place | 2026-07-28 | VIOLENT | ASSAULT | 331 |
 | International Market Place | 2026-07-26 | VIOLENT | ASSAULT | 385 |
+| International Market Place | 2026-07-27 | VIOLENT | ASSAULT | 399 |
 | Houston Galleria | 2026-07-26 | VIOLENT | Aggravated Assault | 448 |
 | International Market Place | 2026-07-29 | VIOLENT | ASSAULT | 545 |
 | International Market Place | 2026-07-25 | VIOLENT | ASSAULT | 584 |
@@ -60,10 +63,8 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 | Copley Place | 2026-07-26 | VIOLENT | ASSAULT - AGGRAVATED | 899 |
 | Northgate Station | 2026-07-27 | VIOLENT | Robbery | 939 |
 | Tacoma Mall | 2026-07-29 | VIOLENT | Assault Simple | 1074 |
+| International Market Place | 2026-07-27 | VIOLENT | ASSAULT | 1117 |
 | Copley Place | 2026-07-26 | VIOLENT | ROBBERY | 1124 |
 | Copley Place | 2026-07-26 | VIOLENT | FIREARM/WEAPON - LOST | 1124 |
 | Northgate Station | 2026-07-28 | VIOLENT | Aggravated Assault | 1146 |
 | Northgate Station | 2026-07-28 | VIOLENT | Simple Assault | 1146 |
-| Towne East Square | 2026-07-27 | VIOLENT | BATTERY ABW | 1252 |
-| Empire Mall | 2026-07-31 | VIOLENT | Aggravated Assault | 1322 |
-| Houston Galleria | 2026-07-29 | VIOLENT | Aggravated Assault | 1323 |
