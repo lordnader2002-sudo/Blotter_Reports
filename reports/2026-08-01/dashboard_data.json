@@ -1,17 +1,17 @@
 {
-  "generated": "2026-08-01T04:55:55.470379+00:00",
+  "generated": "2026-08-01T04:58:47.637225+00:00",
   "window_days": 7,
-  "cutoff": "2026-07-25T04:55:55.470379+00:00",
+  "cutoff": "2026-07-25T04:58:47.637225+00:00",
   "radius_m": 1600,
   "totals": {
-    "incidents": 285,
+    "incidents": 287,
     "violent": 20,
-    "malls": 21,
+    "malls": 24,
     "coverage_gaps": 3,
     "VIOLENT": 20,
     "PROPERTY": 102,
     "QUALITY_OF_LIFE": 31,
-    "OTHER": 132
+    "OTHER": 134
   },
   "malls": [
     {
@@ -99,6 +99,20 @@
       "truncated": false
     },
     {
+      "property_id": "CHESTNUTHILL",
+      "property_name": "The Shops at Chestnut Hill",
+      "address": "199 Boylston Street Chestnut Hill MA 02467",
+      "status": "FAILED",
+      "total": 0,
+      "VIOLENT": 0,
+      "PROPERTY": 0,
+      "QUALITY_OF_LIFE": 0,
+      "OTHER": 0,
+      "nearest_m": null,
+      "most_recent": null,
+      "truncated": false
+    },
+    {
       "property_id": "CLARKSBURG",
       "property_name": "Clarksburg Premium Outlets",
       "address": "22705 Clarksburg Rd Clarksburg MD 20871",
@@ -124,6 +138,20 @@
       "OTHER": 0,
       "nearest_m": 1086.4,
       "most_recent": "2026-07-25T14:15:00+00:00",
+      "truncated": false
+    },
+    {
+      "property_id": "COPLEY",
+      "property_name": "Copley Place",
+      "address": "2 Copley Place Boston MA 02116",
+      "status": "FAILED",
+      "total": 0,
+      "VIOLENT": 0,
+      "PROPERTY": 0,
+      "QUALITY_OF_LIFE": 0,
+      "OTHER": 0,
+      "nearest_m": null,
+      "most_recent": null,
       "truncated": false
     },
     {
@@ -208,6 +236,20 @@
       "OTHER": 0,
       "nearest_m": null,
       "most_recent": null,
+      "truncated": false
+    },
+    {
+      "property_id": "NORFOLKPO",
+      "property_name": "Norfolk Premium Outlets",
+      "address": "1600 Premium Outlets Boulevard Norfolk VA 23502",
+      "status": "OK",
+      "total": 2,
+      "VIOLENT": 0,
+      "PROPERTY": 0,
+      "QUALITY_OF_LIFE": 0,
+      "OTHER": 2,
+      "nearest_m": 1118.9,
+      "most_recent": "2026-07-30T00:00:00+00:00",
       "truncated": false
     },
     {
@@ -9767,6 +9809,63 @@
         "longitude": "-77.2772",
         "police_district_number": "5D"
       }
+    },
+    {
+      "property_id": "NORFOLKPO",
+      "property_name": "Norfolk Premium Outlets",
+      "source_id": "NORFOLKPO:r7bn-2egr",
+      "incident_id": "260730001961",
+      "occurred_at": "2026-07-30T00:00:00+00:00",
+      "crime_type": "SHOOT INTO OCCUPIED DWELLING",
+      "crime_category": "OTHER",
+      "description": null,
+      "address": "1400 DURE RD",
+      "lat": 36.872248203692,
+      "lon": -76.209734788037,
+      "distance_m": 1387.8,
+      "synopsis": "Shoot into occupied dwelling on Jul 30, 2026, 1388 m from Norfolk Premium Outlets (1400 DURE RD). Case #260730001961 (use for a records request \u2014 full narratives are not published in open data).",
+      "details": {
+        "inci_id": "260730001961",
+        "offense": "SHOOT INTO OCCUPIED DWELLING",
+        "streetno": "1400",
+        "street": "DURE RD",
+        "date_occu": "2026-07-30T00:00:00.000",
+        "hour_occu": "1442",
+        "tract": "75",
+        "zone": "124",
+        "district": "RED",
+        "reportarea": "1",
+        "dow1": "TH",
+        "neighborhd": "LAKE TAYLOR"
+      }
+    },
+    {
+      "property_id": "NORFOLKPO",
+      "property_name": "Norfolk Premium Outlets",
+      "source_id": "NORFOLKPO:r7bn-2egr",
+      "incident_id": "260730001974",
+      "occurred_at": "2026-07-30T00:00:00+00:00",
+      "crime_type": "HIT & RUN - PERSONAL INJURY",
+      "crime_category": "OTHER",
+      "description": null,
+      "address": "2500 MILITARY HIGHWAY",
+      "lat": 36.879766119132,
+      "lon": -76.212427576002,
+      "distance_m": 1118.9,
+      "synopsis": "Hit & run - personal injury on Jul 30, 2026, 1119 m from Norfolk Premium Outlets (2500 MILITARY HIGHWAY). Case #260730001974 (use for a records request \u2014 full narratives are not published in open data).",
+      "details": {
+        "inci_id": "260730001974",
+        "offense": "HIT & RUN - PERSONAL INJURY",
+        "streetno": "2500",
+        "street": "MILITARY HIGHWAY",
+        "date_occu": "2026-07-30T00:00:00.000",
+        "hour_occu": "1303",
+        "tract": "48",
+        "zone": "124",
+        "district": "RED",
+        "reportarea": "1",
+        "dow1": "TH"
+      }
     }
   ],
   "highlights": [
@@ -10945,6 +11044,45 @@
         "agency": "Montgomery County Department of Police",
         "agency_url": "https://www.montgomerycountymd.gov/pol"
       }
+    },
+    {
+      "property_id": "COPLEY",
+      "name": "Boston PD Crime Incident Reports",
+      "status": "FAILED",
+      "fetched_count": 0,
+      "truncated": false,
+      "error": "CKAN fetch failed for b973d8cb-eeb2-4e7e-99da-c92938efc9c0: HTTP 403 for https://data.boston.gov/api/3/action/datastore_search_sql?sql=SELECT+%2A+FROM+%22b973d8cb-eeb2-4e7e-99da-c92938efc9c0%22+WHERE+CAST%28NULLIF%28%22Lat%22%2C+%27%27%29+AS+float8%29+BETWEEN+42.3332261543053+AND+42.3620044456947+AND+CAST%28NULLIF%28%22Long%22%2C+%27%27%29+AS+float8%29+BETWEEN+-71.09710221911952+AND+-71.05816378088049+AND+%22OCCURRED_ON_DATE%22+%3E%3D+%272026-07-25T04%3A58%3A47%27+LIMIT+5000 :: {\"help\": \"https://data.boston.gov/api/3/action/help_show?name=datastore_search_sql\", \"error\": {\"__type\": \"Authorization Error\", \"message\": \"Access denied: {'permissions': ['Not authorized to call function NULLIF']}\"}, \"success\": false}",
+      "url": "https://data.boston.gov/resource/b973d8cb-eeb2-4e7e-99da-c92938efc9c0",
+      "contact": {
+        "agency": "Boston Police Department",
+        "agency_url": "https://www.boston.gov/departments/police"
+      }
+    },
+    {
+      "property_id": "CHESTNUTHILL",
+      "name": "Boston PD Crime Incident Reports (Boston-side only)",
+      "status": "FAILED",
+      "fetched_count": 0,
+      "truncated": false,
+      "error": "CKAN fetch failed for b973d8cb-eeb2-4e7e-99da-c92938efc9c0: HTTP 403 for https://data.boston.gov/api/3/action/datastore_search_sql?sql=SELECT+%2A+FROM+%22b973d8cb-eeb2-4e7e-99da-c92938efc9c0%22+WHERE+CAST%28NULLIF%28%22Lat%22%2C+%27%27%29+AS+float8%29+BETWEEN+42.3071233543053+AND+42.3359016456947+AND+CAST%28NULLIF%28%22Long%22%2C+%27%27%29+AS+float8%29+BETWEEN+-71.19513294012805+AND+-71.15621065987196+AND+%22OCCURRED_ON_DATE%22+%3E%3D+%272026-07-25T04%3A58%3A47%27+LIMIT+5000 :: {\"help\": \"https://data.boston.gov/api/3/action/help_show?name=datastore_search_sql\", \"error\": {\"__type\": \"Authorization Error\", \"message\": \"Access denied: {'permissions': ['Not authorized to call function NULLIF']}\"}, \"success\": false}",
+      "url": "https://data.boston.gov/resource/b973d8cb-eeb2-4e7e-99da-c92938efc9c0",
+      "contact": {
+        "agency": "Boston Police Department",
+        "agency_url": "https://www.boston.gov/departments/police"
+      }
+    },
+    {
+      "property_id": "NORFOLKPO",
+      "name": "Norfolk Police Incident Reports",
+      "status": "OK",
+      "fetched_count": 281,
+      "truncated": false,
+      "error": null,
+      "url": "https://data.norfolk.gov/resource/r7bn-2egr",
+      "contact": {
+        "agency": "Norfolk Police Department",
+        "agency_url": "https://www.norfolk.gov/police"
+      }
     }
   ],
   "coverage_gaps": [
@@ -11115,13 +11253,6 @@
       "known_issue": true
     },
     {
-      "property_id": "CHESTNUTHILL",
-      "name": "The Shops at Chestnut Hill",
-      "address": "199 Boylston Street Chestnut Hill MA 02467",
-      "reason": "no source configured yet",
-      "known_issue": false
-    },
-    {
       "property_id": "CHICAGOPO",
       "name": "Chicago Premium Outlets",
       "address": "1650 Premium Outlet Boulevard Aurora IL 60502",
@@ -11188,13 +11319,6 @@
       "property_id": "CONCORD",
       "name": "Concord Mills",
       "address": "8111 Concord Mills Blvd Concord NC 28027",
-      "reason": "no source configured yet",
-      "known_issue": false
-    },
-    {
-      "property_id": "COPLEY",
-      "name": "Copley Place",
-      "address": "2 Copley Place Boston MA 02116",
       "reason": "no source configured yet",
       "known_issue": false
     },
@@ -11643,13 +11767,6 @@
       "property_id": "NEWPORTCTR",
       "name": "Newport Centre",
       "address": "30 Mall Drive West Jersey City NJ 07310",
-      "reason": "no source configured yet",
-      "known_issue": false
-    },
-    {
-      "property_id": "NORFOLKPO",
-      "name": "Norfolk Premium Outlets",
-      "address": "1600 Premium Outlets Boulevard Norfolk VA 23502",
       "reason": "no source configured yet",
       "known_issue": false
     },
@@ -12836,6 +12953,41 @@
         "INTLPLAZA": 1,
         "LENOX": 0,
         "MALLATMILLENIA": 0,
+        "NORTHGATE": 14,
+        "OPRYMILLS": 0,
+        "SOUTHPARK": 7,
+        "TACOMAMALL": 9,
+        "THEDOMAIN": 0,
+        "TOWNEEAST": 33,
+        "UNIVPARKVILLAGE": 0
+      }
+    },
+    {
+      "ts": "2026-08-01T04:58:47.637225+00:00",
+      "label": "Aug 01",
+      "total": 287,
+      "violent": 20,
+      "property": 102,
+      "qol": 31,
+      "other": 134,
+      "malls": {
+        "ABQUP": 0,
+        "ARZMILLS": 23,
+        "BEVCENTER": 0,
+        "CASTLETON": 0,
+        "CHARLOTTE": 4,
+        "CHERRYCREEK": 12,
+        "CHESTNUTHILL": 0,
+        "CLARKSBURG": 1,
+        "CLEARFORK": 1,
+        "COPLEY": 0,
+        "EMPIRE": 123,
+        "GREENHILLS": 0,
+        "HOUSTONGAL": 57,
+        "INTLPLAZA": 1,
+        "LENOX": 0,
+        "MALLATMILLENIA": 0,
+        "NORFOLKPO": 2,
         "NORTHGATE": 14,
         "OPRYMILLS": 0,
         "SOUTHPARK": 7,
