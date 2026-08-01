@@ -114,7 +114,7 @@ def atlanta_links():
             print(f"    HTTP {getattr(r, 'status_code', 'n/a')}")
             continue
         links = re.findall(r'href=["\']([^"\']+\.(?:csv|zip|xlsx)[^"\']*)["\']',
-                           r.text, flags=re.I)
+                           r.text, flags=re.IGNORECASE)
         uniq = list(dict.fromkeys(links))[:20]
         if uniq:
             for u in uniq:
