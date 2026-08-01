@@ -1,7 +1,7 @@
 {
-  "generated": "2026-08-01T04:54:04.147095+00:00",
+  "generated": "2026-08-01T04:55:55.470379+00:00",
   "window_days": 7,
-  "cutoff": "2026-07-25T04:54:04.147095+00:00",
+  "cutoff": "2026-07-25T04:55:55.470379+00:00",
   "radius_m": 1600,
   "totals": {
     "incidents": 285,
@@ -12783,6 +12783,38 @@
     },
     {
       "ts": "2026-08-01T04:54:04.147095+00:00",
+      "label": "Aug 01",
+      "total": 285,
+      "violent": 20,
+      "property": 102,
+      "qol": 31,
+      "other": 132,
+      "malls": {
+        "ABQUP": 0,
+        "ARZMILLS": 23,
+        "BEVCENTER": 0,
+        "CASTLETON": 0,
+        "CHARLOTTE": 4,
+        "CHERRYCREEK": 12,
+        "CLARKSBURG": 1,
+        "CLEARFORK": 1,
+        "EMPIRE": 123,
+        "GREENHILLS": 0,
+        "HOUSTONGAL": 57,
+        "INTLPLAZA": 1,
+        "LENOX": 0,
+        "MALLATMILLENIA": 0,
+        "NORTHGATE": 14,
+        "OPRYMILLS": 0,
+        "SOUTHPARK": 7,
+        "TACOMAMALL": 9,
+        "THEDOMAIN": 0,
+        "TOWNEEAST": 33,
+        "UNIVPARKVILLAGE": 0
+      }
+    },
+    {
+      "ts": "2026-08-01T04:55:55.470379+00:00",
       "label": "Aug 01",
       "total": 285,
       "violent": 20,
