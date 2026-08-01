@@ -74,6 +74,14 @@ class SocrataAdapter(SourceAdapter):
 
     def to_normalized(self, result: RawFetchResult) -> list[NormalizedIncident]:
         e = self.entry
+        # Comma-listed address_field joins split columns (e.g. Norfolk streetno,street).
+        addr_fields = [f.strip() for f in (e.address_field or "").split(",") if f.strip()]
+
+        def build_address(row: dict) -> str | None:
+            parts = [str(row.get(f)).strip() for f in addr_fields
+                     if row.get(f) not in (None, "")]
+            return " ".join(parts) or None if parts else None
+
         out: list[NormalizedIncident] = []
         for row in result.records:
             lat, lon = socrata_point(row, e.point_field, e.point_field_lon)
@@ -86,7 +94,7 @@ class SocrataAdapter(SourceAdapter):
                     crime_type=row.get(e.crime_type_field),
                     crime_category=OTHER,  # mapped later by filters
                     description=row.get(e.description_field) if e.description_field else None,
-                    address=row.get(e.address_field) if e.address_field else None,
+                    address=build_address(row),
                     lat=lat,
                     lon=lon,
                     raw=row,
