@@ -34,7 +34,8 @@ def test_csv_streams_filters_and_normalizes():
     adapter = CsvAdapter(SD, HttpClient())
     result = adapter.fetch(FetchQuery(32.767, -117.166, 1600, "2026-07-25T00:00:00"))
 
-    assert result.fetched_count == 2  # E1 predates the window
+    # E1 predates the window; E3 is off the priority streets (stream filter)
+    assert result.fetched_count == 1
     incidents = adapter.to_normalized(result)
     assert incidents[0].incident_id == "E2"
     assert incidents[0].address == "7000 FRIARS RD"
@@ -70,4 +71,4 @@ def test_csv_no_charset_response_still_parses():
                   body=CSV_BODY.encode(), content_type=None)
     adapter = CsvAdapter(SD, HttpClient())
     result = adapter.fetch(FetchQuery(32.767, -117.166, 1600, "2026-07-25T00:00:00"))
-    assert result.fetched_count == 2
+    assert result.fetched_count == 1  # in-window AND on a priority street
