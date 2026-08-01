@@ -34,7 +34,7 @@ class Geocoder:
     """Census geocoder with a persistent cache and a per-run request budget."""
 
     def __init__(self, cache_path: str | Path, session: requests.Session | None = None,
-                 max_lookups_per_run: int = 150, timeout: int = 15):
+                 max_lookups_per_run: int = 500, timeout: int = 15):
         self.cache_path = Path(cache_path)
         self.session = session or requests.Session()
         self.max_lookups = max_lookups_per_run
@@ -84,16 +84,22 @@ class Geocoder:
                                    encoding="utf-8")
 
 
-def fill_coordinates(incidents, entry, geocoder: Geocoder) -> int:
+def fill_coordinates(incidents, entry, geocoder: Geocoder,
+                     per_source_lookups: int = 120) -> int:
     """Geocode incidents missing lat/lon for a geocode_hint source. Returns fill count.
 
     When the entry lists geocode_priority_streets, ONLY addresses on those
     streets are geocoded — high-volume citywide feeds (San Diego CFS) would
-    otherwise burn the whole lookup budget far from the mall.
+    otherwise burn the whole lookup budget far from the mall. Each source also
+    gets its own lookup allotment so an early high-volume source (Honolulu)
+    cannot starve the ones that run after it.
     """
     streets = [s.upper() for s in getattr(entry, "geocode_priority_streets", [])]
+    start = geocoder.lookups
     filled = 0
     for inc in incidents:
+        if geocoder.lookups - start >= per_source_lookups:
+            break  # this source's slice is spent; cache resumes next run
         if inc.lat is not None or not inc.address:
             continue
         if streets and not any(s in inc.address.upper() for s in streets):
