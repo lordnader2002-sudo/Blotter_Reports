@@ -344,6 +344,18 @@ sources:
       agency: "Orlando Police Department"
       agency_url: "https://www.orlando.gov/POLICE"
 
+  # --- Castleton Square, Indianapolis — DISABLED ---
+  # IMPD's NIBRS layer is fresh but publishes NO coordinates or addresses (zip/
+  # beat level only) and silently ignores spatial filters — radius queries return
+  # citywide rows. Unusable for 1-mile precision without a geocoding step.
+  - property_id: CASTLETON
+    enabled: false
+    type: arcgis
+    name: "IMPD NIBRS (zip-level only, no coordinates)"
+    base_url: "https://gis.indy.gov/server/rest/services/IMPD/IMPD_NIBRS_Public/FeatureServer/1"
+    date_field: "OccurredFrom"
+    crime_type_field: "CR_Desc"
+
   # --- Lenox Square, Atlanta, GA — DISABLED ---
   # APD's portal is dashboard-only (DCAT catalog probe: Web Pages, no FeatureServer
   # or data downloads). Would need a COBRA CSV-download adapter; NO COVERAGE until then.
