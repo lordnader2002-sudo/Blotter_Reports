@@ -267,6 +267,8 @@ sources:
     name: "Tacoma PD Reported Crime"
     base_url: "https://services3.arcgis.com/SCwJH1pD8WSn5T5y/arcgis/rest/services/TPD_RMS_Crime/FeatureServer/0"
     date_query_style: "date_literal"
+    point_field: "Latitude"       # geometry comes back empty; use attribute coords
+    point_field_lon: "Longitude"
     date_field: "DateOccurred"
     crime_type_field: "Description"
     description_field: "Offense_Category"
