@@ -278,6 +278,72 @@ sources:
       agency: "Tacoma Police Department"
       agency_url: "https://www.cityoftacoma.org/government/city_departments/police"
 
+  # --- Fort Worth, TX: The Shops at Clearfork + University Park Village share
+  #     the official CFW Crime Data service. From_Date = occurred (Reported_Date
+  #     exists but is not used). Probe-verified. ---
+  - property_id: CLEARFORK
+    type: arcgis
+    name: "Fort Worth PD Crime Data"
+    base_url: "https://mapit.fortworthtexas.gov/ags/rest/services/CIVIC/Crime_Data/MapServer/0"
+    date_query_style: "date_literal"
+    point_field: "Latitude"
+    point_field_lon: "Longitude"
+    date_field: "From_Date"
+    crime_type_field: "Offense_Desc"
+    description_field: "Nature_Of_Call"
+    address_field: "BLOCK_ADDRESS"
+    incident_id_field: "Case_No"
+    contact: &fwpd_contact
+      agency: "Fort Worth Police Department"
+      agency_url: "https://www.fortworthtexas.gov/departments/police"
+  - property_id: UNIVPARKVILLAGE
+    type: arcgis
+    name: "Fort Worth PD Crime Data"
+    base_url: "https://mapit.fortworthtexas.gov/ags/rest/services/CIVIC/Crime_Data/MapServer/0"
+    date_query_style: "date_literal"
+    point_field: "Latitude"
+    point_field_lon: "Longitude"
+    date_field: "From_Date"
+    crime_type_field: "Offense_Desc"
+    description_field: "Nature_Of_Call"
+    address_field: "BLOCK_ADDRESS"
+    incident_id_field: "Case_No"
+    contact: *fwpd_contact
+
+  # --- Empire Mall, Sioux Falls, SD (police CALLS FOR SERVICE — CAD dispatches,
+  #     not verified crime reports; intersection-level addresses only). ---
+  - property_id: EMPIRE
+    type: arcgis
+    name: "Sioux Falls PD Calls for Service"
+    base_url: "https://gis.siouxfalls.gov/arcgis/rest/services/Data/Safety/MapServer/16"
+    date_query_style: "date_literal"
+    date_field: "Date_Time"
+    crime_type_field: "PI_Code"
+    description_field: "Category"
+    address_field: "IntName"
+    incident_id_field: "CFS_Num"
+    contact:
+      agency: "Sioux Falls Police Department"
+      agency_url: "https://www.siouxfalls.gov/police"
+
+  # --- The Mall at Millenia, Orlando, FL (OPD crimes; the other geopolis
+  #     services are derived views of this layer). Probe-verified. ---
+  - property_id: MALLATMILLENIA
+    type: arcgis
+    name: "Orlando PD Crimes"
+    base_url: "https://services3.arcgis.com/CE6vSrSsvFx0JZEW/arcgis/rest/services/OPD_Crimes_For_Join/FeatureServer/0"
+    date_query_style: "date_literal"
+    point_field: "Latitude"
+    point_field_lon: "Longitude"
+    date_field: "Date"
+    crime_type_field: "OffenseType"
+    description_field: "Category"
+    address_field: "CaseLocation"
+    incident_id_field: "CaseNumber"
+    contact:
+      agency: "Orlando Police Department"
+      agency_url: "https://www.orlando.gov/POLICE"
+
   # --- Lenox Square, Atlanta, GA — DISABLED ---
   # APD's portal is dashboard-only (DCAT catalog probe: Web Pages, no FeatureServer
   # or data downloads). Would need a COBRA CSV-download adapter; NO COVERAGE until then.
