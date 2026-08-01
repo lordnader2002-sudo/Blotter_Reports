@@ -40,8 +40,10 @@ def test_ckan_sql_casts_and_normalizes():
     result = adapter.fetch(FetchQuery(42.3476, -71.0776, 1600, "2026-07-25T00:00:00"))
 
     sql = parse_qs(urlparse(responses.calls[0].request.url).query)["sql"][0]
-    assert 'CAST(NULLIF("Lat", \'\') AS float8) BETWEEN' in sql
-    assert 'CAST(NULLIF("Long", \'\') AS float8) BETWEEN' in sql
+    # Function-free (Boston whitelists SQL functions): quoted string bounds only.
+    assert "CAST" not in sql and "NULLIF" not in sql
+    assert "\"Lat\" BETWEEN '42.3" in sql
+    assert "\"Long\" BETWEEN '-71.0" in sql
     assert '"OCCURRED_ON_DATE" >= \'2026-07-25T00:00:00\'' in sql
     assert f'FROM "{BOSTON.dataset_id}"' in sql
 

@@ -22,13 +22,20 @@ class CkanAdapter(SourceAdapter):
     type_name = "ckan"
 
     def _sql(self, query: FetchQuery) -> str:
+        # Boston's CKAN whitelists SQL functions (CAST/NULLIF are "not authorized"),
+        # so filter with pure string comparisons: within a small box the integer
+        # part of text lat/lon is constant, making lexicographic order match
+        # numeric order (reversed for negatives -> sort the bounds). Empty and
+        # zero placeholders fall outside the quoted interval. Exact radius is
+        # re-checked numerically downstream.
         e = self.entry
         min_lat, min_lon, max_lat, max_lon = bounding_box(query.lat, query.lon, query.radius_m)
-        num = 'CAST(NULLIF("{f}", \'\') AS float8)'
+        lat_lo, lat_hi = sorted([str(min_lat), str(max_lat)])
+        lon_lo, lon_hi = sorted([str(min_lon), str(max_lon)])
         return (
             f'SELECT * FROM "{e.dataset_id}" '
-            f"WHERE {num.format(f=e.point_field)} BETWEEN {min_lat} AND {max_lat} "
-            f"AND {num.format(f=e.point_field_lon)} BETWEEN {min_lon} AND {max_lon} "
+            f"WHERE \"{e.point_field}\" BETWEEN '{lat_lo}' AND '{lat_hi}' "
+            f"AND \"{e.point_field_lon}\" BETWEEN '{lon_lo}' AND '{lon_hi}' "
             f"AND \"{e.date_field}\" >= '{query.since_iso}' "
             f"LIMIT {query.limit}"
         )
