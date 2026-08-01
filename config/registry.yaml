@@ -344,6 +344,24 @@ sources:
       agency: "Orlando Police Department"
       agency_url: "https://www.orlando.gov/POLICE"
 
+  # --- Clarksburg Premium Outlets, Clarksburg, MD (Montgomery County Police
+  #     "Crime" dataset; true point column -> within_circle. start_date is the
+  #     occurred date; `date` is dispatch — not used. Probe-verified fresh. ---
+  - property_id: CLARKSBURG
+    type: socrata
+    name: "Montgomery County Police Crime"
+    base_url: "https://data.montgomerycountymd.gov"
+    dataset_id: "icn6-v9z3"
+    point_field: "geolocation"
+    date_field: "start_date"
+    crime_type_field: "crimename2"
+    description_field: "crimename3"
+    address_field: "location"
+    incident_id_field: "incident_id"
+    contact:
+      agency: "Montgomery County Department of Police"
+      agency_url: "https://www.montgomerycountymd.gov/pol"
+
   # --- Castleton Square, Indianapolis — DISABLED ---
   # IMPD's NIBRS layer is fresh but publishes NO coordinates or addresses (zip/
   # beat level only) and silently ignores spatial filters — radius queries return
