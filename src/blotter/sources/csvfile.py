@@ -46,6 +46,9 @@ class CsvAdapter(SourceAdapter):
                 if resp.status_code >= 400:
                     raise SourceError(
                         f"CSV fetch failed for {url}: HTTP {resp.status_code}")
+                # S3-style hosts often omit charset -> encoding is None and
+                # iter_lines would yield BYTES, crashing csv. Force a default.
+                resp.encoding = resp.encoding or "utf-8"
                 reader = csv.reader(resp.iter_lines(decode_unicode=True))
                 header = next(reader, None)
                 if not header or e.date_field not in header:
@@ -66,6 +69,8 @@ class CsvAdapter(SourceAdapter):
                         break
             except requests.RequestException as ex:
                 raise SourceError(f"CSV fetch failed for {url}: {ex}") from ex
+            except (csv.Error, UnicodeDecodeError) as ex:
+                raise SourceError(f"CSV parse failed for {url}: {ex}") from ex
             if truncated:
                 break
         return RawFetchResult(

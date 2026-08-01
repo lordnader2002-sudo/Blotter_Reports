@@ -68,6 +68,12 @@ def run(properties, registry, settings, http, now: datetime | None = None,
             log.warning("Source failed for %s: %s", entry.property_id, ex)
             report.record_failure(entry, ex)
             continue
+        except Exception as ex:
+            # an adapter bug must degrade to ONE failed source, never kill the
+            # run (a csv.Error once escaped and took down all 26 healthy sources).
+            log.exception("Source crashed for %s", entry.property_id)
+            report.record_failure(entry, ex)
+            continue
 
     incidents = filters.apply(incidents, cutoff, settings, properties)
     incidents = filters.dedupe(incidents)
