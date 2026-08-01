@@ -362,6 +362,56 @@ sources:
       agency: "Montgomery County Department of Police"
       agency_url: "https://www.montgomerycountymd.gov/pol"
 
+  # --- Boston, MA: Copley Place + The Shops at Chestnut Hill via BPD's CKAN
+  #     datastore (2023-to-present resource; all columns are text — the CKAN
+  #     adapter casts in SQL). NOTE: Chestnut Hill sits on the Newton line, so
+  #     BPD covers only the Boston-side portion of its radius. ---
+  - property_id: COPLEY
+    type: ckan
+    name: "Boston PD Crime Incident Reports"
+    base_url: "https://data.boston.gov"
+    dataset_id: "b973d8cb-eeb2-4e7e-99da-c92938efc9c0"
+    point_field: "Lat"
+    point_field_lon: "Long"
+    date_field: "OCCURRED_ON_DATE"
+    crime_type_field: "OFFENSE_DESCRIPTION"
+    description_field: "OFFENSE_CODE_GROUP"
+    address_field: "STREET"
+    incident_id_field: "INCIDENT_NUMBER"
+    contact: &bpd_contact
+      agency: "Boston Police Department"
+      agency_url: "https://www.boston.gov/departments/police"
+  - property_id: CHESTNUTHILL
+    type: ckan
+    name: "Boston PD Crime Incident Reports (Boston-side only)"
+    base_url: "https://data.boston.gov"
+    dataset_id: "b973d8cb-eeb2-4e7e-99da-c92938efc9c0"
+    point_field: "Lat"
+    point_field_lon: "Long"
+    date_field: "OCCURRED_ON_DATE"
+    crime_type_field: "OFFENSE_DESCRIPTION"
+    description_field: "OFFENSE_CODE_GROUP"
+    address_field: "STREET"
+    incident_id_field: "INCIDENT_NUMBER"
+    contact: *bpd_contact
+
+  # --- Norfolk Premium Outlets, Norfolk, VA (fresh Socrata feed with NO geo
+  #     columns — citywide date fetch, then Census geocoding fills coordinates
+  #     and unlocated rows are dropped). Probe-verified current. ---
+  - property_id: NORFOLKPO
+    type: socrata
+    name: "Norfolk Police Incident Reports"
+    base_url: "https://data.norfolk.gov"
+    dataset_id: "r7bn-2egr"
+    date_field: "date_occu"
+    crime_type_field: "offense"
+    address_field: "streetno,street"
+    incident_id_field: "inci_id"
+    geocode_hint: "Norfolk, VA"
+    contact:
+      agency: "Norfolk Police Department"
+      agency_url: "https://www.norfolk.gov/police"
+
   # --- Castleton Square, Indianapolis — DISABLED ---
   # IMPD's NIBRS layer is fresh but publishes NO coordinates or addresses (zip/
   # beat level only) and silently ignores spatial filters — radius queries return
