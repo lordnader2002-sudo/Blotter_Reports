@@ -412,6 +412,36 @@ sources:
       agency: "Norfolk Police Department"
       agency_url: "https://www.norfolk.gov/police"
 
+  # --- Oahu, HI: International Market Place (Waikiki) + Waikele Premium
+  #     Outlets (Waipahu) on HPD Crime Incidents — updated daily, block
+  #     addresses only -> geocoding path. Probe-verified same-day fresh. ---
+  - property_id: INTLMARKET
+    type: socrata
+    name: "Honolulu PD Crime Incidents"
+    base_url: "https://data.honolulu.gov"
+    dataset_id: "vg88-5rn5"
+    date_field: "date"
+    crime_type_field: "type"
+    description_field: "status"
+    address_field: "blockaddress"
+    incident_id_field: "incidentnum"
+    geocode_hint: "Honolulu, HI"
+    contact: &hpd_hi_contact
+      agency: "Honolulu Police Department"
+      agency_url: "https://www.honolulupd.org"
+  - property_id: WAIKELE
+    type: socrata
+    name: "Honolulu PD Crime Incidents"
+    base_url: "https://data.honolulu.gov"
+    dataset_id: "vg88-5rn5"
+    date_field: "date"
+    crime_type_field: "type"
+    description_field: "status"
+    address_field: "blockaddress"
+    incident_id_field: "incidentnum"
+    geocode_hint: "Waipahu, HI"
+    contact: *hpd_hi_contact
+
   # --- Castleton Square, Indianapolis — DISABLED ---
   # IMPD's NIBRS layer is fresh but publishes NO coordinates or addresses (zip/
   # beat level only) and silently ignores spatial filters — radius queries return
