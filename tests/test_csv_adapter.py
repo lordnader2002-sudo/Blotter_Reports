@@ -61,3 +61,13 @@ def test_priority_streets_gate_geocoding(tmp_path):
         assert fill_coordinates(incs, SD, g) == 1
     assert incs[0].lat == 32.77       # FRIARS matched -> geocoded
     assert incs[1].lat is None        # off-list street -> skipped entirely
+
+
+@responses.activate
+def test_csv_no_charset_response_still_parses():
+    # S3-style hosts omit charset; iter_lines must not yield bytes (CI crash 2026-08-01).
+    responses.add(responses.GET, "https://seshat.example.org/pd_calls_2026.csv",
+                  body=CSV_BODY.encode(), content_type=None)
+    adapter = CsvAdapter(SD, HttpClient())
+    result = adapter.fetch(FetchQuery(32.767, -117.166, 1600, "2026-07-25T00:00:00"))
+    assert result.fetched_count == 2
