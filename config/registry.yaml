@@ -209,6 +209,73 @@ sources:
       agency: "Tempe Police Department"
       agency_url: "https://www.tempe.gov/government/police"
 
+  # --- Houston Galleria, Houston, TX (HPD recent-NIBRS; offenses split across
+  #     sibling layers, one entry per layer — the pipeline merges + dedupes.
+  #     Address is composite (comma list joined by the adapter). Probe-verified,
+  #     all layers current. ---
+  - property_id: HOUSTONGAL
+    type: arcgis
+    name: "Houston PD NIBRS — Person"
+    base_url: "https://mycity2.houstontx.gov/pubgis02/rest/services/HPD/NIBRS_Recent_Crime_Reports/FeatureServer/0"
+    date_query_style: "date_literal"
+    date_field: "USER_RMSOccurrenceDate"
+    crime_type_field: "USER_NIBRSDescription"
+    description_field: "USER_NIBRSClass"
+    address_field: "USER_BlockRange,USER_StreetName,USER_StreetType,USER_Suffix"
+    incident_id_field: "USER_Incident"
+    contact: &hpd_contact
+      agency: "Houston Police Department"
+      agency_url: "https://www.houstontx.gov/police"
+  - property_id: HOUSTONGAL
+    type: arcgis
+    name: "Houston PD NIBRS — Property"
+    base_url: "https://mycity2.houstontx.gov/pubgis02/rest/services/HPD/NIBRS_Recent_Crime_Reports/FeatureServer/1"
+    date_query_style: "date_literal"
+    date_field: "USER_RMSOccurrenceDate"
+    crime_type_field: "USER_NIBRSDescription"
+    description_field: "USER_NIBRSClass"
+    address_field: "USER_BlockRange,USER_StreetName,USER_StreetType,USER_Suffix"
+    incident_id_field: "USER_Incident"
+    contact: *hpd_contact
+  - property_id: HOUSTONGAL
+    type: arcgis
+    name: "Houston PD NIBRS — Society"
+    base_url: "https://mycity2.houstontx.gov/pubgis02/rest/services/HPD/NIBRS_Recent_Crime_Reports/FeatureServer/2"
+    date_query_style: "date_literal"
+    date_field: "USER_RMSOccurrenceDate"
+    crime_type_field: "USER_NIBRSDescription"
+    description_field: "USER_NIBRSClass"
+    address_field: "USER_BlockRange,USER_StreetName,USER_StreetType,USER_Suffix"
+    incident_id_field: "USER_Incident"
+    contact: *hpd_contact
+  - property_id: HOUSTONGAL
+    type: arcgis
+    name: "Houston PD NIBRS — Group B"
+    base_url: "https://mycity2.houstontx.gov/pubgis02/rest/services/HPD/NIBRS_Recent_Crime_Reports/FeatureServer/3"
+    date_query_style: "date_literal"
+    date_field: "USER_RMSOccurrenceDate"
+    crime_type_field: "USER_NIBRSDescription"
+    description_field: "USER_NIBRSClass"
+    address_field: "USER_BlockRange,USER_StreetName,USER_StreetType,USER_Suffix"
+    incident_id_field: "USER_Incident"
+    contact: *hpd_contact
+
+  # --- Tacoma Mall, Tacoma, WA (TPD RMS crime, official open-data account).
+  #     Probe-verified; a 0-count would indicate a stale feed. ---
+  - property_id: TACOMAMALL
+    type: arcgis
+    name: "Tacoma PD Reported Crime"
+    base_url: "https://services3.arcgis.com/SCwJH1pD8WSn5T5y/arcgis/rest/services/TPD_RMS_Crime/FeatureServer/0"
+    date_query_style: "date_literal"
+    date_field: "DateOccurred"
+    crime_type_field: "Description"
+    description_field: "Offense_Category"
+    address_field: "Address"
+    incident_id_field: "CaseNo"
+    contact:
+      agency: "Tacoma Police Department"
+      agency_url: "https://www.cityoftacoma.org/government/city_departments/police"
+
   # --- Lenox Square, Atlanta, GA — DISABLED ---
   # APD's portal is dashboard-only (DCAT catalog probe: Web Pages, no FeatureServer
   # or data downloads). Would need a COBRA CSV-download adapter; NO COVERAGE until then.
