@@ -1,13 +1,13 @@
 # Mall Blotter Report
 
-Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **530** incidents (**34** violent) across 27 malls.
+Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **525** incidents (**35** violent) across 27 malls.
 
 ## Summary by mall
 
 | Mall | Status | Total | VIOLENT | PROPERTY | QUALITY_OF_LIFE | OTHER | Nearest (m) | Most recent |
 |---|---|---|---|---|---|---|---|---|
 | ABQ Uptown | OK | 0 | 0 | 0 | 0 | 0 | - | - |
-| Arizona Mills | OK | 23 | 2 | 7 | 2 | 12 | 15 | 2026-07-30 |
+| Arizona Mills | OK | 21 | 2 | 6 | 2 | 11 | 15 | 2026-07-30 |
 | Beverly Center | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | Castleton Square | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
 | Charlotte Premium Outlets | OK | 4 | 0 | 3 | 0 | 1 | 233 | 2026-07-30 |
@@ -16,11 +16,11 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 | Clarksburg Premium Outlets | OK | 1 | 0 | 0 | 0 | 1 | 1135 | 2026-07-29 |
 | The Shops at Clearfork | OK | 1 | 0 | 1 | 0 | 0 | 1086 | 2026-07-25 |
 | Copley Place | OK | 61 | 6 | 25 | 4 | 26 | 129 | 2026-07-27 |
-| Empire Mall | OK | 123 | 5 | 12 | 27 | 79 | 316 | 2026-07-31 |
-| Fashion Valley | OK | 114 | 0 | 0 | 0 | 114 | 258 | 2026-07-30 |
+| Empire Mall | OK | 119 | 5 | 12 | 26 | 76 | 316 | 2026-07-31 |
+| Fashion Valley | OK | 111 | 0 | 0 | 0 | 111 | 355 | 2026-07-30 |
 | The Mall at Green Hills | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | Houston Galleria | OK | 57 | 4 | 43 | 1 | 9 | 164 | 2026-07-30 |
-| International Market Place | OK | 67 | 8 | 52 | 4 | 3 | 100 | 2026-07-30 |
+| International Market Place | OK | 62 | 8 | 48 | 4 | 2 | 100 | 2026-07-30 |
 | International Plaza | OK | 1 | 0 | 1 | 0 | 0 | 1534 | 2026-07-29 |
 | Lenox Square | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
 | The Mall at Millenia | OK | 0 | 0 | 0 | 0 | 0 | - | - |
@@ -30,9 +30,9 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 | Southpark | OK | 7 | 1 | 5 | 0 | 1 | 179 | 2026-07-29 |
 | Tacoma Mall | OK | 9 | 3 | 3 | 0 | 3 | 471 | 2026-07-30 |
 | The Domain | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Towne East Square | OK | 33 | 1 | 8 | 1 | 23 | 289 | 2026-07-30 |
+| Towne East Square | OK | 41 | 1 | 9 | 4 | 27 | 289 | 2026-07-31 |
 | University Park Village | OK | 0 | 0 | 0 | 0 | 0 | - | - |
-| Waikele Premium Outlets | OK | 0 | 0 | 0 | 0 | 0 | - | - |
+| Waikele Premium Outlets | OK | 1 | 1 | 0 | 0 | 0 | 1491 | 2026-07-28 |
 
 ## Data quality
 
