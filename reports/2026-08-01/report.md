@@ -1,6 +1,6 @@
 # Mall Blotter Report
 
-Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **284** incidents (**20** violent) across 20 malls.
+Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (~1.0 mi) radius · **285** incidents (**20** violent) across 21 malls.
 
 ## Summary by mall
 
@@ -12,6 +12,7 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 | Castleton Square | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
 | Charlotte Premium Outlets | OK | 4 | 0 | 3 | 0 | 1 | 233 | 2026-07-30 |
 | Cherry Creek Shopping Center | OK | 12 | 1 | 9 | 0 | 2 | 145 | 2026-07-28 |
+| Clarksburg Premium Outlets | OK | 1 | 0 | 0 | 0 | 1 | 1135 | 2026-07-29 |
 | The Shops at Clearfork | OK | 1 | 0 | 1 | 0 | 0 | 1086 | 2026-07-25 |
 | Empire Mall | OK | 123 | 5 | 12 | 27 | 79 | 316 | 2026-07-31 |
 | The Mall at Green Hills | OK | 0 | 0 | 0 | 0 | 0 | - | - |
@@ -30,7 +31,7 @@ Generated **2026-08-01** · window **7 days** (since 2026-07-25) · **1600 m** (
 ## Data quality
 
 - **No coverage:** CASTLETON, LENOX, THEDOMAIN
-- **Properties without data:** 196 (3 known upstream issues, 193 not yet configured) — full list on the dashboard's Data Quality tab
+- **Properties without data:** 195 (3 known upstream issues, 192 not yet configured) — full list on the dashboard's Data Quality tab
 
 ## Highlights (most notable)
 

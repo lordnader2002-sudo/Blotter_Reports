@@ -1,17 +1,17 @@
 {
-  "generated": "2026-08-01T04:32:25.991636+00:00",
+  "generated": "2026-08-01T04:35:44.705888+00:00",
   "window_days": 7,
-  "cutoff": "2026-07-25T04:32:25.991636+00:00",
+  "cutoff": "2026-07-25T04:35:44.705888+00:00",
   "radius_m": 1600,
   "totals": {
-    "incidents": 284,
+    "incidents": 285,
     "violent": 20,
-    "malls": 20,
+    "malls": 21,
     "coverage_gaps": 3,
     "VIOLENT": 20,
     "PROPERTY": 102,
     "QUALITY_OF_LIFE": 31,
-    "OTHER": 131
+    "OTHER": 132
   },
   "malls": [
     {
@@ -96,6 +96,20 @@
       "OTHER": 2,
       "nearest_m": 144.7,
       "most_recent": "2026-07-28T20:00:00+00:00",
+      "truncated": false
+    },
+    {
+      "property_id": "CLARKSBURG",
+      "property_name": "Clarksburg Premium Outlets",
+      "address": "22705 Clarksburg Rd Clarksburg MD 20871",
+      "status": "OK",
+      "total": 1,
+      "VIOLENT": 0,
+      "PROPERTY": 0,
+      "QUALITY_OF_LIFE": 0,
+      "OTHER": 1,
+      "nearest_m": 1135.3,
+      "most_recent": "2026-07-29T09:11:00+00:00",
       "truncated": false
     },
     {
@@ -9709,6 +9723,50 @@
         "Enabled": "Yes",
         "Date_": "1785441540000"
       }
+    },
+    {
+      "property_id": "CLARKSBURG",
+      "property_name": "Clarksburg Premium Outlets",
+      "source_id": "CLARKSBURG:icn6-v9z3",
+      "incident_id": "201584985",
+      "occurred_at": "2026-07-29T09:11:00+00:00",
+      "crime_type": "Family Offenses, NonViolent",
+      "crime_category": "OTHER",
+      "description": "FAMILY OFFENSE - NEGLECT CHILD (INCLUDES NONSUPPOR",
+      "address": "13400 BLK  BLUEBEARD TER",
+      "lat": 39.235,
+      "lon": -77.2772,
+      "distance_m": 1135.3,
+      "synopsis": "Family offenses, nonviolent on Jul 29, 2026, 1135 m from Clarksburg Premium Outlets (13400 BLK  BLUEBEARD TER). Case #201584985 (use for a records request \u2014 full narratives are not published in open data).",
+      "details": {
+        "incident_id": "201584985",
+        "offence_code": "3806",
+        "case_number": "260033205",
+        "date": "2026-07-29T10:55:53.000",
+        "start_date": "2026-07-29T09:11:00.000",
+        "end_date": "2026-07-29T10:40:00.000",
+        "nibrs_code": "90F",
+        "victims": "1",
+        "crimename1": "Crime Against Society",
+        "crimename2": "Family Offenses, NonViolent",
+        "crimename3": "FAMILY OFFENSE - NEGLECT CHILD (INCLUDES NONSUPPOR",
+        "district": "GERMANTOWN",
+        "location": "13400 BLK  BLUEBEARD TER",
+        "city": "CLARKSBURG",
+        "state": "MD",
+        "zip_code": "20871",
+        "agency": "MCPD",
+        "place": "Street - In vehicle",
+        "sector": "M",
+        "beat": "5M3",
+        "pra": "598",
+        "address_number": "13400",
+        "address_street": "BLUEBEARD",
+        "street_type": "TER",
+        "latitude": "39.23499",
+        "longitude": "-77.2772",
+        "police_district_number": "5D"
+      }
     }
   ],
   "highlights": [
@@ -10874,6 +10932,19 @@
         "agency": "Orlando Police Department",
         "agency_url": "https://www.orlando.gov/POLICE"
       }
+    },
+    {
+      "property_id": "CLARKSBURG",
+      "name": "Montgomery County Police Crime",
+      "status": "OK",
+      "fetched_count": 1,
+      "truncated": false,
+      "error": null,
+      "url": "https://data.montgomerycountymd.gov/resource/icn6-v9z3",
+      "contact": {
+        "agency": "Montgomery County Department of Police",
+        "agency_url": "https://www.montgomerycountymd.gov/pol"
+      }
     }
   ],
   "coverage_gaps": [
@@ -11075,13 +11146,6 @@
       "property_id": "CITYCREEK",
       "name": "City Creek Center",
       "address": "50 South Main Street, Salt Lake City UT 84101",
-      "reason": "no source configured yet",
-      "known_issue": false
-    },
-    {
-      "property_id": "CLARKSBURG",
-      "name": "Clarksburg Premium Outlets",
-      "address": "22705 Clarksburg Rd Clarksburg MD 20871",
       "reason": "no source configured yet",
       "known_issue": false
     },
@@ -12669,6 +12733,38 @@
         "CASTLETON": 0,
         "CHARLOTTE": 4,
         "CHERRYCREEK": 12,
+        "CLEARFORK": 1,
+        "EMPIRE": 123,
+        "GREENHILLS": 0,
+        "HOUSTONGAL": 57,
+        "INTLPLAZA": 1,
+        "LENOX": 0,
+        "MALLATMILLENIA": 0,
+        "NORTHGATE": 14,
+        "OPRYMILLS": 0,
+        "SOUTHPARK": 7,
+        "TACOMAMALL": 9,
+        "THEDOMAIN": 0,
+        "TOWNEEAST": 33,
+        "UNIVPARKVILLAGE": 0
+      }
+    },
+    {
+      "ts": "2026-08-01T04:35:44.705888+00:00",
+      "label": "Aug 01",
+      "total": 285,
+      "violent": 20,
+      "property": 102,
+      "qol": 31,
+      "other": 132,
+      "malls": {
+        "ABQUP": 0,
+        "ARZMILLS": 23,
+        "BEVCENTER": 0,
+        "CASTLETON": 0,
+        "CHARLOTTE": 4,
+        "CHERRYCREEK": 12,
+        "CLARKSBURG": 1,
         "CLEARFORK": 1,
         "EMPIRE": 123,
         "GREENHILLS": 0,
