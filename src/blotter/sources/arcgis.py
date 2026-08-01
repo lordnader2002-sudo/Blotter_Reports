@@ -76,6 +76,15 @@ class ArcGISAdapter(SourceAdapter):
 
     def to_normalized(self, result: RawFetchResult) -> list[NormalizedIncident]:
         e = self.entry
+        # Some portals (e.g. Houston) split the address across several fields;
+        # a comma-separated address_field joins the non-empty parts with spaces.
+        addr_fields = [f.strip() for f in (e.address_field or "").split(",") if f.strip()]
+
+        def build_address(attrs: dict) -> str | None:
+            parts = [str(attrs.get(f)).strip() for f in addr_fields
+                     if attrs.get(f) not in (None, "")]
+            return " ".join(parts) or None if parts else None
+
         out: list[NormalizedIncident] = []
         for feat in result.records:
             attrs = feat.get("attributes", {}) or {}
@@ -91,7 +100,7 @@ class ArcGISAdapter(SourceAdapter):
                     crime_type=attrs.get(e.crime_type_field),
                     crime_category=OTHER,
                     description=attrs.get(e.description_field) if e.description_field else None,
-                    address=attrs.get(e.address_field) if e.address_field else None,
+                    address=build_address(attrs),
                     lat=to_float(geom.get("y")),
                     lon=to_float(geom.get("x")),
                     raw=attrs,
