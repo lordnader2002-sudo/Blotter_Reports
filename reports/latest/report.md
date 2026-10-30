@@ -1,45 +1,45 @@
 # Mall Blotter Report
 
-Generated **2026-10-29** · window **7 days** (since 2026-10-22) · **1600 m** (~1.0 mi) radius · **540** incidents (**53** violent) across 34 malls.
+Generated **2026-10-30** · window **7 days** (since 2026-10-23) · **1600 m** (~1.0 mi) radius · **489** incidents (**45** violent) across 34 malls.
 
 ## Summary by mall
 
 | Mall | Status | Total | VIOLENT | PROPERTY | QUALITY_OF_LIFE | OTHER | Nearest (m) | Most recent |
 |---|---|---|---|---|---|---|---|---|
 | ABQ Uptown | FAILED ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Arizona Mills | OK | 3 | 0 | 0 | 0 | 3 | 630 | 2026-10-23 |
+| Arizona Mills | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | Beverly Center | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | Castleton Square | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Charlotte Premium Outlets | OK | 5 | 1 | 1 | 1 | 2 | 430 | 2026-10-24 |
-| Cherry Creek Shopping Center | OK | 8 | 1 | 4 | 0 | 3 | 26 | 2026-10-26 |
+| Charlotte Premium Outlets | OK | 2 | 0 | 1 | 1 | 0 | 832 | 2026-10-27 |
+| Cherry Creek Shopping Center | OK | 13 | 2 | 6 | 0 | 5 | 26 | 2026-10-28 |
 | The Shops at Chestnut Hill | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | Clarksburg Premium Outlets | OK | 1 | 0 | 1 | 0 | 0 | 130 | 2026-10-25 |
 | The Shops at Clearfork | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | College Mall | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Copley Place | OK | 133 | 17 | 58 | 5 | 53 | 183 | 2026-10-27 |
+| Copley Place | OK | 133 | 13 | 55 | 7 | 58 | 134 | 2026-10-27 |
 | Empire Mall | FAILED ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Encore at Wynn Las Vegas | OK | 11 | 2 | 6 | 0 | 3 | 676 | 2026-10-25 |
-| Fashion Valley | OK | 97 | 0 | 0 | 0 | 97 | 355 | 2026-10-27 |
-| The Mall at Green Hills | OK | 11 | 0 | 5 | 1 | 5 | 186 | 2026-10-28 |
+| Encore at Wynn Las Vegas | OK | 9 | 2 | 4 | 0 | 3 | 676 | 2026-10-25 |
+| Fashion Valley | OK | 101 | 0 | 0 | 0 | 101 | 355 | 2026-10-28 |
+| The Mall at Green Hills | OK | 12 | 1 | 5 | 1 | 5 | 186 | 2026-10-29 |
 | Houston Galleria | FAILED ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| International Market Place | OK | 38 | 4 | 31 | 1 | 2 | 100 | 2026-10-28 |
-| International Plaza | OK | 3 | 0 | 3 | 0 | 0 | 926 | 2026-10-27 |
+| International Market Place | OK | 40 | 4 | 32 | 1 | 3 | 100 | 2026-10-29 |
+| International Plaza | OK | 2 | 0 | 2 | 0 | 0 | 926 | 2026-10-27 |
 | Lenox Square | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
 | The Mall at Millenia | OK | 0 | 0 | 0 | 0 | 0 | - | - |
-| Norfolk Premium Outlets | OK | 1 | 0 | 0 | 1 | 0 | 1519 | 2026-10-28 |
-| Northgate Station | OK | 26 | 9 | 8 | 1 | 8 | 145 | 2026-10-28 |
-| Opry Mills | OK | 15 | 1 | 10 | 0 | 4 | 126 | 2026-10-28 |
-| The Forum Shops at Caesars | OK | 30 | 2 | 16 | 1 | 11 | 192 | 2026-10-25 |
-| The Shops at Crystals | OK | 34 | 2 | 17 | 2 | 13 | 58 | 2026-10-25 |
-| Southpark | OK | 16 | 0 | 8 | 0 | 8 | 179 | 2026-10-26 |
-| Tacoma Mall | OK | 33 | 4 | 16 | 6 | 7 | 231 | 2026-10-28 |
+| Norfolk Premium Outlets | OK | 2 | 0 | 0 | 2 | 0 | 1496 | 2026-10-29 |
+| Northgate Station | OK | 29 | 8 | 11 | 2 | 8 | 145 | 2026-10-29 |
+| Opry Mills | OK | 12 | 1 | 7 | 0 | 4 | 126 | 2026-10-28 |
+| The Forum Shops at Caesars | OK | 11 | 1 | 7 | 1 | 2 | 433 | 2026-10-25 |
+| The Shops at Crystals | OK | 13 | 1 | 8 | 1 | 3 | 248 | 2026-10-25 |
+| Southpark | OK | 16 | 0 | 10 | 0 | 6 | 179 | 2026-10-28 |
+| Tacoma Mall | OK | 32 | 5 | 17 | 3 | 7 | 231 | 2026-10-29 |
 | The Domain | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Towne East Square | OK | 39 | 2 | 12 | 1 | 24 | 289 | 2026-10-28 |
-| University Park Village | OK | 2 | 1 | 0 | 0 | 1 | 524 | 2026-10-23 |
-| Las Vegas Convention Center | OK | 15 | 4 | 4 | 0 | 7 | 989 | 2026-10-25 |
-| Las Vegas North Premium Outlets | OK | 10 | 2 | 6 | 0 | 2 | 192 | 2026-10-25 |
-| Las Vegas South Premium Outlets | OK | 6 | 1 | 2 | 0 | 3 | 386 | 2026-10-24 |
-| Waikele Premium Outlets | OK | 3 | 0 | 3 | 0 | 0 | 265 | 2026-10-28 |
+| Towne East Square | OK | 39 | 2 | 14 | 0 | 23 | 399 | 2026-10-29 |
+| University Park Village | OK | 0 | 0 | 0 | 0 | 0 | - | - |
+| Las Vegas Convention Center | OK | 10 | 3 | 2 | 0 | 5 | 989 | 2026-10-25 |
+| Las Vegas North Premium Outlets | OK | 6 | 1 | 4 | 0 | 1 | 192 | 2026-10-25 |
+| Las Vegas South Premium Outlets | OK | 5 | 1 | 1 | 0 | 3 | 386 | 2026-10-24 |
+| Waikele Premium Outlets | OK | 1 | 0 | 1 | 0 | 0 | 265 | 2026-10-28 |
 
 ## Data quality
 
@@ -60,14 +60,13 @@ Generated **2026-10-29** · window **7 days** (since 2026-10-22) · **1600 m** (
 | Northgate Station | 2026-10-25 | VIOLENT | Simple Assault | 145 |
 | Copley Place | 2026-10-25 | VIOLENT | ASSAULT - SIMPLE | 214 |
 | Tacoma Mall | 2026-10-25 | VIOLENT | Assault Simple | 231 |
-| Tacoma Mall | 2026-10-24 | VIOLENT | Assault Aggravated | 231 |
-| Copley Place | 2026-10-23 | VIOLENT | ASSAULT - SIMPLE | 281 |
+| International Market Place | 2026-10-28 | VIOLENT | ASSAULT | 254 |
+| Tacoma Mall | 2026-10-24 | VIOLENT | Assault Aggravated | 272 |
 | The Shops at Crystals | 2026-10-24 | VIOLENT | Simple Assault | 281 |
-| International Market Place | 2026-10-22 | VIOLENT | ASSAULT | 293 |
 | Las Vegas South Premium Outlets | 2026-10-23 | VIOLENT | Aggravated Assault | 386 |
 | Opry Mills | 2026-10-28 | VIOLENT | WEAPON OFFENSE, CRIMINAL ATTEMPT | 387 |
+| The Mall at Green Hills | 2026-10-29 | VIOLENT | ASSAULT- FEAR OF BODILY INJURY | 417 |
 | Cherry Creek Shopping Center | 2026-10-24 | VIOLENT | assault-simple | 448 |
-| Copley Place | 2026-10-23 | VIOLENT | ASSAULT - SIMPLE | 496 |
 | Northgate Station | 2026-10-23 | VIOLENT | Weapon Law Violations | 504 |
 | International Market Place | 2026-10-26 | VIOLENT | ASSAULT | 545 |
 | Copley Place | 2026-10-24 | VIOLENT | ASSAULT - SIMPLE | 611 |
@@ -76,8 +75,9 @@ Generated **2026-10-29** · window **7 days** (since 2026-10-22) · **1600 m** (
 | Encore at Wynn Las Vegas | 2026-10-25 | VIOLENT | Simple Assault | 771 |
 | Las Vegas North Premium Outlets | 2026-10-24 | VIOLENT | Simple Assault | 781 |
 | Copley Place | 2026-10-25 | VIOLENT | ASSAULT - SIMPLE | 792 |
-| The Shops at Crystals | 2026-10-22 | VIOLENT | Aggravated Assault | 816 |
+| Cherry Creek Shopping Center | 2026-10-27 | VIOLENT | assault-simple | 816 |
 | The Forum Shops at Caesars | 2026-10-24 | VIOLENT | Simple Assault | 834 |
 | Northgate Station | 2026-10-27 | VIOLENT | Weapon Law Violations | 881 |
-| Las Vegas North Premium Outlets | 2026-10-23 | VIOLENT | Simple Assault | 922 |
-| Copley Place | 2026-10-23 | VIOLENT | ASSAULT - SIMPLE | 947 |
+| Northgate Station | 2026-10-24 | VIOLENT | Weapon Law Violations | 988 |
+| Las Vegas Convention Center | 2026-10-24 | VIOLENT | Simple Assault | 989 |
+| Tacoma Mall | 2026-10-26 | VIOLENT | Weapon Law Violation | 1080 |
