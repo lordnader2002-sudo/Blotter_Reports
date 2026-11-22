@@ -1,45 +1,45 @@
 # Mall Blotter Report
 
-Generated **2026-11-21** · window **7 days** (since 2026-11-14) · **1600 m** (~1.0 mi) radius · **519** incidents (**43** violent) across 34 malls.
+Generated **2026-11-22** · window **7 days** (since 2026-11-15) · **1600 m** (~1.0 mi) radius · **458** incidents (**34** violent) across 34 malls.
 
 ## Summary by mall
 
 | Mall | Status | Total | VIOLENT | PROPERTY | QUALITY_OF_LIFE | OTHER | Nearest (m) | Most recent |
 |---|---|---|---|---|---|---|---|---|
 | ABQ Uptown | FAILED ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Arizona Mills | OK | 26 | 5 | 8 | 2 | 11 | 15 | 2026-11-20 |
+| Arizona Mills | OK | 29 | 5 | 8 | 3 | 13 | 15 | 2026-11-21 |
 | Beverly Center | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | Castleton Square | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Charlotte Premium Outlets | OK | 4 | 0 | 4 | 0 | 0 | 151 | 2026-11-18 |
-| Cherry Creek Shopping Center | OK | 8 | 1 | 7 | 0 | 0 | 26 | 2026-11-18 |
+| Charlotte Premium Outlets | OK | 4 | 0 | 4 | 0 | 0 | 233 | 2026-11-19 |
+| Cherry Creek Shopping Center | OK | 5 | 0 | 5 | 0 | 0 | 26 | 2026-11-18 |
 | The Shops at Chestnut Hill | OK | 0 | 0 | 0 | 0 | 0 | - | - |
-| Clarksburg Premium Outlets | OK | 3 | 0 | 2 | 0 | 1 | 130 | 2026-11-18 |
+| Clarksburg Premium Outlets | OK | 2 | 0 | 1 | 0 | 1 | 641 | 2026-11-18 |
 | The Shops at Clearfork | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | College Mall | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
 | Copley Place | OK | 0 | 0 | 0 | 0 | 0 | - | - |
-| Empire Mall | OK | 128 | 1 | 14 | 42 | 71 | 196 | 2026-11-20 |
-| Encore at Wynn Las Vegas | OK | 10 | 1 | 2 | 0 | 7 | 271 | 2026-11-15 |
-| Fashion Valley | OK | 116 | 0 | 0 | 0 | 116 | 355 | 2026-11-19 |
-| The Mall at Green Hills | OK | 10 | 4 | 5 | 0 | 1 | 417 | 2026-11-19 |
+| Empire Mall | OK | 121 | 2 | 16 | 34 | 69 | 297 | 2026-11-21 |
+| Encore at Wynn Las Vegas | OK | 0 | 0 | 0 | 0 | 0 | - | - |
+| Fashion Valley | OK | 113 | 0 | 0 | 0 | 113 | 355 | 2026-11-20 |
+| The Mall at Green Hills | OK | 7 | 2 | 4 | 0 | 1 | 417 | 2026-11-20 |
 | Houston Galleria | FAILED ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| International Market Place | OK | 76 | 17 | 39 | 16 | 4 | 100 | 2026-11-21 |
-| International Plaza | OK | 1 | 0 | 1 | 0 | 0 | 926 | 2026-11-19 |
+| International Market Place | OK | 73 | 12 | 36 | 21 | 4 | 100 | 2026-11-22 |
+| International Plaza | OK | 3 | 0 | 3 | 0 | 0 | 410 | 2026-11-20 |
 | Lenox Square | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
 | The Mall at Millenia | OK | 0 | 0 | 0 | 0 | 0 | - | - |
-| Norfolk Premium Outlets | OK | 3 | 0 | 2 | 1 | 0 | 1119 | 2026-11-17 |
-| Northgate Station | OK | 14 | 4 | 7 | 0 | 3 | 145 | 2026-11-18 |
-| Opry Mills | OK | 6 | 0 | 3 | 0 | 3 | 126 | 2026-11-20 |
-| The Forum Shops at Caesars | OK | 12 | 2 | 3 | 1 | 6 | 403 | 2026-11-15 |
-| The Shops at Crystals | OK | 13 | 2 | 5 | 2 | 4 | 162 | 2026-11-15 |
-| Southpark | OK | 8 | 0 | 7 | 0 | 1 | 179 | 2026-11-19 |
-| Tacoma Mall | OK | 28 | 2 | 19 | 1 | 6 | 231 | 2026-11-20 |
+| Norfolk Premium Outlets | OK | 4 | 0 | 2 | 2 | 0 | 1119 | 2026-11-21 |
+| Northgate Station | OK | 17 | 6 | 9 | 0 | 2 | 70 | 2026-11-21 |
+| Opry Mills | OK | 4 | 0 | 2 | 0 | 2 | 236 | 2026-11-20 |
+| The Forum Shops at Caesars | OK | 0 | 0 | 0 | 0 | 0 | - | - |
+| The Shops at Crystals | OK | 0 | 0 | 0 | 0 | 0 | - | - |
+| Southpark | OK | 9 | 0 | 8 | 0 | 1 | 179 | 2026-11-20 |
+| Tacoma Mall | OK | 25 | 4 | 14 | 1 | 6 | 275 | 2026-11-21 |
 | The Domain | NO COVERAGE ⚠️ | 0 | 0 | 0 | 0 | 0 | - | - |
-| Towne East Square | OK | 35 | 1 | 7 | 2 | 25 | 342 | 2026-11-20 |
-| University Park Village | OK | 1 | 0 | 1 | 0 | 0 | 505 | 2026-11-14 |
-| Las Vegas Convention Center | OK | 6 | 1 | 1 | 0 | 4 | 560 | 2026-11-15 |
-| Las Vegas North Premium Outlets | OK | 3 | 1 | 1 | 0 | 1 | 1516 | 2026-11-15 |
+| Towne East Square | OK | 35 | 2 | 11 | 0 | 22 | 342 | 2026-11-21 |
+| University Park Village | OK | 0 | 0 | 0 | 0 | 0 | - | - |
+| Las Vegas Convention Center | OK | 0 | 0 | 0 | 0 | 0 | - | - |
+| Las Vegas North Premium Outlets | OK | 0 | 0 | 0 | 0 | 0 | - | - |
 | Las Vegas South Premium Outlets | OK | 0 | 0 | 0 | 0 | 0 | - | - |
-| Waikele Premium Outlets | OK | 8 | 1 | 6 | 0 | 1 | 265 | 2026-11-20 |
+| Waikele Premium Outlets | OK | 7 | 1 | 5 | 0 | 1 | 265 | 2026-11-20 |
 
 ## Data quality
 
@@ -55,28 +55,28 @@ Generated **2026-11-21** · window **7 days** (since 2026-11-14) · **1600 m** (
 
 | Mall | Date | Category | Type | Distance (m) |
 |---|---|---|---|---|
+| Northgate Station | 2026-11-20 | VIOLENT | Aggravated Assault | 70 |
 | International Market Place | 2026-11-21 | VIOLENT | ASSAULT | 100 |
-| International Market Place | 2026-11-15 | VIOLENT | ASSAULT | 100 |
-| International Market Place | 2026-11-15 | VIOLENT | ASSAULT | 100 |
 | Northgate Station | 2026-11-15 | VIOLENT | Robbery | 145 |
-| International Market Place | 2026-11-15 | VIOLENT | ASSAULT | 205 |
 | International Market Place | 2026-11-15 | VIOLENT | WEAPONS | 254 |
 | Waikele Premium Outlets | 2026-11-20 | VIOLENT | ROBBERY | 280 |
+| Empire Mall | 2026-11-21 | VIOLENT | Assault | 316 |
 | International Market Place | 2026-11-21 | VIOLENT | ASSAULT | 331 |
-| International Market Place | 2026-11-15 | VIOLENT | ASSAULT | 353 |
-| Encore at Wynn Las Vegas | 2026-11-15 | VIOLENT | Simple Assault | 400 |
-| The Forum Shops at Caesars | 2026-11-15 | VIOLENT | Simple Assault | 403 |
+| Towne East Square | 2026-11-21 | VIOLENT | BATTERY ABW | 399 |
+| The Mall at Green Hills | 2026-11-20 | VIOLENT | ASSAULT- FEAR OF BODILY INJURY | 417 |
 | The Mall at Green Hills | 2026-11-19 | VIOLENT | ASSAULT- FEAR OF BODILY INJURY | 417 |
 | Northgate Station | 2026-11-16 | VIOLENT | Aggravated Assault | 475 |
 | International Market Place | 2026-11-20 | VIOLENT | ASSAULT | 531 |
-| The Shops at Crystals | 2026-11-15 | VIOLENT | Simple Assault | 534 |
-| The Forum Shops at Caesars | 2026-11-15 | VIOLENT | Simple Assault | 618 |
+| Empire Mall | 2026-11-21 | VIOLENT | Assault | 637 |
 | Arizona Mills | 2026-11-16 | VIOLENT | [90D] DUI-AGGRAVATED                                                             | 645 |
 | Arizona Mills | 2026-11-16 | VIOLENT | [11A] SEXUAL ASSAULT [DV]                                                        | 828 |
-| The Shops at Crystals | 2026-11-15 | VIOLENT | Simple Assault | 861 |
+| Tacoma Mall | 2026-11-21 | VIOLENT | Assault Simple | 879 |
 | International Market Place | 2026-11-16 | VIOLENT | ASSAULT | 883 |
-| The Mall at Green Hills | 2026-11-15 | VIOLENT | ASSAULT- OFFENSIVE OR PROVOCATIVE CONTACT | 910 |
-| The Mall at Green Hills | 2026-11-15 | VIOLENT | ASSAULT- OFFENSIVE OR PROVOCATIVE CONTACT | 910 |
-| The Mall at Green Hills | 2026-11-15 | VIOLENT | ASSAULT- OFFENSIVE OR PROVOCATIVE CONTACT | 910 |
 | Arizona Mills | 2026-11-15 | VIOLENT | [13B] ASSAULT [DV]                                                               | 923 |
 | International Market Place | 2026-11-20 | VIOLENT | ASSAULT | 956 |
+| Northgate Station | 2026-11-17 | VIOLENT | Simple Assault | 997 |
+| Arizona Mills | 2026-11-16 | VIOLENT | [13B] ASSAULT [DV]                                                               | 1173 |
+| International Market Place | 2026-11-17 | VIOLENT | WEAPONS | 1198 |
+| Towne East Square | 2026-11-19 | VIOLENT | AGG ASSAULT FIREARMS DISPLAYED | 1220 |
+| Tacoma Mall | 2026-11-21 | VIOLENT | Weapon Law Violation | 1238 |
+| International Market Place | 2026-11-18 | VIOLENT | ASSAULT | 1296 |
